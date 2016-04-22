@@ -1,0 +1,22 @@
+Package: PI
+Type: Package
+Title: Networking Genetic Evidence to Prioritise Drug Targets at the Gene, Pathway and Network Level
+Version: 1.0.0
+Date: 2016-4-21
+Author: Hai Fang, the ULTRA-DD consortium, Julian C Knight
+Maintainer: Hai Fang <hfang@well.ox.ac.uk>
+Depends: R (>= 3.1.0), XGR, igraph, dnet
+Imports: Matrix, MASS, ggplot2, ggbio, GenomicRanges
+Suggests: foreach, doMC
+Description: Priority index or Pi is developed as a genomic-led target prioritisation system, with the focus on leveraging genetic data to prioritise targets at the gene and pathway level. Based on evidence of genetic association from GWAS data, this prioritisation system is able to resolve modulated genes (seed genes) by utilising knowledge of linkage disequilibrium (co-inherited variants), distance from the gene, and evidence of genetic association with gene expression. Seed genes are scored in an integrative way quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the top priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting many highly prioritised genes but a few lowly prioritised genes as linkers.
+URL: http://galahad.well.ox.ac.uk/PI
+Collate: 
+    'xRWR.r'
+    'xPrioritiser.r'
+    'xPrioritiserGenes.r'
+    'xPrioritiserSNPs.r'
+    'xPrioritiserPathways.r'
+    'xPrioritiserManhattan.r'
+    'xPrioritiserSubnet.r'
+License: GPL-2
+biocViews: Bioinformatics

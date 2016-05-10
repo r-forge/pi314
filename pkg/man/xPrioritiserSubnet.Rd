@@ -13,7 +13,7 @@ xPrioritiserSubnet(pNode, priority.quantite = 0.1, network = c(NULL,
 network.customised = NULL, subnet.significance = 0.01,
 subnet.size = NULL, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
@@ -109,15 +109,12 @@ genes is much higher.
 \examples{
 \dontrun{
 # Load the library
-library(XGR)
-library(igraph)
-library(dnet)
-library(ggbio)
+library(Pi)
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-AS <- read.delim(file.path(path.package("XGR"),"AS.txt"),
-stringsAsFactors=FALSE)
+data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
 
 # b) perform priority analysis
 pNode <- xPrioritiserSNPs(data=AS,

@@ -16,7 +16,7 @@ c("laplacian",
 normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
 multicores = NULL, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{data}{a named input vector containing a list of seed nodes (ie
@@ -130,10 +130,7 @@ The input graph will treat as an unweighted graph if there is no
 \examples{
 \dontrun{
 # Load the library
-library(XGR)
-library(igraph)
-library(dnet)
-library(GenomicRanges)
+library(Pi)
 
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase

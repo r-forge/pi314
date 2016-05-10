@@ -20,7 +20,7 @@ ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
 lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
 "all_shortest_paths"), true.path.rule = F, verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
@@ -174,10 +174,7 @@ maximum of both p-values in these two calculations.}
 \examples{
 \dontrun{
 # Load the library
-library(XGR)
-library(igraph)
-library(dnet)
-library(GenomicRanges)
+library(Pi)
 
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase

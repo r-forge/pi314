@@ -8,9 +8,9 @@ xPrioritiserManhattan(pNode, color = c("darkred", "darkgreen"), cex =
 0.5,
 highlight.top = 20, highlight.col = "deepskyblue",
 highlight.label.size = 2, highlight.label.offset = 0.02,
-highlight.label.col = "darkblue", verbose = T,
+highlight.label.col = "darkblue", GR.Gene = "UCSC_genes", verbose = T,
 RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/XGR/1.0.0")
+"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
@@ -28,6 +28,15 @@ RData.location =
 \item{highlight.label.offset}{the highlight label offset}
 
 \item{highlight.label.col}{the highlight label color}
+
+\item{GR.Gene}{the genomic regions of genes. By default, it is
+'UCSC_genes', that is, UCSC known canonical genes (together with
+genomic locations) based on human genome assembly hg19. Even the user
+can specify the customised input. To do so, first save your RData file
+(containing an GR object) into your local computer, and make sure the
+GR object content names refer to Gene Symbols. Then, tell "GR.Gene"
+with your RData file name (with or without extension), plus specify
+your file RData path in "RData.location"}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}
@@ -49,15 +58,12 @@ none
 \examples{
 \dontrun{
 # Load the library
-library(XGR)
-library(igraph)
-library(dnet)
-library(ggbio)
+library(Pi)
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-AS <- read.delim(file.path(path.package("XGR"),"AS.txt"),
-stringsAsFactors=FALSE)
+data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
 
 # b) perform priority analysis
 pNode <- xPrioritiserSNPs(data=AS,

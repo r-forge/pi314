@@ -20,9 +20,12 @@
 #' @import MASS
 #' @import Matrix
 #' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame
+#' @importFrom GenomeInfoDb seqlevels
 #' @import igraph
 #' @import dnet
 #' @import XGR
+#' @importFrom ggbio plotGrandLinear
+#' @import ggplot2
 #' @seealso \code{\link{xPrioritiser}}
 #' @include xRWR.r
 #' @examples

@@ -29,15 +29,17 @@ significance.threshold = 5e-05, distance.max = 2e+05,
 decay.kernel = c("rapid", "slow", "linear"), decay.exponent = 2,
 GR.SNP = "dbSNP_GWAS", GR.Gene = "UCSC_genes", include.eQTL = c(NA,
 "JKscience_TS2A", "JKscience_TS2B", "JKscience_TS3A", "JKng_bcell",
-"JKng_mono", "JKnc_neutro", "JK_nk", "GTEx_Adipose_Subcutaneous",
-"GTEx_Artery_Aorta", "GTEx_Artery_Tibial", "GTEx_Esophagus_Mucosa",
-"GTEx_Esophagus_Muscularis", "GTEx_Heart_Left_Ventricle", "GTEx_Lung",
-"GTEx_Muscle_Skeletal", "GTEx_Nerve_Tibial",
-"GTEx_Skin_Sun_Exposed_Lower_leg", "GTEx_Stomach", "GTEx_Thyroid",
-"GTEx_Whole_Blood"), eQTL.customised = NULL, cdf.function =
-c("empirical",
-"exponential"), relative.importance = c(0.5, 0.5),
-scoring.scheme = c("max", "sum", "sequential"),
+"JKng_mono", "JKnc_neutro", "JK_nk", "GTEx_V4_Adipose_Subcutaneous",
+"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
+"GTEx_V4_Esophagus_Mucosa",
+"GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
+"GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
+"GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
+"GTEx_V4_Thyroid",
+"GTEx_V4_Whole_Blood"), eQTL.customised = NULL,
+cdf.function = c("empirical", "exponential"), relative.importance =
+c(0.5,
+0.5), scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
@@ -82,8 +84,8 @@ population can be one of 5 super populations (&quot;AFR&quot;, &quot;AMR&quot;, 
 <td>
 <p>a user-input matrix or data frame with 3 columns:
 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2
-value. It is designed to allow the user analysing their precalcuated LD
-info. This customisation (if provided) has the high priority over
+value. It is designed to allow the user analysing their pre-calculated
+LD info. This customisation (if provided) has the high priority over
 built-in LD SNPs</p>
 </td></tr>
 <tr valign="top"><td><code>LD.r2</code></td>

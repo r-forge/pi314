@@ -124,7 +124,7 @@ xPrioritiser <- function(seeds, g, normalise=c("laplacian","row","column","none"
     	weights <- rep(0, nrow(PTmatrix))
     	weights[flag[!is.na(flag)]] <- setSeeds[!is.na(flag),1]
     	
-    	df <- data.frame(name=rownames(PTmatrix), seed=seeds, weight=weights, priority=as.matrix(PTmatrix))
+    	df <- data.frame(name=rownames(PTmatrix), seed=seeds, weight=weights, priority=as.matrix(PTmatrix), stringsAsFactors=F)
     	df <- df[with(df,order(-priority)), ]
     	df <- cbind(df, rank=rank(-df$priority,ties.method='min'))
     }

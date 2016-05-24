@@ -210,6 +210,11 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 				plot(my.CDF, xlab="-log10(p-values)", ylab="Empirical CDF (eQTL weights)", main="")
 			}
 			
+			if(verbose){
+				now <- Sys.time()
+				message(sprintf("eQTL weights are CDF of empirical distributions"), appendLF=T)
+			}
+			
 		}
 	
 		if(verbose){

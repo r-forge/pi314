@@ -125,6 +125,6 @@ PTmatrix
 }
 }
 \seealso{
-\code{\link{xPrioritiser}}
+\code{\link{xPier}}
 }
 

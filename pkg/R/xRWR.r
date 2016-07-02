@@ -26,7 +26,9 @@
 #' @import XGR
 #' @importFrom ggbio plotGrandLinear
 #' @import ggplot2
-#' @seealso \code{\link{xPrioritiser}}
+#' @importFrom supraHex sDistance
+#' @importFrom scales sqrt_trans log_trans trans_breaks trans_format math_format
+#' @seealso \code{\link{xPier}}
 #' @include xRWR.r
 #' @examples
 #' \dontrun{
@@ -300,7 +302,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
                     as.matrix(PT)
                 })
                     
-                PTmatrix[PTmatrix<1e-6] <- 0
+                #PTmatrix[PTmatrix<1e-6] <- 0
                 #PTmatrix <- Matrix::Matrix(PTmatrix, sparse=T)
             }
         }
@@ -328,7 +330,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
                     step <- step+1
                 }
                 #PTmatrix[,j] <- as.matrix(PT, ncol=1)
-                PT[PT<1e-6] <- 0
+                #PT[PT<1e-6] <- 0
                 #PTmatrix[,j] <- Matrix::Matrix(PT, sparse=T)
                 PTmatrix[,j] <- PT
             
@@ -371,7 +373,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
         message(sprintf("Finally, output %d by %d affinity matrix normalised by %s (%s) ...", nrow(PTmatrix), ncol(PTmatrix), normalise.affinity.matrix, as.character(now)), appendLF=T)
     }
     
-    PTmatrix[PTmatrix<1e-6] <- 0
+    #PTmatrix[PTmatrix<1e-6] <- 0
     #PTmatrix <- signif(PTmatrix, digits=7)
     PTmatrix <- Matrix::Matrix(PTmatrix, sparse=T)
     rownames(PTmatrix) <- rownames(P0matrix)

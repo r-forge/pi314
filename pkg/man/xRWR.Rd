@@ -6,7 +6,7 @@
 \usage{
 xRWR(g, normalise = c("laplacian", "row", "column", "none"),
 setSeeds = NULL, restart = 0.75, normalise.affinity.matrix = c("none",
-"quantile"), parallel = TRUE, multicores = NULL, verbose = T)
+"quantile"), parallel = TRUE, multicores = NULL, verbose = TRUE)
 }
 \arguments{
 \item{g}{an object of class "igraph" or "graphNEL"}
@@ -96,10 +96,10 @@ The input graph will treat as an unweighted graph if there is no
 'weight' edge attribute associated with
 }
 \examples{
-\dontrun{
 # 1) generate a random graph according to the ER model
 g <- erdos.renyi.game(100, 1/100)
 
+\dontrun{
 # 2) produce the induced subgraph only based on the nodes in query
 subg <- dNetInduce(g, V(g), knn=0)
 V(subg)$name <- 1:vcount(subg)

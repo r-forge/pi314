@@ -28,6 +28,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the seed nodes/genes with the weight info
 #' ## load ImmunoBase
@@ -37,6 +38,7 @@
 #' ## seeds weighted according to distance away from lead SNPs
 #' data <- 1- seeds.genes/500000
 #'
+#' \dontrun{
 #' # b) perform priority analysis
 #' pNode <- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7)
 #'
@@ -44,13 +46,14 @@
 #' write.table(pNode$priority, file="Genes_priority.txt", sep="\t", row.names=FALSE)
 #' }
 
-xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), weighted=FALSE, network.customised=NULL, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+
+xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), weighted=FALSE, network.customised=NULL, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     startT <- Sys.time()
     if(verbose){
-        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-        message("", appendLF=T)
+        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+        message("", appendLF=TRUE)
     }
     ####################################################################################
     
@@ -62,7 +65,7 @@ xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_me
     if(!is.null(network.customised) && class(network.customised)=="igraph"){
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Load the customised network (%s) ...", as.character(now)), appendLF=T)
+			message(sprintf("Load the customised network (%s) ...", as.character(now)), appendLF=TRUE)
 		}
 		g <- network.customised
 		
@@ -70,10 +73,10 @@ xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_me
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Load the network %s (%s) ...", network, as.character(now)), appendLF=T)
+			message(sprintf("Load the network %s (%s) ...", network, as.character(now)), appendLF=TRUE)
 		}
 		
-		if(length(grep('STRING',network,perl=T)) > 0){
+		if(length(grep('STRING',network,perl=TRUE)) > 0){
 			g <- xRDataLoader(RData.customised='org.Hs.string', RData.location=RData.location, verbose=verbose)
 			
 			## restrict to those edges with given confidence
@@ -94,9 +97,9 @@ xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_me
 				relations <- igraph::get.data.frame(g, what="edges")[, c(1,2)]
 				colnames(relations) <- c("from","to")
 			}
-			g <- igraph::graph.data.frame(d=relations, directed=F)
+			g <- igraph::graph.data.frame(d=relations, directed=FALSE)
 			
-        }else if(length(grep('PCommonsUN',network,perl=T)) > 0){
+        }else if(length(grep('PCommonsUN',network,perl=TRUE)) > 0){
 			g <- xRDataLoader(RData.customised='org.Hs.PCommons_UN', RData.location=RData.location, verbose=verbose)
 			
 			flag <- unlist(strsplit(network,"_"))[2]
@@ -110,9 +113,9 @@ xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_me
 			
 			relations <- igraph::get.data.frame(g, what="edges")[, c(1,2)]
 			colnames(relations) <- c("from","to")
-			g <- igraph::graph.data.frame(d=relations, directed=F)
+			g <- igraph::graph.data.frame(d=relations, directed=FALSE)
 			
-        }else if(length(grep('PCommonsDN',network,perl=T)) > 0){
+        }else if(length(grep('PCommonsDN',network,perl=TRUE)) > 0){
 			flag <- unlist(strsplit(network,"_"))[2]
 			if(flag=='high'){
 				g <- xRDataLoader(RData.customised='org.Hs.PCommons_DN', RData.location=RData.location, verbose=verbose)
@@ -131,7 +134,7 @@ xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_me
 			
 			relations <- igraph::get.data.frame(g, what="edges")[, c(1,2)]
 			colnames(relations) <- c("from","to")
-			g <- igraph::graph.data.frame(d=relations, directed=F)
+			g <- igraph::graph.data.frame(d=relations, directed=FALSE)
         }
 	
 	}
@@ -142,11 +145,11 @@ xPierGenes <- function(data, network=c("STRING_highest","STRING_high","STRING_me
     ####################################################################################
     endT <- Sys.time()
     if(verbose){
-        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=T)
+        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
     }
     
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
     invisible(pNode)
 }

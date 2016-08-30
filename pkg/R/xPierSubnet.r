@@ -20,12 +20,17 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-#' AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#' #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' gr <- ImmunoBase$AS$variants
+#' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 #'
+#' \dontrun{
 #' # b) perform priority analysis
 #' pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
 #' 
@@ -50,13 +55,13 @@
 #' xCircos(g=subnet, entity="Gene")
 #' }
 
-xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, subnet.significance=0.01, subnet.size=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), network.customised=NULL, subnet.significance=0.01, subnet.size=NULL, verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     startT <- Sys.time()
     if(verbose){
-        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-        message("", appendLF=T)
+        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+        message("", appendLF=TRUE)
     }
     ####################################################################################
     
@@ -76,19 +81,19 @@ xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STRING_hig
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("The 'pNode' object contains %d prioritised genes", length(priority)), appendLF=T)
+		message(sprintf("The 'pNode' object contains %d prioritised genes", length(priority)), appendLF=TRUE)
 	}
     
     ## scale to the range [0 100] and then convert to pvalue-like signficant level
 	x <- priority
-	y <- (x - min(x,na.rm=T)) / (max(x,na.rm=T) - min(x,na.rm=T))
+	y <- (x - min(x,na.rm=TRUE)) / (max(x,na.rm=TRUE) - min(x,na.rm=TRUE))
 	pval <- 10^(-100*y)
 	
 	## only keep the top priority (qunatile)
 	## priority quantite
 	priority.quantite <- as.numeric(priority.quantite)
 	if(length(priority.quantite>0 & priority.quantite<1) & !is.na(priority.quantite)){
-		cf <- quantile(pval, priority.quantite, na.rm=T)
+		cf <- quantile(pval, priority.quantite, na.rm=TRUE)
 		ind <- which(pval<cf)
 		pval <- pval[ind]
 		
@@ -97,25 +102,25 @@ xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STRING_hig
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Among prioritised genes, %d genes are used for network analysis", length(pval)), appendLF=T)
+		message(sprintf("Among prioritised genes, %d genes are used for network analysis", length(pval)), appendLF=TRUE)
 	}
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("\t maximum priority: %1.2e; minimum priority: %1.2e", max(priority), min(priority)), appendLF=T)
-		message(sprintf("\t minimum p-value: %1.2e; maximum p-value: %1.2e", min(pval), max(pval)), appendLF=T)
+		message(sprintf("\t maximum priority: %1.2e; minimum priority: %1.2e", max(priority), min(priority)), appendLF=TRUE)
+		message(sprintf("\t minimum p-value: %1.2e; maximum p-value: %1.2e", min(pval), max(pval)), appendLF=TRUE)
 	}
     
     #############################################################################################
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("xSubneterGenes is being called (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("xSubneterGenes is being called (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
-    subg <- xSubneterGenes(data=pval, network=network, network.customised=network.customised, seed.genes=T, subnet.significance=subnet.significance, subnet.size=subnet.size, verbose=verbose, RData.location=RData.location)
+    subg <- xSubneterGenes(data=pval, network=network, network.customised=network.customised, seed.genes=TRUE, subnet.significance=subnet.significance, subnet.size=subnet.size, verbose=verbose, RData.location=RData.location)
 	
 	# extract relevant info
 	if(ecount(subg)>0 && class(subg)=="igraph"){
@@ -123,9 +128,9 @@ xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STRING_hig
 		nodes <- igraph::get.data.frame(subg, what="vertices")
 		nodes <- cbind(symbol=nodes$name, description=nodes$description, significance=nodes$significance, score=nodes$score, priority=priority[rownames(nodes)])
 		if(is.directed(subg)){
-			subg <- igraph::graph.data.frame(d=relations, directed=T, vertices=nodes)
+			subg <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
 		}else{
-			subg <- igraph::graph.data.frame(d=relations, directed=F, vertices=nodes)
+			subg <- igraph::graph.data.frame(d=relations, directed=FALSE, vertices=nodes)
 		}
 	}else{
 		subg <- NULL
@@ -133,19 +138,19 @@ xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NULL,"STRING_hig
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("xSubneterGenes has finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("xSubneterGenes has finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     ####################################################################################
     endT <- Sys.time()
     if(verbose){
-        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=T)
+        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
     }
     
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
     return(subg)
 }

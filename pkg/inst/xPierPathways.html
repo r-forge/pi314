@@ -32,7 +32,7 @@ test = c("hypergeo", "fisher", "binomial"), p.adjust.method = c("BH",
 ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
 0.01,
 lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = F, verbose = T,
+"all_shortest_paths"), true.path.rule = FALSE, verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -268,6 +268,8 @@ maximum of both p-values in these two calculations.
 # Load the library
 library(Pi)
 
+## End(Not run)
+
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
@@ -276,12 +278,13 @@ seeds.genes &lt;- ImmunoBase$AS$genes_variants
 ## seeds weighted according to distance away from lead SNPs
 data &lt;- 1- seeds.genes/500000
 
+## Not run: 
 # b) perform priority analysis
 pNode &lt;- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7)
 
 # c) derive pathway-level priority
 eTerm &lt;- xPierPathways(pNode=pNode, priority.top=100,
-ontology="MsigdbC2CPall")
+ontology="MsigdbC2CP")
 
 # d) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)

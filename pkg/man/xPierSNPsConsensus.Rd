@@ -28,7 +28,7 @@ cdf.function = c("empirical", "exponential"), scoring.scheme = c("max",
 "PCommonsDN_CTD"), weighted = FALSE, network.customised = NULL,
 normalise = c("laplacian", "row", "column", "none"), restart = 0.75,
 normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
-multicores = NULL, verbose = T,
+multicores = NULL, verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -257,15 +257,20 @@ none
 \dontrun{
 # Load the library
 library(Pi)
+}
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+gr <- ImmunoBase$AS$variants
+AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
+\dontrun{
 # b) perform priority analysis
 pNode <- xPierSNPsConsensus(data=AS, include.LD="EUR",
-include.eQTL=c("JKscience_TS2A","JKscience_TS2B","JKscience_TS3A"),
+include.eQTL=c("JKscience_TS2A","JKscience_TS3A"),
 network="PCommonsUN_medium", restart=0.7)
 
 # c) save to the file called 'SNPs_priority.consensus.txt'
@@ -273,8 +278,7 @@ write.table(pNode$priority, file="SNPs_priority.consensus.txt",
 sep="\\t", row.names=FALSE)
 
 # d) manhattan plot
-mp <- xPierManhattan(pNode, highlight.top=10,
-RData.location=RData.location)
+mp <- xPierManhattan(pNode, highlight.top=10)
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()

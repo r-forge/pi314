@@ -51,32 +51,37 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-#' AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#' #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' gr <- ImmunoBase$AS$variants
+#' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 #'
+#' \dontrun{
 #' # b) perform priority analysis
-#' pNode <- xPierSNPs(data=AS, include.LD="EUR", include.eQTL=c("JKscience_TS2A","JKscience_TS2B","JKscience_TS3A"), network="PCommonsUN_medium", restart=0.7)
+#' pNode <- xPierSNPs(data=AS, include.LD=NA, include.eQTL=c("JKscience_TS2A","JKscience_TS3A"), network="PCommonsUN_medium", restart=0.7)
 #'
 #' # c) save to the file called 'SNPs_priority.txt'
 #' write.table(pNode$priority, file="SNPs_priority.txt", sep="\t", row.names=FALSE)
 #' 
 #' # d) manhattan plot
-#' mp <- xPierManhattan(pNode, highlight.top=10, RData.location=RData.location)
+#' mp <- xPierManhattan(pNode, highlight.top=10)
 #' #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 #' print(mp)
 #' #dev.off()
 #' }
 
-xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood"), eQTL.customised=NULL, cdf.function=c("empirical","exponential"), relative.importance=c(0.5, 0.5), scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), weighted=FALSE, network.customised=NULL, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("rapid","slow","linear"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood"), eQTL.customised=NULL, cdf.function=c("empirical","exponential"), relative.importance=c(0.5, 0.5), scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_high","STRING_medium","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), weighted=FALSE, network.customised=NULL, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     startT <- Sys.time()
     if(verbose){
-        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-        message("", appendLF=T)
+        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+        message("", appendLF=TRUE)
     }
     ####################################################################################
     
@@ -92,54 +97,54 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xSNPscores' is being called to score SNPs (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xSNPscores' is being called to score SNPs (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
 	df_SNP <- xSNPscores(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xSNPscores' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xSNPscores' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     ####################################################################################
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xSNP2nGenes' is being called to define nearby genes (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xSNP2nGenes' is being called to define nearby genes (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
 	df_nGenes <- xSNP2nGenes(data=df_SNP$SNP, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xSNP2nGenes' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xSNP2nGenes' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     ####################################################################################
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xSNP2eGenes' is being called to define nearby genes (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xSNP2eGenes' is being called to define nearby genes (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
-	df_eGenes <- xSNP2eGenes(data=df_SNP$SNP, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, cdf.function=cdf.function, plot=F, verbose=verbose, RData.location=RData.location)
+	df_eGenes <- xSNP2eGenes(data=df_SNP$SNP, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, cdf.function=cdf.function, plot=FALSE, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xSNP2eGenes' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xSNP2eGenes' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     
@@ -150,9 +155,9 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
     allSNPs <- sort(df_SNP$SNP)
     
     ## sparse matrix of nGenes X SNPs
-    G2S_n <- xSparseMatrix(df_nGenes[,c("Gene","SNP","Weight")], rows=allGenes, columns=allSNPs, verbose=F)
+    G2S_n <- xSparseMatrix(df_nGenes[,c("Gene","SNP","Weight")], rows=allGenes, columns=allSNPs, verbose=FALSE)
     ## sparse matrix of eGenes X SNPs
-    G2S_e <- xSparseMatrix(df_eGenes[,c("Gene","SNP","Weight")], rows=allGenes, columns=allSNPs, verbose=F)
+    G2S_e <- xSparseMatrix(df_eGenes[,c("Gene","SNP","Weight")], rows=allGenes, columns=allSNPs, verbose=FALSE)
     
     ## combine both sparse matrix
     if(is.null(G2S_e)){
@@ -194,31 +199,31 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
         })
     }else if(scoring.scheme=='sequential'){
         seeds.genes <- apply(G2S_score, 1, function(x) {
-        	base::sum(base::sort(x, decreasing=T) / (1:length(x)))
+        	base::sum(base::sort(x, decreasing=TRUE) / (1:length(x)))
         })
     }
 	
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("%d Genes are defined as seeds and scored using '%s' scoring scheme from %d SNPs", length(seeds.genes), scoring.scheme, ncol(G2S_score)), appendLF=T)
+		message(sprintf("%d Genes are defined as seeds and scored using '%s' scoring scheme from %d SNPs", length(seeds.genes), scoring.scheme, ncol(G2S_score)), appendLF=TRUE)
 	}
     
     ######################################################################################
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xPierGenes' is being called to prioritise target genes (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xPierGenes' is being called to prioritise target genes (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
 	pNode <- suppressMessages(xPierGenes(data=seeds.genes, network=network, weighted=weighted, network.customised=network.customised, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location))
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xPierGenes' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xPierGenes' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     pNode[['SNP']] <- df_SNP
@@ -227,11 +232,11 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
     ####################################################################################
     endT <- Sys.time()
     if(verbose){
-        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=T)
+        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
     }
     
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
     invisible(pNode)
 }

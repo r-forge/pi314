@@ -25,17 +25,20 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-#' AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#' #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' gr <- ImmunoBase$AS$variants
+#' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 #'
 #' # b) define eQTL genes
-#' df_eGenes <- xSNP2eGenes(data=AS$SNP, include.eQTL=c("JKscience_TS2A","JKscience_TS2B","JKscience_TS3A"))
-#' }
+#' df_eGenes <- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A")
 
-xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood"), eQTL.customised=NULL, cdf.function=c("empirical","exponential"), plot=F, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood"), eQTL.customised=NULL, cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -44,13 +47,13 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
     data <- unique(data)
     
 	## replace '_' with ':'
-	data <- gsub("_", ":", data, perl=T)
+	data <- gsub("_", ":", data, perl=TRUE)
 	## replace 'imm:' with 'chr'
-	data <- gsub("imm:", "chr", data, perl=T)
+	data <- gsub("imm:", "chr", data, perl=TRUE)
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d SNPs are input", length(data)), appendLF=T)
+		message(sprintf("A total of %d SNPs are input", length(data)), appendLF=TRUE)
 	}
     
     ######################################################
@@ -65,7 +68,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
     if(length(include.eQTL) > 0 & is.null(eQTL.customised)){
     	
     	# if GTEx required, only load once
-    	if(sum(grep("GTEx_V4_",include.eQTL,perl=T)) > 0){
+    	if(sum(grep("GTEx_V4_",include.eQTL,perl=TRUE)) > 0){
 			GTEx <- xRDataLoader(RData.customised='GTEx_V4', RData.location=RData.location, verbose=verbose)
 		}
     
@@ -73,63 +76,63 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("Processing %s ...", x), appendLF=T)
+				message(sprintf("Processing %s ...", x), appendLF=TRUE)
 			}
 
 			if(x=='JKscience_TS2B'){
 				# cis-eQTL
 				cis <- xRDataLoader(RData.customised='JKscience_TS2B', RData.location=RData.location, verbose=verbose)
-				minFDR <- apply(cis[,c(9:12)], 1, min, na.rm=T)
-				df <- data.frame(SNP=cis[,1], Gene=cis[,4], FDR=minFDR, stringsAsFactors=F)
+				minFDR <- apply(cis[,c(9:12)], 1, min, na.rm=TRUE)
+				df <- data.frame(SNP=cis[,1], Gene=cis[,4], FDR=minFDR, stringsAsFactors=FALSE)
 			}else if(x=='JKscience_TS3A'){
 				# trans-eQTL
 				trans <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location, verbose=verbose)
-				minFDR <- apply(trans[,c(9:12)], 1, min, na.rm=T)
-				df <- data.frame(SNP=trans[,1], Gene=trans[,4], FDR=minFDR, stringsAsFactors=F)
+				minFDR <- apply(trans[,c(9:12)], 1, min, na.rm=TRUE)
+				df <- data.frame(SNP=trans[,1], Gene=trans[,4], FDR=minFDR, stringsAsFactors=FALSE)
 			}else if(x=='JKscience_TS2A'){
 				# cis-eQTL
 				cis <- xRDataLoader(RData.customised='JKscience_TS2A', RData.location=RData.location, verbose=verbose)
-				minFDR <- apply(cis[,c(9:12)], 1, min, na.rm=T)
-				df <- data.frame(SNP=cis[,1], Gene=cis[,4], FDR=minFDR, stringsAsFactors=F)
+				minFDR <- apply(cis[,c(9:12)], 1, min, na.rm=TRUE)
+				df <- data.frame(SNP=cis[,1], Gene=cis[,4], FDR=minFDR, stringsAsFactors=FALSE)
 			}else if(x=='JKng_bcell'){
 				# b cells
 				res_ls <- xRDataLoader(RData.customised='JKng_bcell', RData.location=RData.location, verbose=verbose)
 				## cis
-				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], FDR=res_ls$cis[,5], stringsAsFactors=F)
+				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], FDR=res_ls$cis[,5], stringsAsFactors=FALSE)
 				## trans
-				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], FDR=res_ls$trans[,5], stringsAsFactors=F)
+				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], FDR=res_ls$trans[,5], stringsAsFactors=FALSE)
 				## both
 				df <- rbind(df_cis, df_trans)
 			}else if(x=='JKng_mono'){
 				# monocytes
 				res_ls <- xRDataLoader(RData.customised='JKng_mono', RData.location=RData.location, verbose=verbose)
 				## cis
-				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], FDR=res_ls$cis[,5], stringsAsFactors=F)
+				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], FDR=res_ls$cis[,5], stringsAsFactors=FALSE)
 				## trans
-				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], FDR=res_ls$trans[,5], stringsAsFactors=F)
+				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], FDR=res_ls$trans[,5], stringsAsFactors=FALSE)
 				## both
 				df <- rbind(df_cis, df_trans)
 			}else if(x=='JKnc_neutro'){
 				# neutrophils
 				res_ls <- xRDataLoader(RData.customised='JKnc_neutro', RData.location=RData.location, verbose=verbose)
 				## cis
-				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], FDR=res_ls$cis[,6], stringsAsFactors=F)
+				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], FDR=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
-				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], FDR=res_ls$trans[,6], stringsAsFactors=F)
+				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], FDR=res_ls$trans[,6], stringsAsFactors=FALSE)
 				## both
 				df <- rbind(df_cis, df_trans)
 			}else if(x=='JK_nk'){
 				# NK cells
 				cis <- xRDataLoader(RData.customised='JK_nk', RData.location=RData.location, verbose=verbose)
 				## cis
-				df_cis <- data.frame(SNP=cis[,1], Gene=cis[,2], FDR=cis[,6], stringsAsFactors=F)
+				df_cis <- data.frame(SNP=cis[,1], Gene=cis[,2], FDR=cis[,6], stringsAsFactors=FALSE)
 				## both
 				df <- df_cis
-			}else if(sum(grep("GTEx_V4_",x,perl=T)) > 0){
+			}else if(sum(grep("GTEx_V4_",x,perl=TRUE)) > 0){
 				x <- gsub("GTEx_V4_","",x)
 				cis <- ''
 				eval(parse(text=paste("cis <- GTEx$", x, sep="")))
-				df <- data.frame(SNP=cis[,1], Gene=cis[,2], FDR=cis[,5], stringsAsFactors=F)
+				df <- data.frame(SNP=cis[,1], Gene=cis[,2], FDR=cis[,5], stringsAsFactors=FALSE)
 			}else{
 				df <- NULL
 			}
@@ -143,7 +146,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 	}else if(!is.null(eQTL.customised)){
 		if(is.vector(eQTL.customised)){
 			# assume a file
-			SGF <- utils::read.delim(file=eQTL.customised, header=F, row.names=NULL, stringsAsFactors=F)
+			SGF <- utils::read.delim(file=eQTL.customised, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
 		}else if(is.matrix(eQTL.customised) | is.data.frame(eQTL.customised)){
 			SGF <- eQTL.customised
 		}
@@ -152,7 +155,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 			colnames(SGF) <- c("SNP", "Gene", "FDR")
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("%d eGenes are customised", length(unique(SGF[,2]))), appendLF=T)
+				message(sprintf("%d eGenes are customised", length(unique(SGF[,2]))), appendLF=TRUE)
 			}
 		}
 	}
@@ -179,17 +182,17 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 			wE <- stats::pexp(-log10(df$FDR), rate=lambda)
 			
 			#########
-			df_eGenes <- data.frame(Gene=df$Gene, SNP=df$SNP, Pval=df$FDR, Weight=wE, row.names=NULL, stringsAsFactors=F)
+			df_eGenes <- data.frame(Gene=df$Gene, SNP=df$SNP, Pval=df$FDR, Weight=wE, row.names=NULL, stringsAsFactors=FALSE)
 			#########
 			
 			if(plot){
-				hist(raw_score, breaks=1000, freq=F, col="grey", xlab="-log10(p-values)", main="")
+				hist(raw_score, breaks=1000, freq=FALSE, col="grey", xlab="-log10(p-values)", main="")
 				curve(stats::dexp(x=raw_score,rate=lambda), 0:max(raw_score), col=2, add=TRUE)
 			}
 			
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("eQTL weights are CDF of exponential empirical distributions (parameter lambda=%f)", lambda), appendLF=T)
+				message(sprintf("eQTL weights are CDF of exponential empirical distributions (parameter lambda=%f)", lambda), appendLF=TRUE)
 			}
 			
 		}else if(cdf.function == "empirical"){
@@ -203,7 +206,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 			wE <- my.CDF(-log10(df$FDR))
 			
 			#########
-			df_eGenes <- data.frame(Gene=df$Gene, SNP=df$SNP, Pval=df$FDR, Weight=wE, row.names=NULL, stringsAsFactors=F)
+			df_eGenes <- data.frame(Gene=df$Gene, SNP=df$SNP, Pval=df$FDR, Weight=wE, row.names=NULL, stringsAsFactors=FALSE)
 			#########
 			
 			if(plot){
@@ -212,14 +215,14 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 			
 			if(verbose){
 				now <- Sys.time()
-				message(sprintf("eQTL weights are CDF of empirical distributions"), appendLF=T)
+				message(sprintf("eQTL weights are CDF of empirical distributions"), appendLF=TRUE)
 			}
 			
 		}
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("%d Genes are defined as eQTL genes", length(unique(df_eGenes$Gene))), appendLF=T)
+			message(sprintf("%d Genes are defined as eQTL genes", length(unique(df_eGenes$Gene))), appendLF=TRUE)
 		}
 	
 	}else{
@@ -227,7 +230,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 		
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("No eQTL genes are defined"), appendLF=T)
+			message(sprintf("No eQTL genes are defined"), appendLF=TRUE)
 		}
 	}
 	

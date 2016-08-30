@@ -30,7 +30,7 @@ xPierGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_CTD"), weighted = FALSE, network.customised = NULL,
 normalise = c("laplacian", "row", "column", "none"), restart = 0.75,
 normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
-multicores = NULL, verbose = T,
+multicores = NULL, verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 </pre>
@@ -196,6 +196,8 @@ scores)
 # Load the library
 library(Pi)
 
+## End(Not run)
+
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase
 ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
@@ -204,6 +206,7 @@ seeds.genes &lt;- ImmunoBase$AS$genes_variants
 ## seeds weighted according to distance away from lead SNPs
 data &lt;- 1- seeds.genes/500000
 
+## Not run: 
 # b) perform priority analysis
 pNode &lt;- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7)
 

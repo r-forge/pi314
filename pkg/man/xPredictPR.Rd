@@ -5,7 +5,7 @@
 \title{Function to assess the prediction performance via Precision-Recall (PR) analysis}
 \usage{
 xPredictPR(GSP, prediction, num.threshold = 100, bin = c("quantile",
-"uniform"), recall.prediction = F, plot = F, verbose = T)
+"uniform"), recall.prediction = FALSE, plot = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{GSP}{a vector containing Glod Standard Positive (GSP)}

@@ -24,7 +24,7 @@ is also supported for Linux or Mac operating systems.
 <pre>
 xRWR(g, normalise = c("laplacian", "row", "column", "none"),
 setSeeds = NULL, restart = 0.75, normalise.affinity.matrix = c("none",
-"quantile"), parallel = TRUE, multicores = NULL, verbose = T)
+"quantile"), parallel = TRUE, multicores = NULL, verbose = TRUE)
 </pre>
 
 
@@ -147,10 +147,10 @@ nodes/seeds.
 <h3>Examples</h3>
 
 <pre>
-## Not run: 
 # 1) generate a random graph according to the ER model
 g &lt;- erdos.renyi.game(100, 1/100)
 
+## Not run: 
 # 2) produce the induced subgraph only based on the nodes in query
 subg &lt;- dNetInduce(g, V(g), knn=0)
 V(subg)$name &lt;- 1:vcount(subg)

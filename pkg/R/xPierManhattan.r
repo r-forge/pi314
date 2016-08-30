@@ -23,12 +23,17 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-#' AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#' #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' gr <- ImmunoBase$AS$variants
+#' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 #'
+#' \dontrun{
 #' # b) perform priority analysis
 #' pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
 #'
@@ -39,7 +44,8 @@
 #' #dev.off()
 #' }
 
-xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", y.scale=c("normal","sqrt","log10"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+
+xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", y.scale=c("normal","sqrt","log10"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -51,13 +57,13 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highl
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=T)
+		message(sprintf("Load positional information for Genes (%s) ...", as.character(now)), appendLF=TRUE)
 	}
     gr_Gene <- xRDataLoader(RData.customised=GR.Gene[1], verbose=verbose, RData.location=RData.location)
     if(is.null(gr_Gene)){
     	GR.Gene <- "UCSC_knownGene"
 		if(verbose){
-			message(sprintf("Instead, %s will be used", GR.Gene), appendLF=T)
+			message(sprintf("Instead, %s will be used", GR.Gene), appendLF=TRUE)
 		}
     	gr_Gene <- xRDataLoader(RData.customised=GR.Gene, verbose=verbose, RData.location=RData.location)
     }
@@ -87,13 +93,13 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highl
         highlight.top <- length(gr)
     }
 	df <- data.frame(index=1:length(gr), val=GenomicRanges::mcols(gr)$priority)
-	ind_o <- df[with(df,order(-val))[1:highlight.top],1]
+	ind_o <- df[order(-df$val)[1:highlight.top],1]
 	gro <- gr[ind_o,]
 	names(gro) <- GenomicRanges::mcols(gro)$Symbol
 	
 	## draw plot
     suppressWarnings(
-    mp <- ggbio::plotGrandLinear(gr, eval(parse(text=paste("aes(y=priority)",sep=""))), color=color, spaceline=T, cex=cex, ylab='Priority', highlight.gr=gro, highlight.col=highlight.col, highlight.label=F, highlight.label.size=highlight.label.size, highlight.label.offset=highlight.label.offset, highlight.label.col=highlight.label.col) + theme(axis.title.y=element_text(size=14), axis.text.x=element_text(angle=45, hjust=1,color="black",size=12), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
+    mp <- ggbio::plotGrandLinear(gr, eval(parse(text=paste("aes(y=priority)",sep=""))), color=color, spaceline=TRUE, cex=cex, ylab='Priority', highlight.gr=gro, highlight.col=highlight.col, highlight.label=FALSE, highlight.label.size=highlight.label.size, highlight.label.offset=highlight.label.offset, highlight.label.col=highlight.label.col) + theme(axis.title.y=element_text(size=14), axis.text.x=element_text(angle=45, hjust=1,color="black",size=12), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
     )
     
     x <- NULL

@@ -9,7 +9,7 @@ highlight.top = 20, highlight.col = "deepskyblue",
 highlight.label.size = 2, highlight.label.offset = 0.02,
 highlight.label.col = "darkblue", y.scale = c("normal", "sqrt",
 "log10"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = T,
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -67,12 +67,17 @@ none
 \dontrun{
 # Load the library
 library(Pi)
+}
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+gr <- ImmunoBase$AS$variants
+AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
+\dontrun{
 # b) perform priority analysis
 pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
 

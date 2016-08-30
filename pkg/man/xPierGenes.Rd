@@ -13,7 +13,7 @@ xPierGenes(data, network = c("STRING_highest", "STRING_high",
 "PCommonsDN_CTD"), weighted = FALSE, network.customised = NULL,
 normalise = c("laplacian", "row", "column", "none"), restart = 0.75,
 normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
-multicores = NULL, verbose = T,
+multicores = NULL, verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -135,6 +135,7 @@ The input graph will treat as an unweighted graph if there is no
 \dontrun{
 # Load the library
 library(Pi)
+}
 
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase
@@ -144,6 +145,7 @@ seeds.genes <- ImmunoBase$AS$genes_variants
 ## seeds weighted according to distance away from lead SNPs
 data <- 1- seeds.genes/500000
 
+\dontrun{
 # b) perform priority analysis
 pNode <- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7)
 

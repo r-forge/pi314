@@ -46,6 +46,7 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the seed nodes/genes with the weight info
 #' ## load ImmunoBase
@@ -55,11 +56,12 @@
 #' ## seeds weighted according to distance away from lead SNPs
 #' data <- 1- seeds.genes/500000
 #'
+#' \dontrun{
 #' # b) perform priority analysis
 #' pNode <- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7)
 #' 
 #' # c) derive pathway-level priority
-#' eTerm <- xPierPathways(pNode=pNode, priority.top=100, ontology="MsigdbC2CPall")
+#' eTerm <- xPierPathways(pNode=pNode, priority.top=100, ontology="MsigdbC2CP")
 #'
 #' # d) view enrichment results for the top significant terms
 #' xEnrichViewer(eTerm)
@@ -70,11 +72,11 @@
 #' utils::write.table(output, file="Pathways_priority.txt", sep="\t", row.names=FALSE)
 #' }
 
-xPierPathways <- function(pNode, priority.top=100, background=NULL, ontology=c("GOBP","GOMF","GOCC","PS","PS2","SF","DO","HPPA","HPMI","HPCM","HPMA","MP", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=F, verbose=T, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xPierPathways <- function(pNode, priority.top=100, background=NULL, ontology=c("GOBP","GOMF","GOCC","PS","PS2","SF","DO","HPPA","HPMI","HPCM","HPMA","MP", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb"), size.range=c(10,2000), min.overlap=3, which.distance=NULL, test=c("hypergeo","fisher","binomial"), p.adjust.method=c("BH", "BY", "bonferroni", "holm", "hochberg", "hommel"), ontology.algorithm=c("none","pc","elim","lea"), elim.pvalue=1e-2, lea.depth=2, path.mode=c("all_paths","shortest_paths","all_shortest_paths"), true.path.rule=FALSE, verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 {
     startT <- Sys.time()
-    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-    message("", appendLF=T)
+    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+    message("", appendLF=TRUE)
     ####################################################################################
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -103,26 +105,26 @@ xPierPathways <- function(pNode, priority.top=100, background=NULL, ontology=c("
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xEnricherGenes' is being called (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xEnricherGenes' is being called (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
 	eTerm <- xEnricherGenes(data=data, background=background, ontology=ontology, size.range=size.range, min.overlap=min.overlap, which.distance=which.distance, test=test, p.adjust.method=p.adjust.method, ontology.algorithm=ontology.algorithm, elim.pvalue=elim.pvalue, lea.depth=lea.depth, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose, RData.location=RData.location)
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xEnricherGenes' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xEnricherGenes' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     ####################################################################################
     endT <- Sys.time()
-    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=T)
+    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
     
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
     invisible(eTerm)
 }

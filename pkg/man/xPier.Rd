@@ -6,7 +6,7 @@
 \usage{
 xPier(seeds, g, normalise = c("laplacian", "row", "column", "none"),
 restart = 0.75, normalise.affinity.matrix = c("none", "quantile"),
-parallel = TRUE, multicores = NULL, verbose = T)
+parallel = TRUE, multicores = NULL, verbose = TRUE)
 }
 \arguments{
 \item{seeds}{a named input vector containing a list of seed nodes. For
@@ -85,11 +85,13 @@ The input graph will treat as an unweighted graph if there is no
 \dontrun{
 # Load the library
 library(Pi)
+}
 
 # a) provide the input nodes/genes with the significance info
+sig <- rbeta(500, shape1=0.5, shape2=1)
+\dontrun{
 ## load human genes
 org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
-sig <- rbeta(500, shape1=0.5, shape2=1)
 data <- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
 
 # b) provide the network

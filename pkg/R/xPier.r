@@ -25,11 +25,13 @@
 #' \dontrun{
 #' # Load the library
 #' library(Pi)
+#' }
 #'
 #' # a) provide the input nodes/genes with the significance info
+#' sig <- rbeta(500, shape1=0.5, shape2=1)
+#' \dontrun{
 #' ## load human genes
 #' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg')
-#' sig <- rbeta(500, shape1=0.5, shape2=1)
 #' data <- data.frame(symbols=org.Hs.eg$gene_info$Symbol[1:500], sig)
 #' 
 #' # b) provide the network
@@ -39,7 +41,7 @@
 #' pNode <- xPier(seeds=data, g=g, restart=0.75)
 #' }
 
-xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=T)
+xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -62,7 +64,7 @@ xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), rest
 				}
 			}else{
 				# assume a file
-				data <- utils::read.delim(file=data, header=F, row.names=NULL, stringsAsFactors=F)
+				data <- utils::read.delim(file=data, header=FALSE, row.names=NULL, stringsAsFactors=FALSE)
 			}
 		}
 		if (is.vector(data)){
@@ -91,7 +93,7 @@ xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), rest
     
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("The input graph has %d nodes and %d edges (%s) ...", vcount(ig),ecount(ig),as.character(now)), appendLF=T)
+			message(sprintf("The input graph has %d nodes and %d edges (%s) ...", vcount(ig),ecount(ig),as.character(now)), appendLF=TRUE)
 		}
 		
 	}else{
@@ -102,9 +104,9 @@ xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), rest
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("\n#######################################################", appendLF=T))
-        message(sprintf("'xRWR' is being called (%s):", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################", appendLF=T))
+        message(sprintf("\n#######################################################", appendLF=TRUE))
+        message(sprintf("'xRWR' is being called (%s):", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################", appendLF=TRUE))
     }
     
     PTmatrix <- suppressWarnings(xRWR(g=ig, normalise=normalise, setSeeds=setSeeds, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose))
@@ -112,9 +114,9 @@ xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), rest
 	
 	if(verbose){
         now <- Sys.time()
-        message(sprintf("#######################################################", appendLF=T))
-        message(sprintf("'xRWR' has been finished (%s)!", as.character(now)), appendLF=T)
-        message(sprintf("#######################################################\n", appendLF=T))
+        message(sprintf("#######################################################", appendLF=TRUE))
+        message(sprintf("'xRWR' has been finished (%s)!", as.character(now)), appendLF=TRUE)
+        message(sprintf("#######################################################\n", appendLF=TRUE))
     }
     
     if(1){
@@ -124,8 +126,8 @@ xPier <- function(seeds, g, normalise=c("laplacian","row","column","none"), rest
     	weights <- rep(0, nrow(PTmatrix))
     	weights[flag[!is.na(flag)]] <- setSeeds[!is.na(flag),1]
     	
-    	df <- data.frame(name=rownames(PTmatrix), seed=seeds, weight=weights, priority=as.matrix(PTmatrix), stringsAsFactors=F)
-    	df <- df[with(df,order(-priority)), ]
+    	df <- data.frame(name=rownames(PTmatrix), seed=seeds, weight=weights, priority=as.matrix(PTmatrix), stringsAsFactors=FALSE)
+    	df <- df[order(-df$priority), ]
     	df <- cbind(df, rank=rank(-df$priority,ties.method='min'))
     }
     

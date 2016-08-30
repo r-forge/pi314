@@ -31,10 +31,10 @@
 #' @seealso \code{\link{xPier}}
 #' @include xRWR.r
 #' @examples
-#' \dontrun{
 #' # 1) generate a random graph according to the ER model
 #' g <- erdos.renyi.game(100, 1/100)
 #'
+#' \dontrun{
 #' # 2) produce the induced subgraph only based on the nodes in query
 #' subg <- dNetInduce(g, V(g), knn=0)
 #' V(subg)$name <- 1:vcount(subg)
@@ -56,13 +56,13 @@
 #' PTmatrix
 #' }
 
-xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NULL, restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=T)
+xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NULL, restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE)
 {
     
     startT <- Sys.time()
     if(verbose){
-        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=T)
-        message("", appendLF=T)
+        message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+        message("", appendLF=TRUE)
     }
     ####################################################################################
     
@@ -80,24 +80,24 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
 
     if(verbose){
         now <- Sys.time()
-        message(sprintf("First, get the adjacency matrix of the input graph (%s) ...", as.character(now)), appendLF=T)
+        message(sprintf("First, get the adjacency matrix of the input graph (%s) ...", as.character(now)), appendLF=TRUE)
     }
     
     if ("weight" %in% list.edge.attributes(ig)){
-        adjM <- get.adjacency(ig, type="both", attr="weight", edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
+        adjM <- get.adjacency(ig, type="both", attr="weight", edges=FALSE, names=TRUE, sparse=getIgraphOpt("sparsematrices"))
         if(verbose){
-            message(sprintf("\tNotes: using weighted graph!"), appendLF=T)
+            message(sprintf("\tNotes: using weighted graph!"), appendLF=TRUE)
         }
     }else{
-        adjM <- get.adjacency(ig, type="both", attr=NULL, edges=F, names=T, sparse=getIgraphOpt("sparsematrices"))
+        adjM <- get.adjacency(ig, type="both", attr=NULL, edges=FALSE, names=TRUE, sparse=getIgraphOpt("sparsematrices"))
         if(verbose){
-            message(sprintf("\tNotes: using unweighted graph!"), appendLF=T)
+            message(sprintf("\tNotes: using unweighted graph!"), appendLF=TRUE)
         }
     }
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("Then, normalise the adjacency matrix using %s normalisation (%s) ...", normalise, as.character(now)), appendLF=T)
+        message(sprintf("Then, normalise the adjacency matrix using %s normalisation (%s) ...", normalise, as.character(now)), appendLF=TRUE)
     }
     
     A <- adjM!=0
@@ -120,7 +120,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     }
     #nadjM <- as.matrix(nadjM)
     
-    #nig <- graph.adjacency(nadjM, mode=c("undirected"), weighted=T, diag=F, add.colnames=NULL, add.rownames=NA)
+    #nig <- graph.adjacency(nadjM, mode=c("undirected"), weighted=TRUE, diag=FALSE, add.colnames=NULL, add.rownames=NA)
     ## update the vertex attributes
     nattr <- list.vertex.attributes(ig)
     for(attr in nattr){
@@ -137,10 +137,10 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     
     ####################################################
     # A function to indicate the running progress
-    progress_indicate <- function(i, B, step, flag=F){
+    progress_indicate <- function(i, B, step, flag=FALSE){
         if(i %% ceiling(B/step) == 0 | i==B | i==1){
             if(flag & verbose){
-                message(sprintf("\t%d out of %d seed sets (%s)", i, B, as.character(Sys.time())), appendLF=T)
+                message(sprintf("\t%d out of %d seed sets (%s)", i, B, as.character(Sys.time())), appendLF=TRUE)
             }
         }
     }
@@ -149,7 +149,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     sum2one <- function(PTmatrix){
         col_sum <- apply(PTmatrix, 2, sum)
         #col_sum <- Matrix::colSums(PTmatrix, sparseResult=F)
-        col_sum_matrix <- matrix(rep(col_sum, nrow(PTmatrix)), ncol=ncol(PTmatrix), nrow=nrow(PTmatrix), byrow =T)
+        col_sum_matrix <- matrix(rep(col_sum, nrow(PTmatrix)), ncol=ncol(PTmatrix), nrow=nrow(PTmatrix), byrow=TRUE)
         res <- as.matrix(PTmatrix)/col_sum_matrix
         res[is.na(res)] <- 0
         return(res)
@@ -215,7 +215,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     stop_step <- 50      # maximum steps of iterations
     
     if(is.null(setSeeds)){
-        P0matrix <- Matrix::Matrix(diag(vcount(ig)), sparse=T)
+        P0matrix <- Matrix::Matrix(diag(vcount(ig)), sparse=TRUE)
         rownames(P0matrix) <- V(ig)$name
         colnames(P0matrix) <- V(ig)$name
         
@@ -264,12 +264,12 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
         }
         
         ## convert to sparse matrix
-        P0matrix <- Matrix::Matrix(P0matrix, sparse=T)
+        P0matrix <- Matrix::Matrix(P0matrix, sparse=TRUE)
     }
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("Third, RWR of %d sets of seeds using %1.1e restart probability (%s) ...", ncol(P0matrix), restart, as.character(now)), appendLF=T)
+        message(sprintf("Third, RWR of %d sets of seeds using %1.1e restart probability (%s) ...", ncol(P0matrix), restart, as.character(now)), appendLF=TRUE)
     }
     
     if(restart==1){
@@ -278,14 +278,14 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     }else{
         
         ###### parallel computing
-        flag_parallel <- F
+        flag_parallel <- FALSE
         if(parallel==TRUE){
 
             flag_parallel <- dCheckParallel(multicores=multicores, verbose=verbose)
             if(flag_parallel){
                 j <- 1
-                PTmatrix <- foreach::`%dopar%` (foreach::foreach(j=1:ncol(P0matrix), .inorder=T, .combine='cbind'), {
-                    progress_indicate(j, ncol(P0matrix), 10, flag=T)
+                PTmatrix <- foreach::`%dopar%` (foreach::foreach(j=1:ncol(P0matrix), .inorder=TRUE, .combine='cbind'), {
+                    progress_indicate(j, ncol(P0matrix), 10, flag=TRUE)
                     P0 <- P0matrix[,j]
                     ## Initializing variables
                     step <- 0
@@ -303,13 +303,13 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
                 })
                     
                 #PTmatrix[PTmatrix<1e-6] <- 0
-                #PTmatrix <- Matrix::Matrix(PTmatrix, sparse=T)
+                #PTmatrix <- Matrix::Matrix(PTmatrix, sparse=TRUE)
             }
         }
         
         ###### non-parallel computing
-        if(flag_parallel==F){
-            PTmatrix <- Matrix::Matrix(0, nrow=nrow(P0matrix), ncol=ncol(P0matrix), sparse=T)
+        if(flag_parallel==FALSE){
+            PTmatrix <- Matrix::Matrix(0, nrow=nrow(P0matrix), ncol=ncol(P0matrix), sparse=TRUE)
             for(j in 1:ncol(P0matrix)){
                 #P0 <- as.matrix(P0matrix[,j],ncol=1)
                 P0 <- P0matrix[,j]
@@ -331,10 +331,10 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
                 }
                 #PTmatrix[,j] <- as.matrix(PT, ncol=1)
                 #PT[PT<1e-6] <- 0
-                #PTmatrix[,j] <- Matrix::Matrix(PT, sparse=T)
+                #PTmatrix[,j] <- Matrix::Matrix(PT, sparse=TRUE)
                 PTmatrix[,j] <- PT
             
-                progress_indicate(j, ncol(P0matrix), 10, flag=T)
+                progress_indicate(j, ncol(P0matrix), 10, flag=TRUE)
         
             }
         }
@@ -343,7 +343,7 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     ## make sure the sum of elements in each steady probability vector is one
     if(verbose){
         now <- Sys.time()
-        message(sprintf("Fourth, rescale steady probability vector (%s) ...", as.character(now)), appendLF=T)
+        message(sprintf("Fourth, rescale steady probability vector (%s) ...", as.character(now)), appendLF=TRUE)
     }
     PTmatrix <- sum2one(PTmatrix) # input/output: full matrix
     
@@ -370,23 +370,23 @@ xRWR <- function(g, normalise=c("laplacian","row","column","none"), setSeeds=NUL
     
     if(verbose){
         now <- Sys.time()
-        message(sprintf("Finally, output %d by %d affinity matrix normalised by %s (%s) ...", nrow(PTmatrix), ncol(PTmatrix), normalise.affinity.matrix, as.character(now)), appendLF=T)
+        message(sprintf("Finally, output %d by %d affinity matrix normalised by %s (%s) ...", nrow(PTmatrix), ncol(PTmatrix), normalise.affinity.matrix, as.character(now)), appendLF=TRUE)
     }
     
     #PTmatrix[PTmatrix<1e-6] <- 0
     #PTmatrix <- signif(PTmatrix, digits=7)
-    PTmatrix <- Matrix::Matrix(PTmatrix, sparse=T)
+    PTmatrix <- Matrix::Matrix(PTmatrix, sparse=TRUE)
     rownames(PTmatrix) <- rownames(P0matrix)
     colnames(PTmatrix) <- colnames(P0matrix)
     
     ####################################################################################
     endT <- Sys.time()
     if(verbose){
-        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=T)
+        message(paste(c("\nFinish at ",as.character(endT)), collapse=""), appendLF=TRUE)
     }
     
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=T)
+    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
 
     invisible(PTmatrix)
 }

@@ -11,7 +11,7 @@ xPierSubnet(pNode, priority.quantite = 0.1, network = c(NULL,
 "PCommonsDN_PID", "PCommonsDN_PANTHER", "PCommonsDN_ReconX",
 "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite", "PCommonsDN_CTD"),
 network.customised = NULL, subnet.significance = 0.01,
-subnet.size = NULL, verbose = T,
+subnet.size = NULL, verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -110,12 +110,17 @@ genes is much higher.
 \dontrun{
 # Load the library
 library(Pi)
+}
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+gr <- ImmunoBase$AS$variants
+AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
+\dontrun{
 # b) perform priority analysis
 pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
 

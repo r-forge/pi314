@@ -14,7 +14,8 @@ xSNP2eGenes(data, include.eQTL = c(NA, "JKscience_TS2A",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
 "GTEx_V4_Thyroid",
 "GTEx_V4_Whole_Blood"), eQTL.customised = NULL,
-cdf.function = c("empirical", "exponential"), plot = F, verbose = T,
+cdf.function = c("empirical", "exponential"), plot = FALSE,
+verbose = TRUE,
 RData.location =
 "https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
 }
@@ -79,16 +80,18 @@ None
 \dontrun{
 # Load the library
 library(Pi)
+}
 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+#data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+gr <- ImmunoBase$AS$variants
+AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 # b) define eQTL genes
-df_eGenes <- xSNP2eGenes(data=AS$SNP,
-include.eQTL=c("JKscience_TS2A","JKscience_TS2B","JKscience_TS3A"))
-}
+df_eGenes <- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A")
 }
 \seealso{
 \code{\link{xRDataLoader}}

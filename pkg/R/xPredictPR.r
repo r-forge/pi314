@@ -21,7 +21,7 @@
 #' PR <- xPredictPR(GSP, prediction)
 #' }
 
-xPredictPR <- function(GSP, prediction, num.threshold=100, bin=c("quantile", "uniform"), recall.prediction=F, plot=F, verbose=T)
+xPredictPR <- function(GSP, prediction, num.threshold=100, bin=c("quantile", "uniform"), recall.prediction=FALSE, plot=FALSE, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -30,14 +30,14 @@ xPredictPR <- function(GSP, prediction, num.threshold=100, bin=c("quantile", "un
     gsp <- unique(GSP)
     if(verbose){
         now <- Sys.time()
-        message(sprintf("There are %d targets in GSP (%s).", length(gsp), as.character(now)), appendLF=T)
+        message(sprintf("There are %d targets in GSP (%s).", length(gsp), as.character(now)), appendLF=TRUE)
     }
     
     res_ls <- split(x=prediction[,2], f=prediction[,1])
     pred <- unlist(lapply(res_ls, max))
     if(verbose){
         now <- Sys.time()
-        message(sprintf("There are %d targets in predictions (%s).", length(pred), as.character(now)), appendLF=T)
+        message(sprintf("There are %d targets in predictions (%s).", length(pred), as.character(now)), appendLF=TRUE)
     }
     
 	## GSP but only predicted
@@ -45,7 +45,7 @@ xPredictPR <- function(GSP, prediction, num.threshold=100, bin=c("quantile", "un
     gsp_predicted <- gsp[!is.na(ind)]
     if(verbose){
         now <- Sys.time()
-        message(sprintf("There are %d targets both in GSP and predictions (%s).", length(gsp_predicted), as.character(now)), appendLF=T)
+        message(sprintf("There are %d targets both in GSP and predictions (%s).", length(gsp_predicted), as.character(now)), appendLF=TRUE)
     }
     
     ######################################
@@ -80,15 +80,15 @@ xPredictPR <- function(GSP, prediction, num.threshold=100, bin=c("quantile", "un
     ######################################
 
     ## F-measure: the maximum (over all thresholds t) of a harmonic mean between precision and recall
-    Fmeasure <- base::max( (2 * x_pr * x_rc) / (x_pr + x_rc), na.rm=T)
+    Fmeasure <- base::max( (2 * x_pr * x_rc) / (x_pr + x_rc), na.rm=TRUE)
     
     ##############################################################################################
     
     if(verbose){
-        message(sprintf("In summary, Prediction coverage: %.2f (amongst %d targets in GSP), and F-measure: %.2f.", max(x_rc), length(gsp), Fmeasure), appendLF=T)
+        message(sprintf("In summary, Prediction coverage: %.2f (amongst %d targets in GSP), and F-measure: %.2f.", max(x_rc), length(gsp), Fmeasure), appendLF=TRUE)
     }
 
-    PR <- data.frame(Precision=x_pr, Recall=x_rc, row.names=t)
+    PR <- data.frame(Precision=x_pr, Recall=x_rc, row.names=TRUE)
     
     if(plot){
 		p <- ggplot(PR, aes(x=PR$Recall, y=PR$Precision)) 

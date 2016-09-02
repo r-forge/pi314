@@ -2,13 +2,15 @@
 title: "Pi User Manual (R/Bioconductor package)"
 author: "Hai Fang, the ULTRA-DD Consortium, Julian C Knight"
 date: "`r Sys.Date()`"
+abstract: >
+  This document provides instructions on how to use an R/Bioconductor package called `Priority index` (or `Pi`). `Pi` is developed as a genomic-led target prioritisation system, with the focus on leveraging genetic data to prioritise targets at the gene and pathway level. Based on evidence of genetic association from GWAS data, this prioritisation system is able to resolve modulated genes (seed genes) by utilising knowledge of linkage disequilibrium (co-inherited variants), distance from the gene, and evidence of genetic association with gene expression. Seed genes are scored in an integrative way quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the top priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting many highly prioritised genes but a few lowly prioritised genes as linkers.
 output: 
-    BiocStyle::html_document:
+  BiocStyle::html_document:
         toc: true
         toc_depth: 2
         number_sections: true
         highlight: default
-bibliography: Pi.bib
+bibliography: now.Pi.bib
 vignette: >
  %\VignetteIndexEntry{Vignette Title}
  %\VignetteEngine{knitr::rmarkdown}
@@ -31,29 +33,53 @@ knitr::opts_chunk$set(eval=FALSE)
 cd ~/Sites/XGR
 ################################################
 R
-library(BiocStyle)
-rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document(toc=TRUE,toc_depth=2,number_sections=TRUE,hightlight="default",theme="united",toc_float=FALSE))
+rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document(toc=TRUE,toc_depth=2,number_sections=TRUE,hightlight="default",toc_float=FALSE))
 q('no')
 ################################################
 scp now.Pi_vignettes.html galahad.well.ox.ac.uk:/var/www/Pi/Pi_vignettes.html
 scp now.Pi_vignettes.Rmd galahad.well.ox.ac.uk:/var/www/Pi/Pi_vignettes.Rmd
 ```
 
-# Overview
-
-We are strong supporters of open-source tools for reproducible research. `Priority index` or `Pi` is developed as a genomic-led target prioritisation system, with the focus on leveraging genetic data to prioritise targets at the gene and pathway level. Based on evidence of genetic association from GWAS data, this prioritisation system is able to resolve modulated genes (seed genes) by utilising knowledge of linkage disequilibrium (co-inherited variants), distance from the gene, and evidence of genetic association with gene expression. Seed genes are scored in an integrative way quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the top priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting many highly prioritised genes but a few lowly prioritised genes as linkers. See below for the workflow.
-
-```{r fig.width=3, fig.height=2, fig.align="center", echo=FALSE, eval=TRUE}
-library(png)
-library(grid)
-img <- readPNG("saved.Pi.workflow.png")
-grid.raster(img)
-```
-
 
 # Installation
 
-This intends for end-users who are comfortable with R (with the latest version available at http://cran.r-project.org). `Pi` together with dependant packages (such as `XGR`) can be installed following instructions below:
+## R
+
+This intends for end-users who are comfortable with R (http://cran.r-project.org). The latest version on different platforms can be installed: `Windows` ([download](http://cran.r-project.org/bin/windows/base)), `Mac OS X` ([download](http://cran.r-project.org/bin/macosx)), and `Linux` (see below).
+
+- Assume you have a `ROOT (sudo)` privilege:
+
+	```{r, eval=FALSE}
+	# Below are shell command lines in Terminal
+	sudo su
+	# here enter your password
+	wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.3.1.tar.gz
+	tar xvfz R-3.3.1.tar.gz
+	cd R-3.3.1
+	./configure
+	make
+	make check
+	make install
+	R # start R
+	```
+
+- Assume you do `NOT` have a `ROOT (sudo)` privilege and want R installation under your home directory (`$HOME`):
+
+	```{r, eval=FALSE}
+	# Below are shell command lines in Terminal
+	wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.3.1.tar.gz
+	tar xvfz R-3.3.1.tar.gz
+	cd R-3.3.1
+	./configure --prefix=$HOME/R-3.3.1
+	make
+	make check
+	make install
+	$HOME/R-3.3.1/bin/R # start R
+	```
+
+## Packages
+
+`Pi` together with dependant packages (such as `XGR`) can be installed following instructions below:
 
 ```{r eval=FALSE}
 # install the dependant packages including `XGR` and others
@@ -65,9 +91,27 @@ library(devtools)
 install_github(c("hfang-bristol/Pi"), dependencies=TRUE)
 ```
 
+
+# Workflow
+
+```{r fig.width=3, fig.height=2, fig.align="center", echo=FALSE, eval=TRUE}
+library(png)
+library(grid)
+img <- readPNG("saved.Pi.workflow.png")
+grid.raster(img)
+```
+
+
 # R functions
 
 Priority functions are designed in a nested way. The core relation follows this route: `xPierSNPs` -> `xPierGenes` -> `xPier` -> `xRWR`, achieving gene-level prioritisation from an input list of SNPs (along with their significant level). The output of this route is taken as the input of either `xPierManhattan` for visualising gene priority scores, `xPierPathways` for prioritising pathways, or `xPierSubnet` for identifying a network of top prioritised genes.
+
+```{r fig.width=1.2, fig.height=1.2, fig.align="center", echo=FALSE, eval=TRUE}
+library(png)
+library(grid)
+img <- readPNG("saved.Pi.functions.png")
+grid.raster(img)
+```
 
 ## xRWR
 *[`xRWR`](http://rawgit.com/hfang-bristol/Pi/master/inst/xRWR.html)*: implements Random Walk with Restart (RWR) estimating the affinity score of nodes in a graph to a list of seed nodes. The affinity score can be viewed as the `influential impact` over the graph that is collectively imposed by seed nodes. If the seeds are not given, it will pre-compute affinity matrix for nodes in the input graph with respect to each starting node (as a seed) by looping over every node in the graph.  A higher-level function `xPier` directly relies on it.
@@ -162,6 +206,21 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 In this section, we use GWAS SNPs about an inflammatory disease `Spondyloarthritis` (including `Ankylosing Spondylitis` and `Psoriatic Arthritis`) as a case study, and give a step-by-step demo showing how to use `Pi` to achieve disease-specific genetic prioritisation of targets at the gene, pathway and network level.
 
+**First of all, load the packages including `Pi`:**
+
+```{r, eval=TRUE, include=TRUE}
+library(Pi)
+
+# optionally, specify the local location of built-in RData
+# by default:
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+```
+
+```{r, eval=TRUE, echo=FALSE}
+# This intends to use the local version of data
+RData.location <- "~/Sites/SVN/github/bigdata"
+```
+
 ## Input data
 
 Spondyloarthritis-associated GWAS lead SNPs are collected mainly from GWAS Catalog [@Welter2014], complemented by [ImmunoBase](http://www.immunobase.org) and latest publications. 
@@ -171,7 +230,7 @@ data.file <- "http://galahad.well.ox.ac.uk/bigdata/Spondyloarthritis.txt"
 data <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
 ```
 
-The first 15 rows of the data frame `data` are shown below, with the column `SNP` for AS GWAS SNPs and the column `Pval` for GWAS-detected P-values.
+The first 15 rows of `data` are shown below, with the column `SNP` for GWAS SNPs and the column `Pval` for GWAS-detected P-values.
 
 ```{r, eval=TRUE, echo=FALSE}
 knitr::kable(data[1:15,], digits=200, caption="", row.names=FALSE)
@@ -181,11 +240,11 @@ knitr::kable(data[1:15,], digits=200, caption="", row.names=FALSE)
 
 It includes the following steps:
 
-1) Define seed genes based on distance-to-SNP window and genetic association with gene expression: `nearby genes` that are located within defined distance window (by default, 50kb) of lead or Linkage Disequilibrium (LD) SNPs that are calculated based on European population data from 1000 Genome Project; `expression associated genes (eQTL genes)` for which gene expression is, either in a cis- or trans-acting manner, significantly associated with lead or LD SNPs, based on immune-related eQTL data.
+- `define seed genes`, that is, seed genes are defined based on distance-to-SNP window and genetic association with gene expression: `nearby genes` that are located within defined distance window (by default, 50kb) of lead or Linkage Disequilibrium (LD) SNPs that are calculated based on European population data from 1000 Genome Project; `expression associated genes (eQTL genes)` for which gene expression is, either in a cis- or trans-acting manner, significantly associated with lead or LD SNPs, based on eQTL mapping.
 
-2) Score seed genes to quantify the genetic influence under lead or LD SNPs.
+- `score seed genes`, that is, quantifying the genetic influence under lead or LD SNPs.
 
-3) Prioritise target genes by estimating their global network connectivity to seed genes. With scored seed genes superposed onto a  gene interaction network (see above `STRING_high`), RWR algorithm is implemented to prioritise candidate target genes based on their network connectivity/affinity to seed genes. As such, a gene that has a higher affinity score to seed genes will receive a higher priority score.
+- `prioritise target genes`, that is, estimating their global network connectivity to seed genes. With scored seed genes superposed onto a gene interaction network, RWR algorithm is implemented to prioritise candidate target genes based on their network connectivity/affinity to seed genes. As such, a gene that has a higher affinity score to seed genes will receive a higher priority score.
 
 > **Specify parameters**
 
@@ -203,12 +262,6 @@ cdf.function <- "empirical"
 scoring.scheme <- 'max'
 network <- "STRING_high"
 restart <- 0.75
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
-```
-
-```{r, eval=TRUE, echo=FALSE}
-# This intends to use the local version of data
-RData.location <- "~/Sites/SVN/github/bigdata"
 ```
 
 > **Do prioritisation**
@@ -281,11 +334,11 @@ grid.raster(img)
 
 Network-level prioritisation is to identify a gene network that contains as many highly prioritised genes as possible but a few lowly prioritised genes as linkers. Given a gene network (the same as used in gene-level prioritisation) with nodes labelled with gene priority scores, the search for a maximum-scoring gene subnetwork is briefed as follows: 
 
-1) `score transformation`, that is, given a threshold of tolerable priority scores, nodes above this threshold (nodes of interest) are scored positively, and negative scores for nodes below the threshold (intolerable).
+- `score transformation`, that is, given a threshold of tolerable priority scores, nodes above this threshold (nodes of interest) are scored positively, and negative scores for nodes below the threshold (intolerable).
 
-2) `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes but allowing for a few negative-score nodes as linkers, done via heuristically solving prize-collecting Steiner tree problem [@Fang2014c].
+- `subnetwork identification`, that is, to find an interconnected gene subnetwork enriched with positive-score nodes but allowing for a few negative-score nodes as linkers, done via heuristically solving prize-collecting Steiner tree problem [@Fang2014c].
 
-3) `controlling the subnetwork size`, that is, an iterative procedure of scanning different priority thresholds is used to identify the network with a desired number of nodes/genes.
+- `controlling the subnetwork size`, that is, an iterative procedure of scanning different priority thresholds is used to identify the network with a desired number of nodes/genes.
 
 Notably, the preferential use of the same network as used in gene-level prioritisation is due to the fact that gene-level affinity/priority scores are smoothly distributed over the network after being walked. In other words, the chance of identifying such a gene network enriched with top prioritised genes is much higher. To reduce the runtime, by default only top 10% prioritised genes will be used to search for the maximum-scoring gene network.
 
@@ -316,7 +369,7 @@ grid.raster(img)
 
 # Session Info
 
-**Here is the output of `sessionInfo()` on the system on which this user manual was built:**
+**Here is the output of `sessionInfo()` on the system on which this user manual was compiled:**
 
 ```{r sessionInfo, echo=FALSE, eval=TRUE}
 sessionInfo()

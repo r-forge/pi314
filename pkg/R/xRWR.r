@@ -28,6 +28,9 @@
 #' @import ggplot2
 #' @importFrom supraHex sDistance
 #' @importFrom scales sqrt_trans log_trans trans_breaks trans_format math_format
+#' @importFrom grDevices rgb
+#' @importFrom graphics curve hist
+#' @importFrom stats median quantile
 #' @seealso \code{\link{xPier}}
 #' @include xRWR.r
 #' @examples

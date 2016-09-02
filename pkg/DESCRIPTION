@@ -1,12 +1,12 @@
 Package: Pi
 Type: Package
 Title: Leveraging Genetic Evidence to Prioritise Drug Targets at the Gene, Pathway and Network Level
-Version: 0.99.1
-Date: 2016-8-31
+Version: 0.99.2
+Date: 2016-9-2
 Author: Hai Fang, the ULTRA-DD Consortium, Julian C Knight
 Maintainer: Hai Fang <hfang@well.ox.ac.uk>
-Depends: R (>= 3.2), XGR, igraph, dnet, ggplot2
-Imports: Matrix, MASS, ggbio, GenomicRanges, GenomeInfoDb, supraHex, scales
+Depends: XGR, igraph, dnet, ggplot2
+Imports: Matrix, MASS, ggbio, GenomicRanges, GenomeInfoDb, supraHex, scales, grDevices, graphics, stats
 Suggests: foreach, doMC, BiocStyle, knitr, rmarkdown, png
 Description: Priority index or Pi is developed as a genomic-led target prioritisation approach, with the focus on leveraging genetic data to prioritise targets at the gene, pathway and network level. Based on evidence of genetic association from genome-wide association study (GWAS) data, this prioritisation system is able to identify likely modulated genes responsible for the observed disease association (seed genes) by utilising evidence including knowledge of linkage disequilibrium (co-inherited variants), genomic location (distance from the gene) and genetic association with gene expression for different disease relevant cell and tissue types and states. Seed genes are scored in an integrative way quantifying the genetic influence. Scored seed genes are subsequently used as baits to enable ranking of both seed genes and additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the highest priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify gene networks interconnecting many highly prioritised genes with a minimal number of less prioritised genes as linkers.
 URL: http://pi314.r-forge.r-project.org
@@ -23,4 +23,4 @@ Collate:
     'xPredictPR.r'
 License: GPL-3
 VignetteBuilder: knitr
-biocViews: Software, Genetics, GraphAndNetwork, Pathways, GeneExpression, GeneTarget, GenomeWideAssociation, LinkageDisequilibrium
+biocViews: Software, Genetics, GraphAndNetwork, Pathways, GeneExpression, GeneTarget, GenomeWideAssociation, LinkageDisequilibrium, Network

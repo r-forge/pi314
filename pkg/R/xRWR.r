@@ -24,8 +24,9 @@
 #' @import igraph
 #' @import dnet
 #' @import XGR
-#' @importFrom ggbio plotGrandLinear
 #' @import ggplot2
+#' @importFrom ggbio plotGrandLinear
+#' @importFrom ggrepel geom_text_repel
 #' @importFrom supraHex sDistance
 #' @importFrom scales sqrt_trans log_trans trans_breaks trans_format math_format
 #' @importFrom grDevices rgb

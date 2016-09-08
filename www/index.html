@@ -10,7 +10,7 @@
 
 <meta name="author" content="Hai Fang, the ULTRA-DD Consortium, Julian C Knight" />
 
-<meta name="date" content="2016-09-06" />
+<meta name="date" content="2016-09-08" />
 
 <title>Pi User Manual (R/Bioconductor package)</title>
 
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <div id="header">
 <h1 class="title">Pi User Manual (R/Bioconductor package)</h1>
 <h4 class="author"><em>Hai Fang, the ULTRA-DD Consortium, Julian C Knight</em></h4>
-<h4 class="date"><em>2016-09-06</em></h4>
+<h4 class="date"><em>2016-09-08</em></h4>
 <h4 class="abstract">Abstract</h4>
 <p>This document provides instructions on how to use an R/Bioconductor package called Priority index (or Pi). Pi is developed as a genomic-led target prioritisation system, with the focus on leveraging human genetic data to prioritise potential drug targets at the gene, pathway and network level. The long term goal is to use such information to enhance early-stage target validation. Based on evidence of disease association from genome-wide association studies (GWAS), this prioritisation system is able to generate evidence to support identification of the specific modulated genes (seed genes) that are responsible for the genetic association signal by utilising knowledge of linkage disequilibrium (co-inherited genetic variants), distance of associated variants from the gene, and evidence of independent genetic association with gene expression in disease relevant cell/tissue types and states. Seed genes are scored in an integrative way, quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the highest priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting highly prioritised genes and a minimal number of less prioritised genes (which act as linkers bringing together highly prioritised genes).</p>
 </div>
@@ -88,42 +88,13 @@ document.addEventListener("DOMContentLoaded", function() {
 <h1><span class="header-section-number">1</span> Installation</h1>
 <div id="r" class="section level2">
 <h2><span class="header-section-number">1.1</span> R</h2>
-<p>This intends for end-users who are comfortable with R (<a href="http://cran.r-project.org" class="uri">http://cran.r-project.org</a>). The latest version on different platforms can be installed: <code>Windows</code> (<a href="http://cran.r-project.org/bin/windows/base">download</a>), <code>Mac OS X</code> (<a href="http://cran.r-project.org/bin/macosx">download</a>), and <code>Linux</code> (see below).</p>
-<ul>
-<li><p>Assume you have a <code>ROOT (sudo)</code> privilege:</p>
-<pre class="r"><code># Below are shell command lines in Terminal
-sudo su
-# here enter your password
-wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.3.1.tar.gz
-tar xvfz R-3.3.1.tar.gz
-cd R-3.3.1
-./configure
-make
-make check
-make install
-R # start R</code></pre></li>
-<li><p>Assume you do <code>NOT</code> have a <code>ROOT (sudo)</code> privilege and want R installation under your home directory (<code>$HOME</code>):</p>
-<pre class="r"><code># Below are shell command lines in Terminal
-wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.3.1.tar.gz
-tar xvfz R-3.3.1.tar.gz
-cd R-3.3.1
-./configure --prefix=$HOME/R-3.3.1
-make
-make check
-make install
-$HOME/R-3.3.1/bin/R # start R</code></pre></li>
-</ul>
+<p>The latest version on different platforms can be installed following instructions at <a href="http://bioconductor.org/install/#install-R" class="uri">http://bioconductor.org/install/#install-R</a>.</p>
 </div>
 <div id="packages" class="section level2">
 <h2><span class="header-section-number">1.2</span> Packages</h2>
-<p><code>Pi</code> together with dependant packages (such as <code>XGR</code>) can be installed following instructions below:</p>
-<pre class="r"><code># install the dependant packages including `XGR` and others
-source(&quot;http://bioconductor.org/biocLite.R&quot;)
-biocLite(c(&quot;XGR&quot;,&quot;devtools&quot;), siteRepos=c(&quot;http://cran.r-project.org&quot;))
-
-# then install the `Pi` package itself
-library(devtools)
-install_github(c(&quot;hfang-bristol/Pi&quot;), dependencies=TRUE)</code></pre>
+<p><code>Pi</code> together with dependant packages can be installed following instructions below:</p>
+<pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite(&quot;Pi&quot;)</code></pre>
 </div>
 </div>
 <div id="workflow" class="section level1">
@@ -574,8 +545,8 @@ xVisNet(g, pattern=pattern, vertex.shape=&quot;sphere&quot;, colormap=&quot;yr&q
 &gt; [8] base     
 &gt; 
 &gt; other attached packages:
-&gt; [1] Pi_0.99.2       XGR_1.0.3       ggplot2_2.1.0   dnet_1.0.9     
-&gt; [5] supraHex_1.10.0 hexbin_1.27.1   igraph_1.0.1    png_0.1-7      
+&gt; [1] Pi_0.99.3       XGR_1.0.3       ggplot2_2.1.0   dnet_1.0.9     
+&gt; [5] supraHex_1.11.1 hexbin_1.27.1   igraph_1.0.1    png_0.1-7      
 &gt; [9] BiocStyle_2.0.3
 &gt; 
 &gt; loaded via a namespace (and not attached):
@@ -585,42 +556,43 @@ xVisNet(g, pattern=pattern, vertex.shape=&quot;sphere&quot;, colormap=&quot;yr&q
 &gt;  [7] interactiveDisplayBase_1.10.3 highr_0.6                    
 &gt;  [9] stats4_3.3.1                  latticeExtra_0.6-28          
 &gt; [11] RBGL_1.48.1                   BSgenome_1.40.1              
-&gt; [13] Rsamtools_1.24.0              yaml_2.1.13                  
-&gt; [15] RSQLite_1.0.0                 lattice_0.20-33              
-&gt; [17] biovizBase_1.20.0             chron_2.3-47                 
-&gt; [19] digest_0.6.10                 GenomicRanges_1.24.2         
-&gt; [21] RColorBrewer_1.1-2            XVector_0.12.1               
-&gt; [23] colorspace_1.2-6              ggbio_1.20.2                 
-&gt; [25] httpuv_1.3.3                  htmltools_0.3.5              
-&gt; [27] Matrix_1.2-6                  plyr_1.8.4                   
-&gt; [29] OrganismDbi_1.14.1            XML_3.98-1.4                 
-&gt; [31] biomaRt_2.28.0                zlibbioc_1.18.0              
-&gt; [33] xtable_1.8-2                  RCircos_1.1.3                
-&gt; [35] scales_0.4.0                  BiocParallel_1.6.6           
-&gt; [37] IRanges_2.6.1                 SummarizedExperiment_1.2.3   
-&gt; [39] GenomicFeatures_1.24.5        nnet_7.3-12                  
-&gt; [41] BiocGenerics_0.18.0           mime_0.5                     
-&gt; [43] survival_2.39-4               magrittr_1.5                 
-&gt; [45] evaluate_0.9                  GGally_1.2.0                 
-&gt; [47] nlme_3.1-128                  MASS_7.3-45                  
-&gt; [49] foreign_0.8-66                BiocInstaller_1.22.3         
-&gt; [51] graph_1.50.0                  tools_3.3.1                  
-&gt; [53] data.table_1.9.6              formatR_1.4                  
-&gt; [55] stringr_1.1.0                 S4Vectors_0.10.3             
-&gt; [57] munsell_0.4.3                 cluster_2.0.4                
-&gt; [59] AnnotationDbi_1.34.4          ensembldb_1.4.7              
-&gt; [61] Biostrings_2.40.2             GenomeInfoDb_1.8.5           
-&gt; [63] RCurl_1.95-4.8                dichromat_2.0-0              
-&gt; [65] VariantAnnotation_1.18.7      bitops_1.0-6                 
-&gt; [67] rmarkdown_1.0                 gtable_0.2.0                 
-&gt; [69] DBI_0.5                       reshape_0.8.5                
-&gt; [71] R6_2.1.3                      reshape2_1.4.1               
-&gt; [73] GenomicAlignments_1.8.4       gridExtra_2.2.1              
-&gt; [75] knitr_1.14                    rtracklayer_1.32.2           
-&gt; [77] Hmisc_3.17-4                  Rgraphviz_2.16.0             
-&gt; [79] ape_3.5                       stringi_1.1.1                
-&gt; [81] parallel_3.3.1                Rcpp_0.12.6                  
-&gt; [83] rpart_4.1-10                  acepack_1.3-3.3</code></pre>
+&gt; [13] Rsamtools_1.24.0              ggrepel_0.5                  
+&gt; [15] yaml_2.1.13                   RSQLite_1.0.0                
+&gt; [17] lattice_0.20-33               biovizBase_1.20.0            
+&gt; [19] chron_2.3-47                  digest_0.6.10                
+&gt; [21] GenomicRanges_1.24.2          RColorBrewer_1.1-2           
+&gt; [23] XVector_0.12.1                colorspace_1.2-6             
+&gt; [25] ggbio_1.20.2                  httpuv_1.3.3                 
+&gt; [27] htmltools_0.3.5               Matrix_1.2-6                 
+&gt; [29] plyr_1.8.4                    OrganismDbi_1.14.1           
+&gt; [31] XML_3.98-1.4                  biomaRt_2.28.0               
+&gt; [33] zlibbioc_1.18.0               xtable_1.8-2                 
+&gt; [35] RCircos_1.1.3                 scales_0.4.0                 
+&gt; [37] BiocParallel_1.6.6            IRanges_2.6.1                
+&gt; [39] SummarizedExperiment_1.2.3    GenomicFeatures_1.24.5       
+&gt; [41] nnet_7.3-12                   BiocGenerics_0.18.0          
+&gt; [43] mime_0.5                      survival_2.39-4              
+&gt; [45] magrittr_1.5                  evaluate_0.9                 
+&gt; [47] GGally_1.2.0                  nlme_3.1-128                 
+&gt; [49] MASS_7.3-45                   foreign_0.8-66               
+&gt; [51] BiocInstaller_1.22.3          graph_1.50.0                 
+&gt; [53] tools_3.3.1                   data.table_1.9.6             
+&gt; [55] formatR_1.4                   stringr_1.1.0                
+&gt; [57] S4Vectors_0.10.3              munsell_0.4.3                
+&gt; [59] cluster_2.0.4                 AnnotationDbi_1.34.4         
+&gt; [61] ensembldb_1.4.7               Biostrings_2.40.2            
+&gt; [63] GenomeInfoDb_1.8.7            RCurl_1.95-4.8               
+&gt; [65] dichromat_2.0-0               VariantAnnotation_1.18.7     
+&gt; [67] bitops_1.0-6                  rmarkdown_1.0                
+&gt; [69] gtable_0.2.0                  DBI_0.5                      
+&gt; [71] reshape_0.8.5                 R6_2.1.3                     
+&gt; [73] reshape2_1.4.1                GenomicAlignments_1.8.4      
+&gt; [75] gridExtra_2.2.1               knitr_1.14                   
+&gt; [77] rtracklayer_1.32.2            Hmisc_3.17-4                 
+&gt; [79] Rgraphviz_2.16.0              ape_3.5                      
+&gt; [81] stringi_1.1.1                 parallel_3.3.1               
+&gt; [83] Rcpp_0.12.6                   rpart_4.1-10                 
+&gt; [85] acepack_1.3-3.3</code></pre>
 </div>
 <div id="references" class="section level1">
 <h1><span class="header-section-number">6</span> References</h1>

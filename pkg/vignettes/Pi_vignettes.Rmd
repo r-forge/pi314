@@ -45,43 +45,19 @@ scp now.Pi_vignettes.Rmd galahad.well.ox.ac.uk:/var/www/Pi/Pi_vignettes.Rmd
 
 ## R
 
-This intends for end-users who are comfortable with R (http://cran.r-project.org). The latest version on different platforms can be installed: `Windows` ([download](http://cran.r-project.org/bin/windows/base)), `Mac OS X` ([download](http://cran.r-project.org/bin/macosx)), and `Linux` (see below).
+The latest version on different platforms can be installed following instructions at http://bioconductor.org/install/#install-R. 
 
-- Assume you have a `ROOT (sudo)` privilege:
-
-	```{r, eval=FALSE}
-	# Below are shell command lines in Terminal
-	sudo su
-	# here enter your password
-	wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.3.1.tar.gz
-	tar xvfz R-3.3.1.tar.gz
-	cd R-3.3.1
-	./configure
-	make
-	make check
-	make install
-	R # start R
-	```
-
-- Assume you do `NOT` have a `ROOT (sudo)` privilege and want R installation under your home directory (`$HOME`):
-
-	```{r, eval=FALSE}
-	# Below are shell command lines in Terminal
-	wget http://www.stats.bris.ac.uk/R/src/base/R-3/R-3.3.1.tar.gz
-	tar xvfz R-3.3.1.tar.gz
-	cd R-3.3.1
-	./configure --prefix=$HOME/R-3.3.1
-	make
-	make check
-	make install
-	$HOME/R-3.3.1/bin/R # start R
-	```
 
 ## Packages
 
-`Pi` together with dependant packages (such as `XGR`) can be installed following instructions below:
+`Pi` together with dependant packages can be installed following instructions below:
 
 ```{r eval=FALSE}
+source("http://bioconductor.org/biocLite.R")
+biocLite("Pi")
+```
+
+```{r eval=FALSE, echo=FALSE}
 # install the dependant packages including `XGR` and others
 source("http://bioconductor.org/biocLite.R")
 biocLite(c("XGR","devtools"), siteRepos=c("http://cran.r-project.org"))

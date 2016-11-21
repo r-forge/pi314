@@ -19,16 +19,16 @@ class &quot;igraph&quot;.
 <h3>Usage</h3>
 
 <pre>
-xPierSubnet(pNode, priority.quantite = 0.1, network = c(NULL,
-"STRING_highest", "STRING_high", "STRING_medium", "PCommonsUN_high",
-"PCommonsUN_medium", "PCommonsDN_high", "PCommonsDN_medium",
-"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
-"PCommonsDN_PID", "PCommonsDN_PANTHER", "PCommonsDN_ReconX",
-"PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite", "PCommonsDN_CTD"),
-network.customised = NULL, subnet.significance = 0.01,
+xPierSubnet(pNode, priority.quantite = 0.1, network = c(NA,
+"STRING_highest", "STRING_high", "STRING_medium", "STRING_low",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
+"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
+"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
+"PCommonsDN_CTD"), network.customised = NULL, subnet.significance =
+0.01,
 subnet.size = NULL, verbose = TRUE,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -47,7 +47,7 @@ analysis. If NULL or NA, all prioritised genes will be used</p>
 </td></tr>
 <tr valign="top"><td><code>network</code></td>
 <td>
-<p>the built-in network. If NULL, the network used for
+<p>the built-in network. If NA, the network used for
 prioritisation will be used, which is part of the object of class
 &quot;pNode&quot;. Otherwise, choose the other network of interest. Currently two
 sources of network information are supported: the STRING database
@@ -59,8 +59,9 @@ control the confidence of interactions. Therefore, the user can choose
 the different quality of the interactions. In STRING, &quot;STRING_highest&quot;
 indicates interactions with highest confidence (confidence
 scores&gt;=900), &quot;STRING_high&quot; for interactions with high confidence
-(confidence scores&gt;=700), and &quot;STRING_medium&quot; for interactions with
-medium confidence (confidence scores&gt;=400). For undirect/physical
+(confidence scores&gt;=700), &quot;STRING_medium&quot; for interactions with medium
+confidence (confidence scores&gt;=400), and &quot;STRING_low&quot; for interactions
+with low confidence (confidence scores&gt;=150). For undirect/physical
 interactions from Pathways Commons, &quot;PCommonsUN_high&quot; indicates
 undirect interactions with high confidence (supported with the PubMed
 references plus at least 2 different sources), &quot;PCommonsUN_medium&quot; for

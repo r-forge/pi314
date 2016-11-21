@@ -4,16 +4,16 @@
 \alias{xPierSubnet}
 \title{Function to identify a gene network from top prioritised genes}
 \usage{
-xPierSubnet(pNode, priority.quantite = 0.1, network = c(NULL,
-"STRING_highest", "STRING_high", "STRING_medium", "PCommonsUN_high",
-"PCommonsUN_medium", "PCommonsDN_high", "PCommonsDN_medium",
-"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
-"PCommonsDN_PID", "PCommonsDN_PANTHER", "PCommonsDN_ReconX",
-"PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite", "PCommonsDN_CTD"),
-network.customised = NULL, subnet.significance = 0.01,
+xPierSubnet(pNode, priority.quantite = 0.1, network = c(NA,
+"STRING_highest", "STRING_high", "STRING_medium", "STRING_low",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
+"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
+"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
+"PCommonsDN_CTD"), network.customised = NULL, subnet.significance =
+0.01,
 subnet.size = NULL, verbose = TRUE,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
@@ -22,7 +22,7 @@ RData.location =
 default, 10% of top prioritised genes will be used for network
 analysis. If NULL or NA, all prioritised genes will be used}
 
-\item{network}{the built-in network. If NULL, the network used for
+\item{network}{the built-in network. If NA, the network used for
 prioritisation will be used, which is part of the object of class
 "pNode". Otherwise, choose the other network of interest. Currently two
 sources of network information are supported: the STRING database
@@ -34,8 +34,9 @@ control the confidence of interactions. Therefore, the user can choose
 the different quality of the interactions. In STRING, "STRING_highest"
 indicates interactions with highest confidence (confidence
 scores>=900), "STRING_high" for interactions with high confidence
-(confidence scores>=700), and "STRING_medium" for interactions with
-medium confidence (confidence scores>=400). For undirect/physical
+(confidence scores>=700), "STRING_medium" for interactions with medium
+confidence (confidence scores>=400), and "STRING_low" for interactions
+with low confidence (confidence scores>=150). For undirect/physical
 interactions from Pathways Commons, "PCommonsUN_high" indicates
 undirect interactions with high confidence (supported with the PubMed
 references plus at least 2 different sources), "PCommonsUN_medium" for

@@ -3,7 +3,7 @@ title: "Pi User Manual (R/Bioconductor package)"
 author: "Hai Fang, the ULTRA-DD Consortium, Julian C Knight"
 date: "`r Sys.Date()`"
 abstract: >
-  This document provides instructions on how to use an R/Bioconductor package called Priority index (or Pi). Pi is developed as a genomic-led target prioritisation system, with the focus on leveraging human genetic data to prioritise potential drug targets at the gene, pathway and network level. The long term goal is to use such information to enhance early-stage target validation. Based on evidence of disease association from genome-wide association studies (GWAS), this prioritisation system is able to generate evidence to support identification of the specific modulated genes (seed genes) that are responsible for the genetic association signal by utilising knowledge of linkage disequilibrium (co-inherited genetic variants), distance of associated variants from the gene, and evidence of independent genetic association with gene expression in disease relevant cell/tissue types and states. Seed genes are scored in an integrative way, quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the highest priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting highly prioritised genes and a minimal number of less prioritised genes (which act as linkers bringing together highly prioritised genes).
+  This document provides instructions on how to use an R/Bioconductor package called Priority index (or Pi). Pi is developed as a genomic-led target prioritisation system, with the focus on leveraging human genetic data to prioritise potential drug targets at the gene, pathway and network level. The long-term goal is to use such information to enhance early-stage target validation. Based on evidence of disease association from genome-wide association studies (GWAS), this prioritisation system is able to generate evidence to support identification of the specific modulated genes (seed genes) that are responsible for the genetic association signal by utilising knowledge of linkage disequilibrium (co-inherited genetic variants), distance of associated variants from the gene, and evidence of independent genetic association with gene expression in disease relevant cell/tissue types and states. Seed genes are scored in an integrative way, quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the highest priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting highly prioritised genes and a minimal number of less prioritised genes (which act as linkers bringing together highly prioritised genes).
 output: 
   BiocStyle::html_document:
         toc: true
@@ -54,6 +54,7 @@ The latest version on different platforms can be installed following instruction
 
 ```{r eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
+# to use the latest version of Bioconductor, please also run: biocLite("BiocUpgrade") 
 biocLite("Pi")
 ```
 
@@ -150,7 +151,8 @@ obo[['HPCM']] <- c('Phenotype', 'Human Phenotype Clinical Modifier', 'HPCM')
 obo[['HPMA']] <- c('Phenotype', 'Human Phenotype Mortality Aging', 'HPMA')
 obo[['MP']] <- c('Phenotype', 'Mammalian/Mouse Phenotype', 'MP')
 obo[['DGIdb']] <- c('Druggable', 'DGI druggable gene categories', 'DGIdb')
-obo[['SF']] <- c('Domain', 'SCOP domain superfamilies', 'SF')
+obo[['SF']] <- c('Structural domain', 'SCOP domain superfamilies', 'SF')
+obo[['Pfam']] <- c('Structural domain', 'Pfam domain families', 'Pfam')
 obo[['PS2']] <- c('Evolution', 'phylostratific age information (our ancestors)', 'PS2')
 obo[['MsigdbH']] <- c('Hallmark (MsigDB)', 'Hallmark gene sets', 'MsigdbH')
 obo[['MsigdbC1']] <- c('Cytogenetics (MsigDB)', 'Chromosome and cytogenetic band positional gene sets', 'MsigdbC1')
@@ -177,6 +179,12 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 ## xPierSubnet
 *[`xPierSubnet`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierSubnet.html)*: identifies a gene network that contains as many highly prioritised genes as possible but a few lowly prioritised genes as linkers. An iterative procedure of choosing different priority cutoff is also used to identify the network with a desired number of nodes/genes.
 
+## xPredictROCR and xPredictCompare
+*[`xPredictROCR`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPredictROCR.html)*: assess the prediction/prioritisation performance via Receiver Operating Characteristic (ROC) and Precision-Recall (PR) analysis. *[`xPredictCompare`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPredictCompare.html)*: compares the prediction/prioritisation performance.
+
+## xPierMatrix
+*[`xPierMatrix`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierMatrix.html)*: extracts priority matrix from a list of `pNode` objects, in which rows are genes and columns for the predictors (corresponding to the `pNode` objects).
+
 
 # Showcases
 
@@ -189,12 +197,12 @@ library(Pi)
 
 # optionally, specify the local location of built-in RData
 # by default:
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 # This intends to use the local version of data
-RData.location <- "~/Sites/SVN/github/bigdata"
+RData.location <- "~/Sites/SVN/github/bigdata_dev"
 ```
 
 ## Input data
@@ -202,7 +210,7 @@ RData.location <- "~/Sites/SVN/github/bigdata"
 Spondyloarthritis-associated GWAS lead SNPs are collected mainly from GWAS Catalog [@Welter2014], complemented by [ImmunoBase](http://www.immunobase.org) and latest publications. 
 
 ```{r, eval=TRUE}
-data.file <- "http://galahad.well.ox.ac.uk/bigdata/Spondyloarthritis.txt"
+data.file <- "http://galahad.well.ox.ac.uk/bigdata_dev/Spondyloarthritis.txt"
 data <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
 ```
 

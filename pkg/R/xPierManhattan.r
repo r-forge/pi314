@@ -45,7 +45,7 @@
 #' }
 
 
-xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", y.scale=c("normal","sqrt","log10"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=TRUE, RData.location="https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", y.scale=c("normal","sqrt","log10"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -89,13 +89,18 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highl
 	
 	## highlight points
 	highlight.top <- as.integer(highlight.top)
-    if ( highlight.top > length(gr) ){
-        highlight.top <- length(gr)
-    }
-	df <- data.frame(index=1:length(gr), val=GenomicRanges::mcols(gr)$priority)
-	ind_o <- df[order(-df$val)[1:highlight.top],1]
-	gro <- gr[ind_o,]
-	names(gro) <- GenomicRanges::mcols(gro)$Symbol
+	if(highlight.top==0 | length(highlight.top)==0 | is.na(highlight.top)){
+		gro <- NULL
+	}else{
+		if ( highlight.top > length(gr) ){
+			highlight.top <- length(gr)
+		}
+		df <- data.frame(index=1:length(gr), val=GenomicRanges::mcols(gr)$priority)
+		ind_o <- df[order(-df$val)[1:highlight.top],1]
+		gro <- gr[ind_o,]
+		names(gro) <- GenomicRanges::mcols(gro)$Symbol
+	}
+	
 	
 	## draw plot
     suppressWarnings(
@@ -104,9 +109,10 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highl
     
     x <- NULL
     if(y.scale=="sqrt"){
-    	mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
+    	#mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
+    	mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3))
     }else if(y.scale=="log10"){
-    	mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
+    	#mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
     }
 	
     invisible(mp)

@@ -17,11 +17,13 @@ GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
 "GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
 "GTEx_V4_Thyroid",
-"GTEx_V4_Whole_Blood"), eQTL.customised = NULL,
+"GTEx_V4_Whole_Blood", "eQTLdb_NK", "eQTLdb_CD14", "eQTLdb_LPS2",
+"eQTLdb_LPS24", "eQTLdb_IFN"), eQTL.customised = NULL,
 cdf.function = c("empirical", "exponential"), relative.importance =
 c(0.5,
 0.5), scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
+"STRING_low",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
 "PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
 "PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
@@ -30,8 +32,7 @@ network = c("STRING_highest", "STRING_high", "STRING_medium",
 normalise = c("laplacian", "row", "column", "none"), restart = 0.75,
 normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
 multicores = NULL, verbose = TRUE,
-RData.location =
-"https://github.com/hfang-bristol/RDataCentre/blob/master/Portal")
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -90,7 +91,8 @@ so, first save your RData file (containing an GR object) into your
 local computer, and make sure the GR object content names refer to
 dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -102,7 +104,8 @@ first save your RData file (containing an GR object) into your local
 computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
-"RData.location"}
+"RData.location". Note: you can also load your customised GR object
+directly}
 
 \item{include.eQTL}{genes modulated by eQTL (also Lead SNPs or in LD
 with Lead SNPs) are also included. By default, it is 'NA' to disable
@@ -115,7 +118,7 @@ cis- and trans-eQTLs in neutrophils ('JKnc_neutro') from Nature
 Communications 2015, 7(6):7545; cis-eQTLs in NK cells ('JK_nk') which
 is unpublished. Also supported are GTEx cis-eQTLs from Science 2015,
 348(6235):648-60, including 13 tissues:
-'GTEx_Adipose_Subcutaneous','GTEx_Artery_Aorta','GTEx_Artery_Tibial','GTEx_Esophagus_Mucosa','GTEx_Esophagus_Muscularis','GTEx_Heart_Left_Ventricle','GTEx_Lung','GTEx_Muscle_Skeletal','GTEx_Nerve_Tibial','GTEx_Skin_Sun_Exposed_Lower_leg','GTEx_Stomach','GTEx_Thyroid','GTEx_Whole_Blood'.}
+"GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood".}
 
 \item{eQTL.customised}{a user-input matrix or data frame with 3
 columns: 1st column for SNPs/eQTLs, 2nd column for Genes, and 3rd for
@@ -145,26 +148,28 @@ physical/pathway aspect. Both have scores to control the confidence of
 interactions. Therefore, the user can choose the different quality of
 the interactions. In STRING, "STRING_highest" indicates interactions
 with highest confidence (confidence scores>=900), "STRING_high" for
-interactions with high confidence (confidence scores>=700), and
+interactions with high confidence (confidence scores>=700),
 "STRING_medium" for interactions with medium confidence (confidence
-scores>=400). For undirect/physical interactions from Pathways Commons,
-"PCommonsUN_high" indicates undirect interactions with high confidence
-(supported with the PubMed references plus at least 2 different
-sources), "PCommonsUN_medium" for undirect interactions with medium
-confidence (supported with the PubMed references). For direct
-(pathway-merged) interactions from Pathways Commons, "PCommonsDN_high"
-indicates direct interactions with high confidence (supported with the
-PubMed references plus at least 2 different sources), and
-"PCommonsUN_medium" for direct interactions with medium confidence
-(supported with the PubMed references). In addtion to pooled version of
-pathways from all data sources, the user can also choose the
-pathway-merged network from individual sources, that is,
-"PCommonsDN_Reactome" for those from Reactome, "PCommonsDN_KEGG" for
-those from KEGG, "PCommonsDN_HumanCyc" for those from HumanCyc,
-"PCommonsDN_PID" for those froom PID, "PCommonsDN_PANTHER" for those
-from PANTHER, "PCommonsDN_ReconX" for those from ReconX,
-"PCommonsDN_TRANSFAC" for those from TRANSFAC, "PCommonsDN_PhosphoSite"
-for those from PhosphoSite, and "PCommonsDN_CTD" for those from CTD}
+scores>=400), and "STRING_low" for interactions with low confidence
+(confidence scores>=150). For undirect/physical interactions from
+Pathways Commons, "PCommonsUN_high" indicates undirect interactions
+with high confidence (supported with the PubMed references plus at
+least 2 different sources), "PCommonsUN_medium" for undirect
+interactions with medium confidence (supported with the PubMed
+references). For direct (pathway-merged) interactions from Pathways
+Commons, "PCommonsDN_high" indicates direct interactions with high
+confidence (supported with the PubMed references plus at least 2
+different sources), and "PCommonsUN_medium" for direct interactions
+with medium confidence (supported with the PubMed references). In
+addtion to pooled version of pathways from all data sources, the user
+can also choose the pathway-merged network from individual sources,
+that is, "PCommonsDN_Reactome" for those from Reactome,
+"PCommonsDN_KEGG" for those from KEGG, "PCommonsDN_HumanCyc" for those
+from HumanCyc, "PCommonsDN_PID" for those froom PID,
+"PCommonsDN_PANTHER" for those from PANTHER, "PCommonsDN_ReconX" for
+those from ReconX, "PCommonsDN_TRANSFAC" for those from TRANSFAC,
+"PCommonsDN_PhosphoSite" for those from PhosphoSite, and
+"PCommonsDN_CTD" for those from CTD}
 
 \item{weighted}{logical to indicate whether edge weights should be
 considered. By default, it sets to false. If true, it only works for
@@ -229,10 +234,12 @@ non-seeds), "weight" (weight/score values for seed genes), "priority"
 \item{\code{g}: an input "igraph" object}
 \item{\code{SNP}: a data frame of nSNP X 3 containing input SNPs and/or
 LD SNPs info, where nSNP is the number of input SNPs and/or LD SNPs,
-and the 3 columns are "SNP" (dbSNP), "Score" (the SNP score), "Pval"
-(the SNP p-value)}
-\item{\code{Gene2SNP}: a matrix of Genes X SNPs, each non-zero cell
-telling an SNP's genetic influential score on a seed gene}
+and the 4 columns are "SNP" (dbSNP), "Score" (the SNP score), "Pval"
+(the SNP p-value), "Flag" (indicative of Lead SNPs or LD SNPs)}
+\item{\code{Gene2SNP}: a data frame of nPair X 3 containing Gene-SNP
+pair info, where nPair is the number of Gene-SNP pairs, and the 3
+columns are "Gene" (seed genes), "SNP" (dbSNP), "Score" (an SNP's
+genetic influential score on a seed gene), "Pval" (the SNP p-value)}
 \item{\code{call}: the call that produced this result}
 }
 }
@@ -298,7 +305,7 @@ print(mp)
 \seealso{
 \code{\link{xSNPscores}}, \code{\link{xSNP2nGenes}},
 \code{\link{xSNP2eGenes}}, \code{\link{xSparseMatrix}},
-\code{\link{xPier}}, \code{\link{xPierGenes}},
+\code{\link{xSM2DF}}, \code{\link{xPier}}, \code{\link{xPierGenes}},
 \code{\link{xPierPathways}}
 }
 

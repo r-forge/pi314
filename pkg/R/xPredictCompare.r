@@ -96,6 +96,7 @@ xPredictCompare <- function(list_pPerf, displayBy=c("ROC","PR"), sort=TRUE, deta
 
 	}else if(displayBy=='PR'){
 		## sort by: fmax
+		fmax <- ''
 		if(sort){
 			df_PRS <- df_PRS[with(df_PRS, order(-fmax)), ]
 			## define levels

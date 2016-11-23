@@ -11,10 +11,11 @@
 #' @param highlight.label.offset the highlight label offset
 #' @param highlight.label.col the highlight label color
 #' @param y.scale how to transform the y scale. It can be "normal" for no transformation, "sqrt" for square transformation, and "log10" for 10-based log-transformation
+#' @param top.only logical to indicate whether only the top targets will be drawn in the plot. By default, it sets to TRUE
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
-#' @return an object of class "ggplot"
+#' @return an object of class "ggplot", appended by an GR object called 'gr'
 #' @note none
 #' @export
 #' @seealso \code{\link{xRDataLoader}}, \code{\link{xPier}}, \code{\link{xPierSNPs}}, \code{\link{xPierGenes}}, \code{\link{xPierPathways}}
@@ -25,27 +26,29 @@
 #' library(Pi)
 #' }
 #'
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
 #' #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
 #' gr <- ImmunoBase$AS$variants
 #' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 #'
 #' \dontrun{
 #' # b) perform priority analysis
-#' pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
+#' pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono", include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7, RData.location=RData.location)
 #'
 #' # c) manhattan plot
-#' mp <- xPierManhattan(pNode, highlight.top=10)
+#' mp <- xPierManhattan(pNode, highlight.top=20, RData.location=RData.location)
+#' mp$gr
 #' #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 #' print(mp)
 #' #dev.off()
 #' }
 
 
-xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0.02, highlight.label.col="darkblue", y.scale=c("normal","sqrt","log10"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highlight.top=20, highlight.col="deepskyblue", highlight.label.size=2, highlight.label.offset=0, highlight.label.col="darkblue", y.scale=c("normal","sqrt","log10"), top.only=TRUE, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -101,18 +104,33 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highl
 		names(gro) <- GenomicRanges::mcols(gro)$Symbol
 	}
 	
-	
 	## draw plot
     suppressWarnings(
     mp <- ggbio::plotGrandLinear(gr, eval(parse(text=paste("aes(y=priority)",sep=""))), color=color, spaceline=TRUE, cex=cex, ylab='Priority', highlight.gr=gro, highlight.col=highlight.col, highlight.label=FALSE, highlight.label.size=highlight.label.size, highlight.label.offset=highlight.label.offset, highlight.label.col=highlight.label.col) + theme(axis.title.y=element_text(size=14), axis.text.x=element_text(angle=45, hjust=1,color="black",size=12), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
     )
     
+    mp$gr <- gr
+    
+    vec_top <- GenomicRanges::mcols(gro)$priority
+    if(top.only){
+    	mp <- mp + scale_y_continuous(limits=c(min(vec_top), max(vec_top)))
+    }
+    
     x <- NULL
     if(y.scale=="sqrt"){
-    	#mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
-    	mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3))
+    	if(top.only){
+			mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), limits=c(min(vec_top), max(vec_top)))
+    	}else{
+    		mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2), labels=scales::trans_format("log10", scales::math_format(10^.x)))
+    	}
+    	
     }else if(y.scale=="log10"){
-    	#mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
+    	if(top.only){
+			mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^.x)), limits=c(min(vec_top), max(vec_top)))
+    	}else{
+			mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^.x)))
+    	}
+    	
     }
 	
     invisible(mp)

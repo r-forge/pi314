@@ -3,7 +3,7 @@ title: "Pi User Manual (R/Bioconductor package)"
 author: "Hai Fang, the ULTRA-DD Consortium, Julian C Knight"
 date: "`r Sys.Date()`"
 abstract: >
-  This document provides instructions on how to use an R/Bioconductor package called Priority index (or Pi). Pi is developed as a genomic-led target prioritisation system, with the focus on leveraging human genetic data to prioritise potential drug targets at the gene, pathway and network level. The long-term goal is to use such information to enhance early-stage target validation. Based on evidence of disease association from genome-wide association studies (GWAS), this prioritisation system is able to generate evidence to support identification of the specific modulated genes (seed genes) that are responsible for the genetic association signal by utilising knowledge of linkage disequilibrium (co-inherited genetic variants), distance of associated variants from the gene, and evidence of independent genetic association with gene expression in disease relevant cell/tissue types and states. Seed genes are scored in an integrative way, quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the highest priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting highly prioritised genes and a minimal number of less prioritised genes (which act as linkers bringing together highly prioritised genes).
+  This document provides instructions on how to use an R/Bioconductor package called Priority index (or Pi). Pi is developed as a genomic-led target prioritisation system, with the focus on leveraging human genetic data to prioritise potential drug targets at the gene, pathway and network level. The long-term goal is to use such information to enhance early-stage target validation. Based on evidence of disease association from genome-wide association studies (GWAS), this prioritisation system is able to generate evidence to support identification of the specific modulated genes (seed genes) that are responsible for the genetic association signal by utilising knowledge of linkage disequilibrium (co-inherited genetic variants), distance of associated variants from the gene, interaction of associated variants with the gene, evidence of independent genetic association with gene expression and evidence of physical interaction involving variants and genes in disease relevant cell/tissue types and states. Seed genes are scored in an integrative way, quantifying the genetic influence. Scored seed genes are subsequently used as baits to rank seed genes plus additional (non-seed) genes; this is achieved by iteratively exploring the global connectivity of a gene interaction network. Genes with the highest priority are further used to identify/prioritise pathways that are significantly enriched with highly prioritised genes. Prioritised genes are also used to identify a gene network interconnecting highly prioritised genes and a minimal number of less prioritised genes (which act as linkers bringing together highly prioritised genes).
 output: 
   BiocStyle::html_document:
         toc: true
@@ -58,6 +58,8 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("Pi")
 ```
 
+**Highly recommend to install the latest version**
+
 ```{r eval=FALSE, echo=FALSE}
 # install the dependant packages including `XGR` and others
 source("http://bioconductor.org/biocLite.R")
@@ -65,7 +67,7 @@ biocLite(c("XGR","devtools"), siteRepos=c("http://cran.r-project.org"))
 
 # then install the `Pi` package itself
 library(devtools)
-install_github(c("hfang-bristol/Pi"), dependencies=TRUE)
+install_github(c("hfang-bristol/XGR", "hfang-bristol/Pi"))
 ```
 
 
@@ -115,7 +117,7 @@ knitr::kable(df_net[,c(3,2,1)], caption="", row.names=FALSE)
 ```
 
 ## xPierSNPs
-*[`xPierSNPs`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierSNPs.html)*: prioritises gene targets from an input gene interaction network and a given list of SNPs together with the significance level (eg GWAS reported p-values). To do so, it first defines seed genes and their scores that are calculated in an integrative manner to quantify the genetic influence under SNPs. Genetic influential score on a seed gene is calculated from the SNP score (reflecting the SNP significant level), the gene-to-SNP distance weight and the eQTL mapping weight. This function can be considered to be a specific instance of `xPierGenes`, that is, specifying seed genes plus their scores. 
+*[`xPierSNPs`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierSNPs.html)*: prioritises gene targets from an input gene interaction network and a given list of SNPs together with the significance level (eg GWAS reported p-values). To do so, it first defines seed genes and their scores that are calculated in an integrative manner to quantify the genetic influence under SNPs. Genetic influential score on a seed gene is calculated from the SNP score (reflecting the SNP significant level), the gene-to-SNP distance weight, the eQTL mapping weight and the promoter capture HiC weight. This function can be considered to be a specific instance of `xPierGenes`, that is, specifying seed genes plus their scores. 
 
 Knowledge of co-inherited variants is also used to include additional SNPs that are in Linkage Disequilibrium (LD) with GWAS lead SNPs. LD SNPs are calculated based on 1000 Genomes Project data [@Project2012]. LD SNPs are defined to be any SNPs having R2 > 0.8 with GWAS lead SNPs. The user can choose the population used to calculate LD SNPs:
 
@@ -185,6 +187,14 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 ## xPierMatrix
 *[`xPierMatrix`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierMatrix.html)*: extracts priority matrix from a list of `pNode` objects, in which rows are genes and columns for the predictors (corresponding to the `pNode` objects).
 
+## Infrastructure functions
+*[`xSNPeqtl`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNPeqtl.html)*: extracts eQTL-gene pairs given a list of SNPs.
+*[`xSNP2eGenes`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNP2eGenes.html)*: defines eQTL genes given a list of SNPs.
+*[`xSNPhic`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNPhic.html)*: extracts promoter capture HiC-gene pairs given a list of SNPs.
+*[`xSNP2cGenes`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNP2cGenes.html)*: defines HiC genes given a list of SNPs.
+*[`xPCHiCplot`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPCHiCplot.html)*: visualises promoter capture HiC data using different network layouts.
+*[`xContour`](http://rawgit.com/hfang-bristol/Pi/master/inst/xContour.html)*: visualises a numeric matrix as a contour plot.
+
 
 # Showcases
 
@@ -233,13 +243,14 @@ It includes the following steps:
 > **Specify parameters**
 
 ```{r, eval=TRUE, include=TRUE, echo=TRUE}
-include.eQTL <- c("JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Whole_Blood")
 include.LD <- 'EUR'
 LD.r2 <- 0.8
 significance.threshold <- 5e-5
 distance.max <- 50000
 decay.kernel <- "rapid"
 decay.exponent <- 2
+include.eQTL <- c("JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro", "GTEx_V4_Whole_Blood")
+include.HiC <- c('Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'),
 GR.SNP <- "dbSNP_GWAS"
 GR.Gene <- "UCSC_knownGene"
 cdf.function <- "empirical"

@@ -18,13 +18,13 @@
 #' If input data is not NULL, a list with two components: "df" and "ig".
 #' "df" is a data frame with following columns:
 #' \itemize{
-#'  \item{\code{SNP}: input SNPs}
+#'  \item{\code{SNP}: input SNPs (in query)}
 #'  \item{\code{harbor}: genomic regions harboring input SNPs}
 #'  \item{\code{partner}: genomic regions (partners of harboring genomic regions)}
 #'  \item{\code{score}: CHiCAGO scores quantifying the strength of physical interactions between harbors and partners}
 #'  \item{\code{harbor_genes}: genes associated with harboring genomic regions}
 #'  \item{\code{partner_genes}: genes associated with partner genomic regions}
-#'  \item{\code{harbor_end}: specify which end the harboring genomic regions (either 'bait/from' or 'prey/to'}
+#'  \item{\code{harbor_end}: specify which end the harboring genomic regions are (either 'bait/from' or 'prey/to')}
 #'  \item{\code{Context}: the context in which PCHiC data was generated}
 #' }
 #' "ig" is an object of both classes "igraph" and "PCHiC", a direct graph with nodes for genomic regions and edges for CHiCAGO scores between them. Also added node attribute is 1) 'target' storing genes assocated and 2) 'SNP' for input SNPs (if the node harboring input SNPs). If several cell types are queried, "ig" is actually a list of "igraph"/"PCHiC" objects.
@@ -169,18 +169,33 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 			colnames(df_prey) <- c('from','to','score','from_genes','to_genes','SNP','harbor_end')
 			df <- rbind(df_bait, df_prey)
 			rownames(df) <- NULL
-					
-			relations <- df[,1:3]
-			nodes <- base::as.data.frame(rbind(as.matrix(df[,c("from","from_genes")]), as.matrix(df[,c("to","to_genes")])), stringsAsFactors=FALSE)
-			nodes <- nodes[!duplicated(nodes),]
-			colnames(nodes) <- c("name","target")
-			nodes$SNP <- NA
-			ind <- match(nodes$name, x$harbor)
-			nodes$SNP[!is.na(ind)] <- x$SNP[ind[!is.na(ind)]]
-					
-			ig <- graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
-			class(ig) <- c("PCHiC","igraph")
-			return(ig)
+			
+			if(1){		
+				#################################
+				res_ls <- lapply(split(x=x$SNP, f=x$harbor),function(x){
+					paste(x, collapse=';')
+				})
+				vec_harbor_SNPs <- unlist(res_ls)
+				#################################
+				
+				## edges
+				relations <- df[,1:3]
+				relations <- relations[!duplicated(relations),]
+				
+				## nodes
+				nodes <- base::as.data.frame(rbind(as.matrix(df[,c("from","from_genes")]), as.matrix(df[,c("to","to_genes")])), stringsAsFactors=FALSE)
+				nodes <- nodes[!duplicated(nodes),]
+				colnames(nodes) <- c("name","target")
+				## apend list of SNP per harbor
+				nodes$SNP <- NA
+				ind <- match(nodes$name,names(vec_harbor_SNPs))
+				nodes$SNP[!is.na(ind)] <- vec_harbor_SNPs[ind[!is.na(ind)]]
+
+				ig <- graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
+				class(ig) <- c("PCHiC","igraph")
+				return(ig)	
+			}
+			
 		})
 		names(ls_ig) <- names(context_ls)
 		####################################

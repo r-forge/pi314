@@ -65,7 +65,7 @@ interactions between harbors and partners}
 If input data is not NULL, a list with two components: "df" and "ig".
 "df" is a data frame with following columns:
 \itemize{
-\item{\code{SNP}: input SNPs}
+\item{\code{SNP}: input SNPs (in query)}
 \item{\code{harbor}: genomic regions harboring input SNPs}
 \item{\code{partner}: genomic regions (partners of harboring genomic
 regions)}
@@ -76,7 +76,7 @@ regions}
 \item{\code{partner_genes}: genes associated with partner genomic
 regions}
 \item{\code{harbor_end}: specify which end the harboring genomic
-regions (either 'bait/from' or 'prey/to'}
+regions are (either 'bait/from' or 'prey/to')}
 \item{\code{Context}: the context in which PCHiC data was generated}
 }
 "ig" is an object of both classes "igraph" and "PCHiC", a direct graph

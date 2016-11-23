@@ -6,11 +6,11 @@
 \usage{
 xPCHiCplot(g, node.info = c("smart", "none", "GR", "GR_SNP",
 "GR_SNP_target",
-"SNP_target"), node.colors = c("skyblue", "pink1"), newpage = TRUE,
-glayout = layout_with_kk, vertex.frame.color = NA, vertex.size = NULL,
-vertex.color = NULL, vertex.shape = "sphere", vertex.label = NULL,
-vertex.label.cex = NULL, vertex.label.font = 2, vertex.label.dist =
-0.3,
+"SNP_target"), node.colors = c("skyblue", "pink1"), nodes.query = NULL,
+newpage = TRUE, signature = TRUE, glayout = layout_with_kk,
+vertex.frame.color = NA, vertex.size = NULL, vertex.color = NULL,
+vertex.shape = "sphere", vertex.label = NULL, vertex.label.cex = NULL,
+vertex.label.font = 2, vertex.label.dist = 0.3,
 vertex.label.color = "black", edge.arrow.size = 0.5, edge.width = NULL,
 edge.color = "grey", ...)
 }
@@ -30,8 +30,14 @@ GR will be hidden)}
 By default, a node harboring an SNP will be colored in 'skyblue' and
 the node without an SNP in 'pink'}
 
+\item{nodes.query}{nodes in query for which edges attached to them will
+be displayed. By default, it sets to NULL meaning no such restriction}
+
 \item{newpage}{logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page}
+
+\item{signature}{a logical to indicate whether the signature is
+assigned to the plot caption. By default, it sets FALSE}
 
 \item{glayout}{either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this
@@ -104,6 +110,17 @@ using different network layouts.
 }
 \note{
 none
+\itemize{
+\item{\code{edge arrow}: interactions are represented as a direct graph
+(bait —> prey)}
+\item{\code{edge thickness}: the thickness in an edge is proportional
+to the interaction strength}
+\item{\code{node color}: a node is colored in pink if it harbors SNPs
+in query; otherwise skyblue}
+\item{\code{node label}: a node is labelled with three pieces of
+information (if any): genomic regions, SNPs in query (marked by a
+container icon '©'), genes associated (marked by an @ icon)}
+}
 }
 \examples{
 \dontrun{

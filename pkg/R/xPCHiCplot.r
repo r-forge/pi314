@@ -5,7 +5,9 @@
 #' @param g an object of both classes "igraph" and "PCHiC" (part of the results from \code{\link{xSNPhic}})
 #' @param node.info tells the information used to label nodes. It can be one of "none" for no node labeling, "GR" for only using genomic regions (GR), "GR_SNP" for using GR and SNP (if any), "GR_SNP_target" for using GR and SNP (if any) and target genes (if any), "SNP_target" for using SNP (if any) and target genes (if any), and "smart" (by default) for only using GR if both SNP and target genes are not available (otherwise GR will be hidden)
 #' @param node.colors colors used to flag which nodes contain SNP or not. By default, a node harboring an SNP will be colored in 'skyblue' and the node without an SNP in 'pink'
+#' @param nodes.query nodes in query for which edges attached to them will be displayed. By default, it sets to NULL meaning no such restriction
 #' @param newpage logical to indicate whether to open a new page. By default, it sets to true for opening a new page
+#' @param signature a logical to indicate whether the signature is assigned to the plot caption. By default, it sets FALSE
 #' @param glayout either a function or a numeric matrix configuring how the vertices will be placed on the plot. If layout is a function, this function will be called with the graph as the single parameter to determine the actual coordinates. This function can be one of "layout_nicely" (previously "layout.auto"), "layout_randomly" (previously "layout.random"), "layout_in_circle" (previously "layout.circle"), "layout_on_sphere" (previously "layout.sphere"), "layout_with_fr" (previously "layout.fruchterman.reingold"), "layout_with_kk" (previously "layout.kamada.kawai"), "layout_as_tree" (previously "layout.reingold.tilford"), "layout_with_lgl" (previously "layout.lgl"), "layout_with_graphopt" (previously "layout.graphopt"), "layout_with_sugiyama" (previously "layout.kamada.kawai"), "layout_with_dh" (previously "layout.davidson.harel"), "layout_with_drl" (previously "layout.drl"), "layout_with_gem" (previously "layout.gem"), "layout_with_mds". A full explanation of these layouts can be found in \url{http://igraph.org/r/doc/layout_nicely.html}
 #' @param vertex.frame.color the color of the frame of the vertices. If it is NA, then there is no frame
 #' @param vertex.size the size of each vertex. If it is a vector, each vertex may differ in size
@@ -22,6 +24,12 @@
 #' @param ... additional graphic parameters. See \url{http://igraph.org/r/doc/plot.common.html} for the complete list.
 #' @return an igraph object
 #' @note none
+#' \itemize{
+#'  \item{\code{edge arrow}: interactions are represented as a direct graph (bait —> prey)}
+#'  \item{\code{edge thickness}: the thickness in an edge is proportional to the interaction strength}
+#'  \item{\code{node color}: a node is colored in pink if it harbors SNPs in query; otherwise skyblue}
+#'  \item{\code{node label}: a node is labelled with three pieces of information (if any): genomic regions, SNPs in query (marked by a container icon '©'), genes associated (marked by an @ icon)}
+#' }
 #' @export
 #' @seealso \code{\link{xSNPhic}}
 #' @include xPCHiCplot.r
@@ -58,7 +66,7 @@
 #' xPCHiCplot(g, node.info='SNP_target', vertex.label.cex=0.5)
 #' }
 
-xPCHiCplot <- function(g, node.info=c("smart", "none", "GR", "GR_SNP", "GR_SNP_target", "SNP_target"), node.colors=c("skyblue","pink1"), newpage=TRUE, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape="sphere", vertex.label=NULL, vertex.label.cex=NULL, vertex.label.font=2, vertex.label.dist=0.3, vertex.label.color="black", edge.arrow.size=0.5, edge.width=NULL, edge.color="grey", ...)
+xPCHiCplot <- function(g, node.info=c("smart", "none", "GR", "GR_SNP", "GR_SNP_target", "SNP_target"), node.colors=c("skyblue","pink1"), nodes.query=NULL, newpage=TRUE, signature=TRUE, glayout=layout_with_kk, vertex.frame.color=NA, vertex.size=NULL, vertex.color=NULL, vertex.shape="sphere", vertex.label=NULL, vertex.label.cex=NULL, vertex.label.font=2, vertex.label.dist=0.3, vertex.label.color="black", edge.arrow.size=0.5, edge.width=NULL, edge.color="grey", ...)
 {
     
     node.info<- match.arg(node.info)
@@ -71,6 +79,11 @@ xPCHiCplot <- function(g, node.info=c("smart", "none", "GR", "GR_SNP", "GR_SNP_t
 		stop("Cannot find an object of both classes 'igraph' and 'PCHiC'.\n")
 	}
 	
+	## restrict to nodes in query
+	if(!is.null(nodes.query)){
+		subg <- dnet::dNetInduce(g=subg, nodes_query=nodes.query, knn=1, remove.loops=FALSE, largest.comp=FALSE)
+	}
+
 	## for vertex.label
     if(is.null(vertex.label)){
 		## define node labels︎
@@ -128,6 +141,11 @@ xPCHiCplot <- function(g, node.info=c("smart", "none", "GR", "GR_SNP", "GR_SNP_t
 	suppressWarnings(dnet::visNet(g=subg, newpage=newpage, glayout=glayout, vertex.frame.color=vertex.frame.color, vertex.size=vertex.size, vertex.color=vertex.color, vertex.shape=vertex.shape, vertex.label=vertex.label, vertex.label.cex=vertex.label.cex, vertex.label.font=vertex.label.font, vertex.label.dist=vertex.label.dist, vertex.label.color=vertex.label.color, edge.arrow.size=edge.arrow.size, edge.width=edge.width, edge.color=edge.color, ...))
 	
 	suppressWarnings(graphics::par(par_old))
+	
+    if(signature){
+    	caption <- paste("Created by xPCHiCplot from Pi version", utils::packageVersion("Pi"))
+    	graphics::mtext(caption, side=1, line=2, adj=1, cex=.66, font=3)
+    }
 	
 	invisible(subg)
 }

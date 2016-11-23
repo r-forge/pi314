@@ -66,7 +66,7 @@
 #'
 #' \dontrun{
 #' # b) perform priority analysis
-#' pNode <- xPierSNPs(data=AS, include.LD=NA, include.eQTL="JKng_mono", include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7, RData.location=RData.location)
+#' pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono", include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7, RData.location=RData.location)
 #'
 #' # c) save to the file called 'SNPs_priority.txt'
 #' write.table(pNode$priority, file="SNPs_priority.txt", sep="\t", row.names=FALSE)

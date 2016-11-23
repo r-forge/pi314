@@ -307,7 +307,7 @@ AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-pNode <- xPierSNPs(data=AS, include.LD=NA, include.eQTL="JKng_mono",
+pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono",
 include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
 RData.location=RData.location)
 

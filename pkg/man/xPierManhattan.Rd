@@ -6,11 +6,12 @@
 \usage{
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), cex = 0.5,
 highlight.top = 20, highlight.col = "deepskyblue",
-highlight.label.size = 2, highlight.label.offset = 0.02,
+highlight.label.size = 2, highlight.label.offset = 0,
 highlight.label.col = "darkblue", y.scale = c("normal", "sqrt",
 "log10"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+top.only = TRUE, GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
@@ -33,6 +34,9 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 transformation, "sqrt" for square transformation, and "log10" for
 10-based log-transformation}
 
+\item{top.only}{logical to indicate whether only the top targets will
+be drawn in the plot. By default, it sets to TRUE}
+
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
 locations) based on human genome assembly hg19. It can be
@@ -52,7 +56,7 @@ displayed in the screen. By default, it sets to false for no display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-an object of class "ggplot"
+an object of class "ggplot", appended by an GR object called 'gr'
 }
 \description{
 \code{xPierManhattan} is supposed to visualise prioritised genes using
@@ -68,20 +72,26 @@ none
 library(Pi)
 }
 
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
 #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 gr <- ImmunoBase$AS$variants
 AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
+pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono",
+include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
+RData.location=RData.location)
 
 # c) manhattan plot
-mp <- xPierManhattan(pNode, highlight.top=10)
+mp <- xPierManhattan(pNode, highlight.top=20,
+RData.location=RData.location)
+mp$gr
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()

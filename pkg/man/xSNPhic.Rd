@@ -65,18 +65,17 @@ interactions between harbors and partners}
 If input data is not NULL, a list with two components: "df" and "ig".
 "df" is a data frame with following columns:
 \itemize{
-\item{\code{SNP}: input SNPs (in query)}
-\item{\code{harbor}: genomic regions harboring input SNPs}
-\item{\code{partner}: genomic regions (partners of harboring genomic
-regions)}
+\item{\code{from}: 'from/bait' genomic regions}
+\item{\code{to}: 'to/prey' genomic regions}
 \item{\code{score}: CHiCAGO scores quantifying the strength of physical
-interactions between harbors and partners}
-\item{\code{harbor_genes}: genes associated with harboring genomic
+interactions between baits and preys}
+\item{\code{from_genes}: genes associated with 'from/bait' genomic
 regions}
-\item{\code{partner_genes}: genes associated with partner genomic
-regions}
-\item{\code{harbor_end}: specify which end the harboring genomic
-regions are (either 'bait/from' or 'prey/to')}
+\item{\code{to_genes}: genes associated with 'to/prey' genomic regions}
+\item{\code{SNP}: input SNPs (in query)}
+\item{\code{SNP_end}: specify which end SNPs in query fall into (either
+'bait/from' or 'prey/to')}
+\item{\code{SNP_harbor}: genomic regions harbors the SNPs in query}
 \item{\code{Context}: the context in which PCHiC data was generated}
 }
 "ig" is an object of both classes "igraph" and "PCHiC", a direct graph
@@ -118,8 +117,8 @@ head(PCHiC$df)
 g <- PCHiC$ig
 ## a node with SNPs colored in 'skyblue' and the one without SNPs in 'pink'
 ## the width in an edge is proportional to the interaction strength
-xPCHiCplot(g, vertex.shape="sphere")
-xPCHiCplot(g, glayout=layout_in_circle, vertex.shape="sphere")
+xPCHiCplot(g, vertex.label.cex=0.5)
+xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 }
 }
 \seealso{

@@ -18,13 +18,14 @@
 #' If input data is not NULL, a list with two components: "df" and "ig".
 #' "df" is a data frame with following columns:
 #' \itemize{
+#'  \item{\code{from}: 'from/bait' genomic regions}
+#'  \item{\code{to}: 'to/prey' genomic regions}
+#'  \item{\code{score}: CHiCAGO scores quantifying the strength of physical interactions between baits and preys}
+#'  \item{\code{from_genes}: genes associated with 'from/bait' genomic regions}
+#'  \item{\code{to_genes}: genes associated with 'to/prey' genomic regions}
 #'  \item{\code{SNP}: input SNPs (in query)}
-#'  \item{\code{harbor}: genomic regions harboring input SNPs}
-#'  \item{\code{partner}: genomic regions (partners of harboring genomic regions)}
-#'  \item{\code{score}: CHiCAGO scores quantifying the strength of physical interactions between harbors and partners}
-#'  \item{\code{harbor_genes}: genes associated with harboring genomic regions}
-#'  \item{\code{partner_genes}: genes associated with partner genomic regions}
-#'  \item{\code{harbor_end}: specify which end the harboring genomic regions are (either 'bait/from' or 'prey/to')}
+#'  \item{\code{SNP_end}: specify which end SNPs in query fall into (either 'bait/from' or 'prey/to')}
+#'  \item{\code{SNP_harbor}: genomic regions harbors the SNPs in query}
 #'  \item{\code{Context}: the context in which PCHiC data was generated}
 #' }
 #' "ig" is an object of both classes "igraph" and "PCHiC", a direct graph with nodes for genomic regions and edges for CHiCAGO scores between them. Also added node attribute is 1) 'target' storing genes assocated and 2) 'SNP' for input SNPs (if the node harboring input SNPs). If several cell types are queried, "ig" is actually a list of "igraph"/"PCHiC" objects.
@@ -55,8 +56,8 @@
 #' g <- PCHiC$ig
 #' ## a node with SNPs colored in 'skyblue' and the one without SNPs in 'pink'
 #' ## the width in an edge is proportional to the interaction strength
-#' xPCHiCplot(g, vertex.shape="sphere")
-#' xPCHiCplot(g, glayout=layout_in_circle, vertex.shape="sphere")
+#' xPCHiCplot(g, vertex.label.cex=0.5)
+#' xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 #' }
 
 xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c('Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
@@ -118,21 +119,34 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 				partner_from <- df_edges[ind_from[!is.na(ind_from)], c('to','score')]
 				partner_from_gene <- df_nodes[match(partner_from[,1],df_nodes[,1]), 2]
 				nodes_from_gene <- df_nodes[match(nodes_from[,2],df_nodes[,1]), 2]
-				df_from <- cbind(nodes_from, partner_from, nodes_from_gene, partner_from_gene)
+				df_from <- cbind(nodes_from, partner_from, nodes_from_gene, partner_from_gene, stringsAsFactors=FALSE)
 				colnames(df_from) <- c('SNP', 'harbor', 'partner', 'score', 'harbor_genes', 'partner_genes')
-				df_from$harbor_end <- rep('bait',nrow(df_from))
+				df_from$harbor_end <- rep('bait/from',nrow(df_from))
 				
 				ind_to <- match(res_df$nodes, df_edges[,'to'])
 				nodes_to <- res_df[!is.na(ind_to),]
 				partner_to <- df_edges[ind_to[!is.na(ind_to)], c('from','score')]
 				partner_to_gene <- df_nodes[match(partner_to[,1],df_nodes[,1]), 2]
 				nodes_to_gene <- df_nodes[match(nodes_to[,2],df_nodes[,1]), 2]
-				df_to <- cbind(nodes_to, partner_to, nodes_to_gene, partner_to_gene)
+				df_to <- cbind(nodes_to, partner_to, nodes_to_gene, partner_to_gene, stringsAsFactors=FALSE)
 				colnames(df_to) <- c('SNP', 'harbor', 'partner', 'score', 'harbor_genes', 'partner_genes')
-				df_to$harbor_end <- rep('prey',nrow(df_to))
+				df_to$harbor_end <- rep('prey/to',nrow(df_to))
 				
 				df <- rbind(df_from, df_to)
 				df$Context <- rep(x, nrow(df))
+				
+				####################
+				# reverse conversion
+				####################
+				y <- df
+				ind <- which(y$harbor_end=="bait/from")
+				df_bait <- y[ind,c('harbor','partner','score','harbor_genes','partner_genes','SNP','harbor_end','harbor','Context')]
+				colnames(df_bait) <- c('from','to','score','from_genes','to_genes','SNP','SNP_end','SNP_harbor','Context')
+				ind <- which(y$harbor_end=="prey/to")
+				df_prey <- y[ind,c('partner','harbor','score','partner_genes','harbor_genes','SNP','harbor_end','harbor','Context')]
+				colnames(df_prey) <- c('from','to','score','from_genes','to_genes','SNP','SNP_end','SNP_harbor','Context')
+				df <- rbind(df_bait, df_prey)
+				rownames(df) <- NULL
 				
 			}else{
 				df <- df_edges
@@ -144,7 +158,7 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 		})
 		## get data frame:
 		### from to score Context
-		### SNP harbor partner score partner_genes Context
+		### from to score from_genes to_genes SNP SNP_end SNP_harbor Context
 		df_returned <- do.call(rbind, res_list)
 	
 	}
@@ -152,27 +166,18 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 	if(!is.null(data)){
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("Amongst %d SNPs, %d SNPs are falling into %d interacton regions", length(unique(data)), length(unique(df_returned$SNP)), length(unique(df_returned$harbor))), appendLF=TRUE)
+			message(sprintf("Amongst %d SNPs, %d SNPs are falling into %d interacton regions", length(unique(data)), length(unique(df_returned$SNP)), length(unique(df_returned$SNP_harbor))), appendLF=TRUE)
 		}
 		
 		####################################
 		## also output igraph
 		context_ls <- split(x=df_returned, f=df_returned$Context)
 		ls_ig <- lapply(1:length(context_ls), function(i){
-			x <- context_ls[[i]]
-					
-			ind <- which(x$harbor_end=="bait")
-			df_bait <- x[ind,c('harbor','partner','score','harbor_genes','partner_genes','SNP','harbor_end')]
-			colnames(df_bait) <- c('from','to','score','from_genes','to_genes','SNP','harbor_end')
-			ind <- which(x$harbor_end=="prey")
-			df_prey <- x[ind,c('partner','harbor','score','partner_genes','harbor_genes','SNP','harbor_end')]
-			colnames(df_prey) <- c('from','to','score','from_genes','to_genes','SNP','harbor_end')
-			df <- rbind(df_bait, df_prey)
-			rownames(df) <- NULL
+			df <- context_ls[[i]]
 			
-			if(1){		
+			if(1){
 				#################################
-				res_ls <- lapply(split(x=x$SNP, f=x$harbor),function(x){
+				res_ls <- lapply(split(x=df$SNP, f=df$SNP_harbor),function(x){
 					paste(x, collapse=';')
 				})
 				vec_harbor_SNPs <- unlist(res_ls)

@@ -129,7 +129,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B
 	
 		if(verbose){
 			now <- Sys.time()
-			message(sprintf("%d nGenes are defined involving %d eQTL", length(unique(df_eGenes$Gene)), length(unique(df_eGenes$SNP))), appendLF=TRUE)
+			message(sprintf("%d eGenes are defined involving %d eQTL", length(unique(df_eGenes$Gene)), length(unique(df_eGenes$SNP))), appendLF=TRUE)
 		}
 	
 	}else{

@@ -159,7 +159,8 @@ xContour <-function(data, main='', xlab='', ylab='', key='', nlevels=50, colorma
 	)
     
     if(signature){
-    	graphics::mtext(paste("xContour() from Pi version", utils ::packageVersion("Pi")), side=1, line=4, adj=1, cex=.66)
+    	caption <- paste("Created by xContour from Pi version", utils::packageVersion("Pi"))
+    	graphics::mtext(caption, side=1, line=4, adj=1, cex=.66, font=3)
     }
     
     invisible()

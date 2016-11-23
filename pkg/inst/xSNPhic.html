@@ -108,30 +108,31 @@ interactions between harbors and partners
 </p>
 
 <ul>
-<li><p><code>SNP</code>: input SNPs (in query)
+<li><p><code>from</code>: 'from/bait' genomic regions
 </p>
 </li>
-<li><p><code>harbor</code>: genomic regions harboring input SNPs
-</p>
-</li>
-<li><p><code>partner</code>: genomic regions (partners of harboring genomic
-regions)
+<li><p><code>to</code>: 'to/prey' genomic regions
 </p>
 </li>
 <li><p><code>score</code>: CHiCAGO scores quantifying the strength of physical
-interactions between harbors and partners
+interactions between baits and preys
 </p>
 </li>
-<li><p><code>harbor_genes</code>: genes associated with harboring genomic
+<li><p><code>from_genes</code>: genes associated with 'from/bait' genomic
 regions
 </p>
 </li>
-<li><p><code>partner_genes</code>: genes associated with partner genomic
-regions
+<li><p><code>to_genes</code>: genes associated with 'to/prey' genomic regions
 </p>
 </li>
-<li><p><code>harbor_end</code>: specify which end the harboring genomic
-regions are (either 'bait/from' or 'prey/to')
+<li><p><code>SNP</code>: input SNPs (in query)
+</p>
+</li>
+<li><p><code>SNP_end</code>: specify which end SNPs in query fall into (either
+'bait/from' or 'prey/to')
+</p>
+</li>
+<li><p><code>SNP_harbor</code>: genomic regions harbors the SNPs in query
 </p>
 </li>
 <li><p><code>Context</code>: the context in which PCHiC data was generated
@@ -187,8 +188,8 @@ head(PCHiC$df)
 g &lt;- PCHiC$ig
 ## a node with SNPs colored in 'skyblue' and the one without SNPs in 'pink'
 ## the width in an edge is proportional to the interaction strength
-xPCHiCplot(g, vertex.shape="sphere")
-xPCHiCplot(g, glayout=layout_in_circle, vertex.shape="sphere")
+xPCHiCplot(g, vertex.label.cex=0.5)
+xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 
 ## End(Not run)
 </pre>

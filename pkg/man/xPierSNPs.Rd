@@ -6,22 +6,31 @@
 \usage{
 xPierSNPs(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, distance.max = 2e+05,
-decay.kernel = c("rapid", "slow", "linear"), decay.exponent = 2,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), include.eQTL = c(NA, "JKscience_TS2A",
-"JKscience_TS2B", "JKscience_TS3A", "JKng_bcell", "JKng_mono",
-"JKnc_neutro",
-"JK_nk", "GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
-"GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
+decay.kernel = c("rapid", "slow", "linear", "constant"),
+decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.eQTL =
+c(NA,
+"JKscience_TS2A", "JKscience_TS2B", "JKscience_TS3A", "JKng_bcell",
+"JKng_mono", "JKnc_neutro", "JK_nk", "GTEx_V4_Adipose_Subcutaneous",
+"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
+"GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
 "GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
 "GTEx_V4_Thyroid",
 "GTEx_V4_Whole_Blood", "eQTLdb_NK", "eQTLdb_CD14", "eQTLdb_LPS2",
 "eQTLdb_LPS24", "eQTLdb_IFN"), eQTL.customised = NULL,
+include.HiC = c("Monocytes", "Macrophages_M0", "Macrophages_M1",
+"Macrophages_M2", "Neutrophils", "Megakaryocytes",
+"Endothelial_precursors",
+"Erythroblasts", "Fetal_thymus", "Naive_CD4_T_cells",
+"Total_CD4_T_cells",
+"Activated_total_CD4_T_cells", "Nonactivated_total_CD4_T_cells",
+"Naive_CD8_T_cells", "Total_CD8_T_cells", "Naive_B_cells",
+"Total_B_cells"),
 cdf.function = c("empirical", "exponential"), relative.importance =
-c(0.5,
-0.5), scoring.scheme = c("max", "sum", "sequential"),
+c(1/3,
+1/3, 1/3), scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
 "STRING_low",
 "PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
@@ -77,7 +86,8 @@ calculated for nearby SNPs per gene}
 
 \item{decay.kernel}{a character specifying a decay kernel function. It
 can be one of 'slow' for slow decay, 'linear' for linear decay, and
-'rapid' for rapid decay}
+'rapid' for rapid decay. If no distance weight is used, please select
+'constant'}
 
 \item{decay.exponent}{an integer specifying a decay exponent. By
 default, it sets to 2}
@@ -126,12 +136,18 @@ eQTL mapping significance level (p-values or FDR). It is designed to
 allow the user analysing their eQTL data. This customisation (if
 provided) has the high priority over built-in eQTL data.}
 
+\item{include.HiC}{genes linked to input SNPs are also included. Genes
+linked to input SNPs are based on Promoter Capture HiC (PCHic),
+including 17 primary blood cell types:
+'Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'.}
+
 \item{cdf.function}{a character specifying a Cumulative Distribution
 Function (cdf). It can be one of 'exponential' based on exponential
 cdf, 'empirical' for empirical cdf}
 
 \item{relative.importance}{a vector specifying the relative importance
-of the distance weight and eQTL weight}
+of nearby genes, eQTL genes and HiC genes. By default, it sets c(1/3,
+1/3, 1/3)}
 
 \item{scoring.scheme}{the method used to calculate seed gene scores
 under a set of SNPs. It can be one of "sum" for adding up, "max" for
@@ -262,10 +278,13 @@ score:
 genes.}
 \item{iii) \code{\link{xSNP2eGenes}} used to define and score the eQTL
 genes.}
-\item{iv) define seed genes as the nearby genes in ii) and the eQTL
-genes in iii), which are then scored in an integrative manner.}
-\item{v) \code{\link{xPierGenes}} used to prioritise genes using an
-input graph and a list of seed genes and their scores from iv). The
+\item{iv) \code{\link{xSNP2cGenes}} used to define and score the HiC
+genes.}
+\item{v) define seed genes as the nearby genes in ii) and the eQTL
+genes in iii) and the HiC genes in iv), which are then scored in an
+integrative manner.}
+\item{vi) \code{\link{xPierGenes}} used to prioritise genes using an
+input graph and a list of seed genes and their scores from v). The
 priority score is the affinity score estimated by Random Walk with
 Restart (RWR), measured as the affinity of all nodes in the graph to
 the seeds.}
@@ -277,6 +296,7 @@ the seeds.}
 library(Pi)
 }
 
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
@@ -287,16 +307,17 @@ AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-pNode <- xPierSNPs(data=AS, include.LD=NA,
-include.eQTL=c("JKscience_TS2A","JKscience_TS3A"),
-network="PCommonsUN_medium", restart=0.7)
+pNode <- xPierSNPs(data=AS, include.LD=NA, include.eQTL="JKng_mono",
+include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
+RData.location=RData.location)
 
 # c) save to the file called 'SNPs_priority.txt'
 write.table(pNode$priority, file="SNPs_priority.txt", sep="\\t",
 row.names=FALSE)
 
 # d) manhattan plot
-mp <- xPierManhattan(pNode, highlight.top=10)
+mp <- xPierManhattan(pNode, highlight.top=20, highlight.label.size=1.5,
+y.scale="sqrt", RData.location=RData.location)
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()
@@ -304,8 +325,8 @@ print(mp)
 }
 \seealso{
 \code{\link{xSNPscores}}, \code{\link{xSNP2nGenes}},
-\code{\link{xSNP2eGenes}}, \code{\link{xSparseMatrix}},
-\code{\link{xSM2DF}}, \code{\link{xPier}}, \code{\link{xPierGenes}},
-\code{\link{xPierPathways}}
+\code{\link{xSNP2eGenes}}, \code{\link{xSNP2cGenes}},
+\code{\link{xSparseMatrix}}, \code{\link{xSM2DF}}, \code{\link{xPier}},
+\code{\link{xPierGenes}}, \code{\link{xPierPathways}}
 }
 

@@ -121,14 +121,14 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), cex=0.5, highl
     	if(top.only){
 			mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), limits=c(min(vec_top), max(vec_top)))
     	}else{
-    		mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2), labels=scales::trans_format("log10", scales::math_format(10^.x)))
+    		mp <- mp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2), labels=scales::trans_format("log10", scales::math_format(10^x)))
     	}
     	
     }else if(y.scale=="log10"){
     	if(top.only){
-			mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^.x)), limits=c(min(vec_top), max(vec_top)))
+			mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)), limits=c(min(vec_top), max(vec_top)))
     	}else{
-			mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^.x)))
+			mp <- mp + scale_y_continuous(trans=scales::log_trans(base=10), breaks=scales::trans_breaks("log10", function(x) 10^x, n=3), labels=scales::trans_format("log10", scales::math_format(10^x)))
     	}
     	
     }

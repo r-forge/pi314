@@ -27,6 +27,7 @@
 #' @import ggplot2
 #' @import graphics
 #' @import e1071
+#' @import randomForest
 #' @importFrom ggbio plotGrandLinear
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom ROCR prediction performance plot

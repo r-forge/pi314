@@ -36,8 +36,8 @@ be displayed. By default, it sets to NULL meaning no such restriction}
 \item{newpage}{logical to indicate whether to open a new page. By
 default, it sets to true for opening a new page}
 
-\item{signature}{a logical to indicate whether the signature is
-assigned to the plot caption. By default, it sets FALSE}
+\item{signature}{logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets FALSE}
 
 \item{glayout}{either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this

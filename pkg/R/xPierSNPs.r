@@ -7,6 +7,7 @@
 #' @param LD.customised a user-input matrix or data frame with 3 columns: 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2 value. It is designed to allow the user analysing their pre-calculated LD info. This customisation (if provided) has the high priority over built-in LD SNPs
 #' @param LD.r2 the LD r2 value. By default, it is 0.8, meaning that SNPs in LD (r2>=0.8) with input SNPs will be considered as LD SNPs. It can be any value from 0.8 to 1
 #' @param significance.threshold the given significance threshold. By default, it is set to NULL, meaning there is no constraint on the significance level when transforming the significance level of SNPs into scores. If given, those SNPs below this are considered significant and thus scored positively. Instead, those above this are considered insigificant and thus receive no score
+#' @param score.cap the maximum score being capped. By default, it is set to 10. If NULL, no capping is applied
 #' @param distance.max the maximum distance between genes and SNPs. Only those genes no far way from this distance will be considered as seed genes. This parameter will influence the distance-component weights calculated for nearby SNPs per gene
 #' @param decay.kernel a character specifying a decay kernel function. It can be one of 'slow' for slow decay, 'linear' for linear decay, and 'rapid' for rapid decay. If no distance weight is used, please select 'constant'
 #' @param decay.exponent an integer specifying a decay exponent. By default, it sets to 2
@@ -78,7 +79,7 @@
 #' #dev.off()
 #' }
 
-xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN"), eQTL.customised=NULL, include.HiC=c('Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'), cdf.function=c("empirical","exponential"), relative.importance=c(1/3,1/3,1/3), scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), weighted=FALSE, network.customised=NULL, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, significance.threshold=5e-5, score.cap=10, distance.max=200000, decay.kernel=c("rapid","slow","linear","constant"), decay.exponent=2, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2B","JKscience_TS3A","JKng_bcell","JKng_mono","JKnc_neutro","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN"), eQTL.customised=NULL, include.HiC=c('Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'), cdf.function=c("empirical","exponential"), relative.importance=c(1/3,1/3,1/3), scoring.scheme=c("max","sum","sequential"), network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD"), weighted=FALSE, network.customised=NULL, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     startT <- Sys.time()
@@ -293,7 +294,19 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
     
 	if(verbose){
 		now <- Sys.time()
-		message(sprintf("A total of %d genes are prioritised", nrow(pNode$priority)), appendLF=TRUE)
+		message(sprintf("A total of %d genes are prioritised, based on:", nrow(pNode$priority)), appendLF=TRUE)
+		message(sprintf("\t%d SNPs scored positively (including %d 'Lead' and %d 'LD');", nrow(df_SNP), sum(df_SNP$Flag=='Lead'), sum(df_SNP$Flag=='LD')), appendLF=TRUE)
+		if(!is.null(df_nGenes)){
+			message(sprintf("\t%d nearby genes within %d(bp) genomic distance window of %d SNPs", length(unique(df_nGenes$Gene)), distance.max, length(unique(df_nGenes$SNP))), appendLF=TRUE)
+		}
+		if(!is.null(df_eGenes)){
+			message(sprintf("\t%d eQTL genes with expression modulated by %d SNPs", length(unique(df_eGenes$Gene)), length(unique(df_eGenes$SNP))), appendLF=TRUE)
+		}
+		if(!is.null(df_cGenes)){
+			message(sprintf("\t%d HiC genes physically interacted with %d SNP", length(unique(df_cGenes$Gene)), length(unique(df_cGenes$SNP))), appendLF=TRUE)
+		}
+		message(sprintf("\t%d genes defined as seeds from %d SNPs", length(seeds.genes), ncol(G2S_score)), appendLF=TRUE)
+		message(sprintf("\trandomly walk the network (%d nodes and %d edges) starting from %d seed genes/nodes (with %.2f restarting prob.)", vcount(pNode$g), ecount(pNode$g), length(seeds.genes), restart), appendLF=TRUE)
 	}
     
     df_SNP <- df_SNP[order(df_SNP$Flag,df_SNP$Score,df_SNP$SNP,decreasing=TRUE),]

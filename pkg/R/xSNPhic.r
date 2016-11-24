@@ -163,7 +163,7 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 	
 	}
 	
-	if(!is.null(data)){
+	if(!is.null(data) & !is.null(df_returned)){
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("Amongst %d SNPs, %d SNPs are falling into %d interacton regions", length(unique(data)), length(unique(df_returned$SNP)), length(unique(df_returned$SNP_harbor))), appendLF=TRUE)

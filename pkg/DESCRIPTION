@@ -30,4 +30,4 @@ Collate:
     'xSNP2cGenes.r'
 License: GPL-3
 VignetteBuilder: knitr
-biocViews: Software, Genetics, GraphAndNetwork, Pathways, GeneExpression, GeneTarget, GenomeWideAssociation, LinkageDisequilibrium, Network
+biocViews: Software, Genetics, GraphAndNetwork, Pathways, GeneExpression, GeneTarget, GenomeWideAssociation, LinkageDisequilibrium, Network, HiC

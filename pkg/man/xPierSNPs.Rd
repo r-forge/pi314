@@ -20,7 +20,7 @@ c(NA,
 "GTEx_V4_Thyroid",
 "GTEx_V4_Whole_Blood", "eQTLdb_NK", "eQTLdb_CD14", "eQTLdb_LPS2",
 "eQTLdb_LPS24", "eQTLdb_IFN"), eQTL.customised = NULL,
-include.HiC = c("Monocytes", "Macrophages_M0", "Macrophages_M1",
+include.HiC = c(NA, "Monocytes", "Macrophages_M0", "Macrophages_M1",
 "Macrophages_M2", "Neutrophils", "Megakaryocytes",
 "Endothelial_precursors",
 "Erythroblasts", "Fetal_thymus", "Naive_CD4_T_cells",
@@ -139,10 +139,11 @@ eQTL mapping significance level (p-values or FDR). It is designed to
 allow the user analysing their eQTL data. This customisation (if
 provided) has the high priority over built-in eQTL data.}
 
-\item{include.HiC}{genes linked to input SNPs are also included. Genes
-linked to input SNPs are based on Promoter Capture HiC (PCHic),
-including 17 primary blood cell types:
-'Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'.}
+\item{include.HiC}{genes linked to input SNPs are also included. By
+default, it is 'NA' to disable this option. Genes linked to input SNPs
+are based on Promoter Capture HiC (PCHic), including 17 primary blood
+cell types:
+"Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells".}
 
 \item{cdf.function}{a character specifying a Cumulative Distribution
 Function (cdf). It can be one of 'exponential' based on exponential

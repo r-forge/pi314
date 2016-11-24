@@ -20,18 +20,18 @@ of HiC interaction scores.
 <pre>
 xSNP2cGenes(data, entity = c("SNP", "chr:start-end", "data.frame",
 "bed",
-"GRanges"), include.HiC = c("Monocytes", "Macrophages_M0",
-"Macrophages_M1",
-"Macrophages_M2", "Neutrophils", "Megakaryocytes",
-"Endothelial_precursors",
-"Erythroblasts", "Fetal_thymus", "Naive_CD4_T_cells",
-"Total_CD4_T_cells",
-"Activated_total_CD4_T_cells", "Nonactivated_total_CD4_T_cells",
-"Naive_CD8_T_cells", "Total_CD8_T_cells", "Naive_B_cells",
-"Total_B_cells"),
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), cdf.function = c("empirical",
-"exponential"), plot = FALSE, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"GRanges"), include.HiC = c(NA, "Monocytes", "Macrophages_M0",
+"Macrophages_M1", "Macrophages_M2", "Neutrophils", "Megakaryocytes",
+"Endothelial_precursors", "Erythroblasts", "Fetal_thymus",
+"Naive_CD4_T_cells", "Total_CD4_T_cells",
+"Activated_total_CD4_T_cells",
+"Nonactivated_total_CD4_T_cells", "Naive_CD8_T_cells",
+"Total_CD8_T_cells",
+"Naive_B_cells", "Total_B_cells"), GR.SNP = c("dbSNP_GWAS",
+"dbSNP_Common"),
+cdf.function = c("empirical", "exponential"), plot = FALSE,
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -55,10 +55,11 @@ use, it can also be one of &quot;chr:start-end&quot;, &quot;data.frame&quot;, &q
 </td></tr>
 <tr valign="top"><td><code>include.HiC</code></td>
 <td>
-<p>genes linked to input SNPs are also included. Genes
-linked to input SNPs are based on Promoter Capture HiC (PCHic),
-including 17 primary blood cell types:
-'Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'.</p>
+<p>genes linked to input SNPs are also included. By
+default, it is 'NA' to disable this option. Genes linked to input SNPs
+are based on Promoter Capture HiC (PCHic), including 17 primary blood
+cell types:
+&quot;Monocytes&quot;,&quot;Macrophages_M0&quot;,&quot;Macrophages_M1&quot;,&quot;Macrophages_M2&quot;,&quot;Neutrophils&quot;,&quot;Megakaryocytes&quot;,&quot;Endothelial_precursors&quot;,&quot;Erythroblasts&quot;,&quot;Fetal_thymus&quot;,&quot;Naive_CD4_T_cells&quot;,&quot;Total_CD4_T_cells&quot;,&quot;Activated_total_CD4_T_cells&quot;,&quot;Nonactivated_total_CD4_T_cells&quot;,&quot;Naive_CD8_T_cells&quot;,&quot;Total_CD8_T_cells&quot;,&quot;Naive_B_cells&quot;,&quot;Total_B_cells&quot;.</p>
 </td></tr>
 <tr valign="top"><td><code>GR.SNP</code></td>
 <td>

@@ -6,17 +6,17 @@
 \usage{
 xSNPhic(data = NULL, entity = c("SNP", "chr:start-end", "data.frame",
 "bed",
-"GRanges"), include.HiC = c("Monocytes", "Macrophages_M0",
-"Macrophages_M1",
-"Macrophages_M2", "Neutrophils", "Megakaryocytes",
-"Endothelial_precursors",
-"Erythroblasts", "Fetal_thymus", "Naive_CD4_T_cells",
-"Total_CD4_T_cells",
-"Activated_total_CD4_T_cells", "Nonactivated_total_CD4_T_cells",
-"Naive_CD8_T_cells", "Total_CD8_T_cells", "Naive_B_cells",
-"Total_B_cells"),
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"GRanges"), include.HiC = c(NA, "Monocytes", "Macrophages_M0",
+"Macrophages_M1", "Macrophages_M2", "Neutrophils", "Megakaryocytes",
+"Endothelial_precursors", "Erythroblasts", "Fetal_thymus",
+"Naive_CD4_T_cells", "Total_CD4_T_cells",
+"Activated_total_CD4_T_cells",
+"Nonactivated_total_CD4_T_cells", "Naive_CD8_T_cells",
+"Total_CD8_T_cells",
+"Naive_B_cells", "Total_B_cells"), GR.SNP = c("dbSNP_GWAS",
+"dbSNP_Common"),
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{NULL or a input vector containing SNPs. If NULL, all SNPs
@@ -30,10 +30,11 @@ the next parameter 'entity')}
 use, it can also be one of "chr:start-end", "data.frame", "bed" or
 "GRanges"}
 
-\item{include.HiC}{genes linked to input SNPs are also included. Genes
-linked to input SNPs are based on Promoter Capture HiC (PCHic),
-including 17 primary blood cell types:
-'Monocytes','Macrophages_M0','Macrophages_M1','Macrophages_M2','Neutrophils','Megakaryocytes','Endothelial_precursors','Erythroblasts','Fetal_thymus','Naive_CD4_T_cells','Total_CD4_T_cells','Activated_total_CD4_T_cells','Nonactivated_total_CD4_T_cells','Naive_CD8_T_cells','Total_CD8_T_cells','Naive_B_cells','Total_B_cells'.}
+\item{include.HiC}{genes linked to input SNPs are also included. By
+default, it is 'NA' to disable this option. Genes linked to input SNPs
+are based on Promoter Capture HiC (PCHic), including 17 primary blood
+cell types:
+"Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells".}
 
 \item{GR.SNP}{the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS

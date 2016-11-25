@@ -113,6 +113,7 @@ genes is much higher.
 library(Pi)
 }
 
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
@@ -123,11 +124,14 @@ AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-pNode <- xPierSNPs(data=AS, network="PCommonsUN_medium",restart=0.7)
+pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono",
+include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
+RData.location=RData.location)
 
 # c) perform network analysis
 # find maximum-scoring subnet with the desired node number=50
-subnet <- xPierSubnet(pNode, priority.quantite=0.1, subnet.size=50)
+subnet <- xPierSubnet(pNode, priority.quantite=0.1, subnet.size=50,
+RData.location=RData.location)
 
 # d) save subnet results to the files called 'subnet_edges.txt' and 'subnet_nodes.txt'
 output <- igraph::get.data.frame(subnet, what="edges")

@@ -328,12 +328,12 @@ RData files. See <code>xRDataLoader</code> for details</p>
 </p>
 
 <ul>
-<li><p><code>priority</code>: a matrix of nNode X 4 containing node priority
+<li><p><code>priority</code>: a matrix of nNode X 5 containing node priority
 information, where nNode is the number of nodes in the input graph, and
-the 4 columns are &quot;name&quot; (node names), &quot;seed&quot; (1 for seeds, 0 for
-non-seeds), &quot;weight&quot; (weight/score values for seed genes), &quot;priority&quot;
-(the priority scores that are rescaled to the range [0,1]), &quot;rank&quot;
-(ranks of the priority scores)
+the 5 columns are &quot;name&quot; (node names), &quot;seed&quot; (1 for seeds, 0 for
+non-seeds), &quot;weight&quot; (weight values), &quot;priority&quot; (the priority scores
+that are rescaled to the range [0,1]), &quot;rank&quot; (ranks of the priority
+scores), &quot;description&quot; (node description)
 </p>
 </li>
 <li><p><code>g</code>: an input &quot;igraph&quot; object
@@ -417,7 +417,8 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
 #AS &lt;- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 gr &lt;- ImmunoBase$AS$variants
 AS &lt;- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 

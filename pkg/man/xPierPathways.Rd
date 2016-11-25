@@ -178,21 +178,24 @@ maximum of both p-values in these two calculations.}
 library(Pi)
 }
 
-# a) provide the seed nodes/genes with the weight info
-## load ImmunoBase
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+# a) provide the SNPs with the significance info
+## get lead SNPs reported in AS GWAS and their significance info (p-values)
+#data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
+#AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
-## get genes within 500kb away from AS GWAS lead SNPs
-seeds.genes <- ImmunoBase$AS$genes_variants
-## seeds weighted according to distance away from lead SNPs
-data <- 1- seeds.genes/500000
+gr <- ImmunoBase$AS$variants
+AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-pNode <- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7)
+pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono",
+include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
+RData.location=RData.location)
 
 # c) derive pathway-level priority
 eTerm <- xPierPathways(pNode=pNode, priority.top=100,
-ontology="MsigdbC2CP")
+ontology="MsigdbC2CP", RData.location=RData.location)
 
 # d) view enrichment results for the top significant terms
 xEnrichViewer(eTerm)

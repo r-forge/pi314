@@ -245,12 +245,12 @@ RData files. See \code{\link{xRDataLoader}} for details}
 \value{
 an object of class "pNode", a list with following components:
 \itemize{
-\item{\code{priority}: a matrix of nNode X 4 containing node priority
+\item{\code{priority}: a matrix of nNode X 5 containing node priority
 information, where nNode is the number of nodes in the input graph, and
-the 4 columns are "name" (node names), "seed" (1 for seeds, 0 for
-non-seeds), "weight" (weight/score values for seed genes), "priority"
-(the priority scores that are rescaled to the range [0,1]), "rank"
-(ranks of the priority scores)}
+the 5 columns are "name" (node names), "seed" (1 for seeds, 0 for
+non-seeds), "weight" (weight values), "priority" (the priority scores
+that are rescaled to the range [0,1]), "rank" (ranks of the priority
+scores), "description" (node description)}
 \item{\code{g}: an input "igraph" object}
 \item{\code{SNP}: a data frame of nSNP X 3 containing input SNPs and/or
 LD SNPs info, where nSNP is the number of input SNPs and/or LD SNPs,
@@ -305,7 +305,8 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
 #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 gr <- ImmunoBase$AS$variants
 AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 

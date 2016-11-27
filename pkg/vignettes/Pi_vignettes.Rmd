@@ -19,7 +19,6 @@ output:
 bibliography: now.Pi.bib
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(collapse=TRUE, comment=">")
 knitr::opts_chunk$set(dpi=300)
@@ -43,7 +42,6 @@ scp now.Pi_vignettes.html galahad.well.ox.ac.uk:/var/www/Pi/Pi_vignettes.html
 scp now.Pi_vignettes.Rmd galahad.well.ox.ac.uk:/var/www/Pi/Pi_vignettes.Rmd
 ```
 
-
 # Installation
 
 ## R
@@ -53,7 +51,7 @@ The latest version on different platforms can be installed following instruction
 
 ## Packages
 
-`Pi` together with dependant packages can be installed following instructions below:
+**Install `Pi` (the latest stable release from Bioconductor):**
 
 ```{r eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
@@ -61,7 +59,7 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("Pi")
 ```
 
-**Highly recommend to install the latest version**
+**Also install the latest development version from github (highly recommended):**
 
 ```{r eval=FALSE, echo=TRUE}
 # first, install the dependant packages (the stable version)

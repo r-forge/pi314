@@ -28,8 +28,8 @@
 #' @import graphics
 #' @import e1071
 #' @import randomForest
-#' @importFrom ggbio plotGrandLinear
-#' @importFrom ggrepel geom_text_repel
+#' @importFrom ggbio autoplot
+#' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom ROCR prediction performance plot
 #' @importFrom supraHex sDistance visColormap
 #' @importFrom scales sqrt_trans log_trans trans_breaks trans_format math_format

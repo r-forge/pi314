@@ -4,38 +4,31 @@
 \alias{xPierManhattan}
 \title{Function to visualise prioritised genes using manhattan plot}
 \usage{
-xPierManhattan(pNode, color = c("darkred", "darkgreen"), cex = 0.5,
-highlight.top = 20, highlight.col = "deepskyblue",
-highlight.label.size = 2, highlight.label.offset = 0,
-highlight.label.col = "darkblue", y.scale = c("normal", "sqrt",
-"log10"),
-top.only = TRUE, GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
+top.label.type = c("box", "text"), top.label.size = 2,
+top.label.col = "darkblue", y.scale = c("normal", "sqrt"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
 
-\item{color}{a character vector for point colors to alternate}
+\item{color}{a character vector for colors to alternate chromosome
+colorings. If NULL, ggplot2 default colors will be used. If a single
+character is provided, it can be "jet" (jet colormap) or "rainbow"
+(rainbow colormap, that is, red-yellow-green-cyan-blue-magenta)}
 
-\item{cex}{a numeric value for point size}
+\item{top}{the number of the top targets to be labelled/highlighted}
 
-\item{highlight.top}{the number of the top targets to be highlighted}
+\item{top.label.type}{how to label the top targets. It can be "box"
+drawing a box around the labels , and "text" for the text only}
 
-\item{highlight.col}{the highlight colors}
+\item{top.label.size}{the highlight label size}
 
-\item{highlight.label.size}{the highlight label size}
-
-\item{highlight.label.offset}{the highlight label offset}
-
-\item{highlight.label.col}{the highlight label color}
+\item{top.label.col}{the highlight label color}
 
 \item{y.scale}{how to transform the y scale. It can be "normal" for no
-transformation, "sqrt" for square transformation, and "log10" for
-10-based log-transformation}
-
-\item{top.only}{logical to indicate whether only the top targets will
-be drawn in the plot. By default, it sets to TRUE}
+transformation, and "sqrt" for square transformation}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic
@@ -89,12 +82,16 @@ include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
 RData.location=RData.location)
 
 # c) manhattan plot
-mp <- xPierManhattan(pNode, highlight.top=20,
-RData.location=RData.location)
-mp$gr
+## default plot
+mp <- xPierManhattan(pNode, RData.location=RData.location)
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()
+mp$gr
+## control visuals
+mp <- xPierManhattan(pNode, color='ggplot2', top=50,
+top.label.col="black", y.scale="sqrt", RData.location=RData.location)
+mp
 }
 }
 \seealso{

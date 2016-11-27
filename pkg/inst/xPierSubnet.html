@@ -165,7 +165,8 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
 #AS &lt;- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase &lt;- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 gr &lt;- ImmunoBase$AS$variants
 AS &lt;- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 

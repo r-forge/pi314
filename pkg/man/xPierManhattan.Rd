@@ -7,8 +7,9 @@
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
 top.label.type = c("box", "text"), top.label.size = 2,
 top.label.col = "darkblue", y.scale = c("normal", "sqrt"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), signature = TRUE,
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{pNode}{an object of class "pNode"}
@@ -41,6 +42,9 @@ computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
 "RData.location"}
+
+\item{signature}{logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to false for no display}

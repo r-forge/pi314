@@ -151,7 +151,16 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
         message(sprintf("#######################################################", appendLF=TRUE))
     }
     
-	df_eGenes <- xSNP2eGenes(data=df_SNP$SNP, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, cdf.function=cdf.function, plot=FALSE, verbose=verbose, RData.location=RData.location)
+    if(relative.importance[2] != 0){
+		df_eGenes <- xSNP2eGenes(data=df_SNP$SNP, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, cdf.function=cdf.function, plot=FALSE, verbose=verbose, RData.location=RData.location)
+	}else{
+		df_eGenes <- NULL
+		
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("No eQTL genes are defined"), appendLF=TRUE)
+		}
+	}
 	
 	if(verbose){
         now <- Sys.time()
@@ -170,7 +179,16 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
         message(sprintf("#######################################################", appendLF=TRUE))
     }
     
-	df_cGenes <- xSNP2cGenes(data=df_SNP$SNP, entity="SNP", include.HiC=include.HiC, GR.SNP=GR.SNP, cdf.function=cdf.function, plot=FALSE, verbose=verbose, RData.location=RData.location)
+    if(relative.importance[3] != 0){
+		df_cGenes <- xSNP2cGenes(data=df_SNP$SNP, entity="SNP", include.HiC=include.HiC, GR.SNP=GR.SNP, cdf.function=cdf.function, plot=FALSE, verbose=verbose, RData.location=RData.location)
+	}else{
+		df_cGenes <- NULL
+		
+		if(verbose){
+			now <- Sys.time()
+			message(sprintf("No HiC genes are defined"), appendLF=TRUE)
+		}
+	}
 	
 	if(verbose){
         now <- Sys.time()

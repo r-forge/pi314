@@ -18,14 +18,11 @@ an object of class &quot;ggplot&quot;.
 <h3>Usage</h3>
 
 <pre>
-xPierManhattan(pNode, color = c("darkred", "darkgreen"), cex = 0.5,
-highlight.top = 20, highlight.col = "deepskyblue",
-highlight.label.size = 2, highlight.label.offset = 0,
-highlight.label.col = "darkblue", y.scale = c("normal", "sqrt",
-"log10"),
-top.only = TRUE, GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
+top.label.type = c("box", "text"), top.label.size = 2,
+top.label.col = "darkblue", y.scale = c("normal", "sqrt"),
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -38,42 +35,32 @@ verbose = TRUE, RData.location =
 </td></tr>
 <tr valign="top"><td><code>color</code></td>
 <td>
-<p>a character vector for point colors to alternate</p>
+<p>a character vector for colors to alternate chromosome
+colorings. If NULL, ggplot2 default colors will be used. If a single
+character is provided, it can be &quot;jet&quot; (jet colormap) or &quot;rainbow&quot;
+(rainbow colormap, that is, red-yellow-green-cyan-blue-magenta)</p>
 </td></tr>
-<tr valign="top"><td><code>cex</code></td>
+<tr valign="top"><td><code>top</code></td>
 <td>
-<p>a numeric value for point size</p>
+<p>the number of the top targets to be labelled/highlighted</p>
 </td></tr>
-<tr valign="top"><td><code>highlight.top</code></td>
+<tr valign="top"><td><code>top.label.type</code></td>
 <td>
-<p>the number of the top targets to be highlighted</p>
+<p>how to label the top targets. It can be &quot;box&quot;
+drawing a box around the labels , and &quot;text&quot; for the text only</p>
 </td></tr>
-<tr valign="top"><td><code>highlight.col</code></td>
-<td>
-<p>the highlight colors</p>
-</td></tr>
-<tr valign="top"><td><code>highlight.label.size</code></td>
+<tr valign="top"><td><code>top.label.size</code></td>
 <td>
 <p>the highlight label size</p>
 </td></tr>
-<tr valign="top"><td><code>highlight.label.offset</code></td>
-<td>
-<p>the highlight label offset</p>
-</td></tr>
-<tr valign="top"><td><code>highlight.label.col</code></td>
+<tr valign="top"><td><code>top.label.col</code></td>
 <td>
 <p>the highlight label color</p>
 </td></tr>
 <tr valign="top"><td><code>y.scale</code></td>
 <td>
 <p>how to transform the y scale. It can be &quot;normal&quot; for no
-transformation, &quot;sqrt&quot; for square transformation, and &quot;log10&quot; for
-10-based log-transformation</p>
-</td></tr>
-<tr valign="top"><td><code>top.only</code></td>
-<td>
-<p>logical to indicate whether only the top targets will
-be drawn in the plot. By default, it sets to TRUE</p>
+transformation, and &quot;sqrt&quot; for square transformation</p>
 </td></tr>
 <tr valign="top"><td><code>GR.Gene</code></td>
 <td>
@@ -148,12 +135,16 @@ include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
 RData.location=RData.location)
 
 # c) manhattan plot
-mp &lt;- xPierManhattan(pNode, highlight.top=20,
-RData.location=RData.location)
-mp$gr
+## default plot
+mp &lt;- xPierManhattan(pNode, RData.location=RData.location)
 #pdf(file="Gene_manhattan.pdf", height=6, width=12, compress=TRUE)
 print(mp)
 #dev.off()
+mp$gr
+## control visuals
+mp &lt;- xPierManhattan(pNode, color='ggplot2', top=50,
+top.label.col="black", y.scale="sqrt", RData.location=RData.location)
+mp
 
 ## End(Not run)
 </pre>

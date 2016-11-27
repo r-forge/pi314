@@ -106,6 +106,7 @@ xContour <-function(data, main='', xlab='', ylab='', key='', nlevels=50, colorma
 			key.title
 		mar <- mar.orig
 		mar[4L] <- 1
+		mar[2L] <- mar[2L]*1.5
 		par(mar = mar)
 		plot.new()
 		plot.window(xlim, ylim, "", xaxs = xaxs, yaxs = yaxs, asp = asp)

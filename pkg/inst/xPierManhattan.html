@@ -21,8 +21,9 @@ an object of class &quot;ggplot&quot;.
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
 top.label.type = c("box", "text"), top.label.size = 2,
 top.label.col = "darkblue", y.scale = c("normal", "sqrt"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), signature = TRUE,
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -75,6 +76,11 @@ computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
 without extension), plus specify your file RData path in
 &quot;RData.location&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>signature</code></td>
+<td>
+<p>logical to indicate whether the signature is assigned
+to the plot caption. By default, it sets TRUE</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

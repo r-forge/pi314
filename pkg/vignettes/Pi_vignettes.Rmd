@@ -34,7 +34,9 @@ knitr::opts_chunk$set(eval=FALSE)
 cd ~/Sites/XGR
 ################################################
 R
-rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document(toc=TRUE,toc_depth=2,number_sections=TRUE,hightlight="default",toc_float=FALSE))
+#devtools::install_github(c("Bioconductor/BiocStyle"))
+#rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document(toc=TRUE,toc_depth=2,number_sections=TRUE,hightlight="default",toc_float=FALSE))
+rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document2(toc=TRUE,toc_depth=2,number_sections=TRUE,theme="journal", hightlight="monochrome",toc_float=TRUE,code_folding="hide"))
 #knitr::purl("now.Pi_vignettes.Rmd")
 q('no')
 ################################################
@@ -294,11 +296,11 @@ write.table(pNode$priority, file="Genes_priority.txt", sep="\t", row.names=FALSE
 Top genes can be highlighted in manhattan plot, in which priority scores for genes are displayed on the Y-axis along with genomic locations on the X-axis. 
 
 ```{r, fig.width=10, fig.height=5, echo=TRUE}
-mp <- xPierManhattan(pNode, highlight.top=20, top.only=FALSE, RData.location=RData.location)
+mp <- xPierManhattan(pNode, top=25, y.scale="sqrt", RData.location=RData.location)
 print(mp)
 ```
 ```{r, eval=FALSE, echo=FALSE}
-png(file="saved.Pi.gene_manhattan.png", height=360, width=720)
+png(file="saved.Pi.gene_manhattan.png", height=480, width=480*2, res=96*1.2)
 print(mp)
 dev.off()
 ```
@@ -333,7 +335,7 @@ bp <- xEnrichBarplot(eTerm_nonred, top_num="auto", displayBy="fdr", FDR.cutoff=1
 bp
 ```
 ```{r, eval=FALSE, echo=FALSE}
-png(file="saved.Pi.pathway_barplot.png", height=360, width=720)
+png(file="saved.Pi.pathway_barplot.png", height=360, width=360*3, res=96)
 print(bp)
 dev.off()
 ```
@@ -369,7 +371,7 @@ zmax <- ceiling(quantile(pattern,0.75)*1000)/1000
 xVisNet(g, pattern=pattern, vertex.shape="sphere", colormap="yr", newpage=FALSE, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2, zlim=c(0,zmax))
 ```
 ```{r, eval=FALSE, cache=FALSE, echo=FALSE}
-png(file="saved.Pi.network_vis.png", height=540, width=540)
+png(file="saved.Pi.network_vis.png", height=480*2, width=480*2, res=96*1.5)
 xVisNet(g, pattern=pattern, vertex.shape="sphere", colormap="yr", newpage=FALSE, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2, zlim=c(0,zmax))
 dev.off()
 ```

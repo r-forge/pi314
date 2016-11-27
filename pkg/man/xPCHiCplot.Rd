@@ -37,7 +37,7 @@ be displayed. By default, it sets to NULL meaning no such restriction}
 default, it sets to true for opening a new page}
 
 \item{signature}{logical to indicate whether the signature is assigned
-to the plot caption. By default, it sets FALSE}
+to the plot caption. By default, it sets TRUE}
 
 \item{glayout}{either a function or a numeric matrix configuring how
 the vertices will be placed on the plot. If layout is a function, this

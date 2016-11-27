@@ -158,7 +158,7 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
 	
 	## caption
     if(signature){
-    	caption <- paste("Created by xPierManhattan from Pi version", utils ::packageVersion("pi"))
+    	caption <- paste("Created by xPierManhattan from Pi version", utils::packageVersion("Pi"))
     	bp <- bp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
 	

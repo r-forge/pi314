@@ -20,7 +20,8 @@ an object of class &quot;ggplot&quot;.
 <pre>
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
 top.label.type = c("box", "text"), top.label.size = 2,
-top.label.col = "darkblue", y.scale = c("normal", "sqrt"),
+top.label.col = "darkblue", top.label.query = NULL,
+label.query.only = FALSE, y.scale = c("normal", "sqrt"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), signature = TRUE,
 verbose = TRUE, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata")
@@ -32,7 +33,7 @@ verbose = TRUE, RData.location =
 <table summary="R argblock">
 <tr valign="top"><td><code>pNode</code></td>
 <td>
-<p>an object of class &quot;pNode&quot;</p>
+<p>an object of class &quot;pNode&quot; (or &quot;pTarget&quot;)</p>
 </td></tr>
 <tr valign="top"><td><code>color</code></td>
 <td>
@@ -57,6 +58,18 @@ drawing a box around the labels , and &quot;text&quot; for the text only</p>
 <tr valign="top"><td><code>top.label.col</code></td>
 <td>
 <p>the highlight label color</p>
+</td></tr>
+<tr valign="top"><td><code>top.label.query</code></td>
+<td>
+<p>which top genes in query will be labelled. By
+default, it sets to NULL meaning all top genes will be displayed. If
+labels in query can not be found, then all will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>label.query.only</code></td>
+<td>
+<p>logical to indicate whether only genes in query
+will be displayed. By default, it sets to FALSE. It only works when
+labels in query are enabled/found</p>
 </td></tr>
 <tr valign="top"><td><code>y.scale</code></td>
 <td>
@@ -150,6 +163,17 @@ mp$gr
 ## control visuals
 mp &lt;- xPierManhattan(pNode, color='ggplot2', top=50,
 top.label.col="black", y.scale="sqrt", RData.location=RData.location)
+mp
+## control labels
+# only IL genes will be labelled
+ind &lt;- grep('^IL', rownames(pNode$priority))
+top.label.query &lt;- rownames(pNode$priority)[ind]
+mp &lt;- xPierManhattan(pNode, top.label.query=top.label.query,
+RData.location=RData.location)
+mp
+# only IL genes will be displayed
+mp &lt;- xPierManhattan(pNode, top.label.query=top.label.query,
+label.query.only=TRUE, RData.location=RData.location)
 mp
 
 ## End(Not run)

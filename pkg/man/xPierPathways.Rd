@@ -23,7 +23,7 @@ lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{pNode}{an object of class "pNode"}
+\item{pNode}{an object of class "pNode" (or "pTarget")}
 
 \item{priority.top}{the number of the top targets to be analysed for
 pathway enrichment}

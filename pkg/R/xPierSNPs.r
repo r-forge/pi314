@@ -36,6 +36,9 @@
 #'  \item{\code{g}: an input "igraph" object}
 #'  \item{\code{SNP}: a data frame of nSNP X 3 containing input SNPs and/or LD SNPs info, where nSNP is the number of input SNPs and/or LD SNPs, and the 4 columns are "SNP" (dbSNP), "Score" (the SNP score), "Pval" (the SNP p-value), "Flag" (indicative of Lead SNPs or LD SNPs)}
 #'  \item{\code{Gene2SNP}: a data frame of nPair X 3 containing Gene-SNP pair info, where nPair is the number of Gene-SNP pairs, and the 3 columns are "Gene" (seed genes), "SNP" (dbSNP), "Score" (an SNP's genetic influential score on a seed gene), "Pval" (the SNP p-value)}
+#'  \item{\code{nGenes}: if not NULL, it is a data frame containing nGene-SNP pair info}
+#'  \item{\code{eGenes}: if not NULL, it is a data frame containing eGene-SNP pair info per context}
+#'  \item{\code{cGenes}: if not NULL, it is a data frame containing cGene-SNP pair info per context}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note The search procedure is heuristic to find the subgraph with the maximum score:
@@ -134,7 +137,7 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
 			message(sprintf("No nearby genes are defined"), appendLF=TRUE)
 		}
 	}
-		
+	
 	if(verbose){
         now <- Sys.time()
         message(sprintf("#######################################################", appendLF=TRUE))
@@ -327,12 +330,48 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
 		message(sprintf("\trandomly walk the network (%d nodes and %d edges) starting from %d seed genes/nodes (with %.2f restarting prob.)", vcount(pNode$g), ecount(pNode$g), length(seeds.genes), restart), appendLF=TRUE)
 	}
     
+    #####
+    ## SNP
     df_SNP <- df_SNP[order(df_SNP$Flag,df_SNP$Score,df_SNP$SNP,decreasing=TRUE),]
-    pNode[['SNP']] <- df_SNP
+    
+    ## Gene2SNP
     Gene2SNP <- xSM2DF(data=G2S_score, verbose=FALSE)
     colnames(Gene2SNP) <- c('Gene','SNP','Score')
     Gene2SNP <- Gene2SNP[order(Gene2SNP$Gene,-Gene2SNP$Score,decreasing=FALSE),]
+    
+    ## nGenes
+    if(is.null(df_nGenes)){
+    	nGenes <- NULL
+    }else{
+		nGenes <- df_nGenes
+		ind <- match(nGenes$SNP, df_SNP$SNP)
+		nGenes$SNP_Flag <- df_SNP$Flag[ind]
+	}
+    ## eGenes
+    if(is.null(df_eGenes)){
+    	eGenes <- NULL
+    }else{
+		eGenes <- xSNPeqtl(data=df_SNP$SNP, include.eQTL=include.eQTL, eQTL.customised=eQTL.customised, verbose=verbose, RData.location=RData.location)
+		ind <- match(eGenes$SNP, df_SNP$SNP)
+		eGenes$SNP_Flag <- df_SNP$Flag[ind]
+	}
+    ## cGenes
+    if(is.null(df_cGenes)){
+    	cGenes <- NULL
+    }else{
+		cGenes <- xSNPhic(data=df_SNP$SNP, entity="SNP", include.HiC=include.HiC, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
+		cGenes <- cGenes$df
+		ind <- match(cGenes$SNP, df_SNP$SNP)
+		cGenes$SNP_Flag <- df_SNP$Flag[ind]
+    }
+    
+    #####
+    ## append
+    pNode[['SNP']] <- df_SNP
     pNode[['Gene2SNP']] <- Gene2SNP
+    pNode[['nGenes']] <- nGenes
+    pNode[['eGenes']] <- eGenes
+    pNode[['cGenes']] <- cGenes
 
 	
     ####################################################################################

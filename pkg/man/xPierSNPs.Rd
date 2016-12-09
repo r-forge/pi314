@@ -260,6 +260,12 @@ and the 4 columns are "SNP" (dbSNP), "Score" (the SNP score), "Pval"
 pair info, where nPair is the number of Gene-SNP pairs, and the 3
 columns are "Gene" (seed genes), "SNP" (dbSNP), "Score" (an SNP's
 genetic influential score on a seed gene), "Pval" (the SNP p-value)}
+\item{\code{nGenes}: if not NULL, it is a data frame containing
+nGene-SNP pair info}
+\item{\code{eGenes}: if not NULL, it is a data frame containing
+eGene-SNP pair info per context}
+\item{\code{cGenes}: if not NULL, it is a data frame containing
+cGene-SNP pair info per context}
 \item{\code{call}: the call that produced this result}
 }
 }

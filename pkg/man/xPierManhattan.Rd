@@ -6,13 +6,14 @@
 \usage{
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
 top.label.type = c("box", "text"), top.label.size = 2,
-top.label.col = "darkblue", y.scale = c("normal", "sqrt"),
+top.label.col = "darkblue", top.label.query = NULL,
+label.query.only = FALSE, y.scale = c("normal", "sqrt"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), signature = TRUE,
 verbose = TRUE, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{pNode}{an object of class "pNode"}
+\item{pNode}{an object of class "pNode" (or "pTarget")}
 
 \item{color}{a character vector for colors to alternate chromosome
 colorings. If NULL, ggplot2 default colors will be used. If a single
@@ -27,6 +28,14 @@ drawing a box around the labels , and "text" for the text only}
 \item{top.label.size}{the highlight label size}
 
 \item{top.label.col}{the highlight label color}
+
+\item{top.label.query}{which top genes in query will be labelled. By
+default, it sets to NULL meaning all top genes will be displayed. If
+labels in query can not be found, then all will be displayed}
+
+\item{label.query.only}{logical to indicate whether only genes in query
+will be displayed. By default, it sets to FALSE. It only works when
+labels in query are enabled/found}
 
 \item{y.scale}{how to transform the y scale. It can be "normal" for no
 transformation, and "sqrt" for square transformation}
@@ -95,6 +104,17 @@ mp$gr
 ## control visuals
 mp <- xPierManhattan(pNode, color='ggplot2', top=50,
 top.label.col="black", y.scale="sqrt", RData.location=RData.location)
+mp
+## control labels
+# only IL genes will be labelled
+ind <- grep('^IL', rownames(pNode$priority))
+top.label.query <- rownames(pNode$priority)[ind]
+mp <- xPierManhattan(pNode, top.label.query=top.label.query,
+RData.location=RData.location)
+mp
+# only IL genes will be displayed
+mp <- xPierManhattan(pNode, top.label.query=top.label.query,
+label.query.only=TRUE, RData.location=RData.location)
 mp
 }
 }

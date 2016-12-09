@@ -16,7 +16,7 @@ subnet.size = NULL, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{pNode}{an object of class "pNode"}
+\item{pNode}{an object of class "pNode" (or "pTarget")}
 
 \item{priority.quantite}{the quantite of the top priority genes. By
 default, 10% of top prioritised genes will be used for network

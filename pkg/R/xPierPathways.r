@@ -2,7 +2,7 @@
 #'
 #' \code{xPierPathways} is supposed to prioritise pathways given prioritised genes and the ontology in query. It returns an object of class "eTerm". It is done via enrichment analysis. 
 #'
-#' @param pNode an object of class "pNode"
+#' @param pNode an object of class "pNode" (or "pTarget")
 #' @param priority.top the number of the top targets to be analysed for pathway enrichment
 #' @param background a background vector. It contains a list of Gene Symbols as the test background. If NULL, by default all annotatable are used as background
 #' @param ontology the ontology supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PS" for phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for domain superfamily assignments, "Pfam" for Pfam domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, and Drug-Gene Interaction database (DGIdb) for drugable categories, and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
@@ -87,19 +87,23 @@ xPierPathways <- function(pNode, priority.top=100, background=NULL, ontology=c("
     ontology.algorithm <- match.arg(ontology.algorithm)
     path.mode <- match.arg(path.mode)
     
-    if (class(pNode) != "pNode" ){
-        stop("The function must apply to a 'pNode' object.\n")
+    if(class(pNode) == "pNode"){
+        df_priority <- pNode$priority[, c(2,3,4)]
+    }else if(class(pNode) == "pTarget"){
+    	df_priority <- pNode$priority[, c(4,5,6)]
+    }else{
+    	stop("The function must apply to a 'pNode' or 'pTarget' object.\n")
     }
     
 	## priority top
 	priority.top <- as.integer(priority.top)
-    if ( priority.top > nrow(pNode$priority) ){
-        priority.top <- nrow(pNode$priority)
+    if ( priority.top > nrow(df_priority) ){
+        priority.top <- nrow(df_priority)
     }    
     
-    data <- rownames(pNode$priority)[1:priority.top]
+    data <- rownames(df_priority)[1:priority.top]
     if(!is.null(background)){
-    	background <- rownames(pNode$priority)
+    	background <- rownames(df_priority)
     }
     
     #############################################################################################

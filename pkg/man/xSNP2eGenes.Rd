@@ -5,8 +5,12 @@
 \title{Function to define eQTL genes given a list of SNPs or a customised eQTL mapping data}
 \usage{
 xSNP2eGenes(data, include.eQTL = c(NA, "JKscience_TS2A",
-"JKscience_TS2B",
-"JKscience_TS3A", "JKng_bcell", "JKng_mono", "JKnc_neutro", "JK_nk",
+"JKscience_TS2A_CD14", "JKscience_TS2A_LPS2", "JKscience_TS2A_LPS24",
+"JKscience_TS2A_IFN", "JKscience_TS2B", "JKscience_TS2B_CD14",
+"JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24", "JKscience_TS2B_IFN",
+"JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis", "JKng_bcell_trans",
+"JKng_mono", "JKng_mono_cis", "JKng_mono_trans", "JKnc_neutro",
+"JKnc_neutro_cis", "JKnc_neutro_trans", "JK_nk",
 "GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
 "GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
@@ -27,16 +31,8 @@ example, 'chr16:28525386'}
 
 \item{include.eQTL}{genes modulated by eQTL (also Lead SNPs or in LD
 with Lead SNPs) are also included. By default, it is 'NA' to disable
-this option. Otherwise, those genes modulated by eQTL will be included:
-immune stimulation in monocytes ('JKscience_TS1A' and 'JKscience_TS2B'
-for cis-eQTLs or 'JKscience_TS3A' for trans-eQTLs) from Science 2014,
-343(6175):1246949; cis- and trans-eQTLs in B cells ('JKng_bcell') and
-in monocytes ('JKng_mono') from Nature Genetics 2012, 44(5):502-510;
-cis- and trans-eQTLs in neutrophils ('JKnc_neutro') from Nature
-Communications 2015, 7(6):7545; cis-eQTLs in NK cells ('JK_nk') which
-is unpublished. Also supported are GTEx cis-eQTLs from Science 2015,
-348(6235):648-60, including 13 tissues:
-"GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood".}
+this option. Otherwise, those genes modulated by eQTL will be included.
+Pre-built eQTL datasets are detailed in the section 'Note'}
 
 \item{eQTL.customised}{a user-input matrix or data frame with 3
 columns: 1st column for SNPs/eQTLs, 2nd column for Genes, and 3rd for
@@ -74,25 +70,27 @@ SNPs or a customised eQTL mapping data. The eQTL weight is calcualted
 as Cumulative Distribution Function of negative log-transformed
 eQTL-reported signficance level.
 }
-\note{
-None
-}
 \examples{
 \dontrun{
 # Load the library
 library(Pi)
 }
 
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
 #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase')
+ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
+RData.location=RData.location)
 gr <- ImmunoBase$AS$variants
 AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
+\dontrun{
 # b) define eQTL genes
-df_eGenes <- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A")
+df_eGenes <- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A",
+RData.location=RData.location)
+}
 }
 \seealso{
 \code{\link{xRDataLoader}}

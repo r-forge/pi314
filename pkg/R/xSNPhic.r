@@ -4,7 +4,7 @@
 #'
 #' @param data NULL or a input vector containing SNPs. If NULL, all SNPs will be considered. If a input vector containing SNPs, SNPs should be provided as dbSNP ID (ie starting with rs) or in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is number; for example, 'chr16:28525386'. Alternatively, it can be other formats/entities (see the next parameter 'entity')
 #' @param entity the data entity. By default, it is "SNP". For general use, it can also be one of "chr:start-end", "data.frame", "bed" or "GRanges"
-#' @param include.HiC genes linked to input SNPs are also included. By default, it is 'NA' to disable this option. Genes linked to input SNPs are based on Promoter Capture HiC (PCHic), including 17 primary blood cell types: "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells".
+#' @param include.HiC genes linked to input SNPs are also included. By default, it is 'NA' to disable this option. Otherwise, those genes linked to SNPs will be included according to Promoter Capture HiC (PCHiC) datasets. Pre-built HiC datasets are detailed in the section 'Note'
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -29,7 +29,38 @@
 #'  \item{\code{Context}: the context in which PCHiC data was generated}
 #' }
 #' "ig" is an object of both classes "igraph" and "PCHiC", a direct graph with nodes for genomic regions and edges for CHiCAGO scores between them. Also added node attribute is 1) 'target' storing genes assocated and 2) 'SNP' for input SNPs (if the node harboring input SNPs). If several cell types are queried, "ig" is actually a list of "igraph"/"PCHiC" objects.
-#' @note None
+#' @note Pre-built HiC datasets are described below according to the data sources.
+#' 1. Promoter Capture HiC datasets in 17 primary blood cell types. Sourced from Cell 2016, 167(5):1369-1384.e19
+#' \itemize{
+#'  \item{\code{Monocytes}: physical interactions (CHiCAGO score >=5) of promoters (baits) with the other end (preys) in Monocytes.}
+#'  \item{\code{Macrophages_M0}: promoter interactomes in Macrophages M0.}
+#'  \item{\code{Macrophages_M1}: promoter interactomes in Macrophages M1.}
+#'  \item{\code{Macrophages_M2}: promoter interactomes in Macrophages M2.}
+#'  \item{\code{Neutrophils}: promoter interactomes in Neutrophils.}
+#'  \item{\code{Megakaryocytes}: promoter interactomes in Megakaryocytes.}
+#'  \item{\code{Endothelial_precursors}: promoter interactomes in Endothelial precursors.}
+#'  \item{\code{Fetal_thymus}: promoter interactomes in Fetal thymus.}
+#'  \item{\code{Naive_CD4_T_cells}: promoter interactomes in Naive CD4+ T cells.}
+#'  \item{\code{Total_CD4_T_cells}: promoter interactomes in Total CD4+ T cells.}
+#'  \item{\code{Activated_total_CD4_T_cells}: promoter interactomes in Activated total CD4+ T cells.}
+#'  \item{\code{Nonactivated_total_CD4_T_cells}: promoter interactomes in Nonactivated total CD4+ T cells.}
+#'  \item{\code{Naive_CD8_T_cells}: promoter interactomes in Naive CD8+ T cells.}
+#'  \item{\code{Total_CD8_T_cells}: promoter interactomes in Total CD8+ T cells.}
+#'  \item{\code{Naive_B_cells}: promoter interactomes in Naive B cells.}
+#'  \item{\code{Total_B_cells}: promoter interactomes in Total B cells.}
+#' }
+#' 2. Promoter Capture HiC datasets (involving active promoters and enhancers) in 9 primary blood cell types. Sourced from Cell 2016, 167(5):1369-1384.e19
+#' \itemize{
+#'  \item{\code{PE.Monocytes}: physical interactions (CHiCAGO score >=5) of promoters (baits) with the other end (enhancers as preys) in Monocytes.}
+#'  \item{\code{PE.Macrophages_M0}: promoter-enhancer interactomes in Macrophages M0.}
+#'  \item{\code{PE.Macrophages_M1}: promoter-enhancer interactomes in Macrophages M1.}
+#'  \item{\code{PE.Macrophages_M2}: promoter-enhancer interactomes in Macrophages M2.}
+#'  \item{\code{PE.Neutrophils}: promoter-enhancer interactomes in Neutrophils.}
+#'  \item{\code{PE.Megakaryocytes}: promoter-enhancer interactomes in Megakaryocytes.}
+#'  \item{\code{PE.Erythroblasts}: promoter-enhancer interactomes in Erythroblasts.}
+#'  \item{\code{PE.Naive_CD4_T_cells}: promoter-enhancer interactomes in Naive CD4+ T cells.}
+#'  \item{\code{PE.Naive_CD8_T_cells}: promoter-enhancer interactomes in Naive CD8+ T cells.}
+#' }
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xSNPhic.r
@@ -60,7 +91,7 @@
 #' xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 #' }
 
-xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
 	entity <- match.arg(entity)
@@ -69,7 +100,7 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
     # Link to targets based on HiC
     ######################################################
     
-    default.include.HiC <- c("Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells")
+    default.include.HiC <- c("Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells")
 	ind <- match(default.include.HiC, include.HiC)
 	include.HiC <- default.include.HiC[!is.na(ind)]
     
@@ -95,7 +126,11 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 				message(sprintf("Processing %s ...", x), appendLF=TRUE)
 			}
 			
-			RData.customised <- paste('ig.PCHiC.', x, sep='')
+			if(sum(grep("^PE.",x,perl=TRUE)) > 0){
+				RData.customised <- paste('ig.PCHiC_', x, sep='')
+			}else{
+				RData.customised <- paste('ig.PCHiC.', x, sep='')
+			}
 			ig <- xRDataLoader(RData.customised=RData.customised, RData.location=RData.location, verbose=verbose)
 			
 			## Convert from igraph into data.frame

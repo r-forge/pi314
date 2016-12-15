@@ -17,7 +17,7 @@
 #'  \item{\code{Sig}: the eQTL mapping significant level (the best/minimum)}
 #'  \item{\code{Weight}: the eQTL weight}
 #' }
-#' @note Pre-built eQTL datasets are described below according to the data sources.
+#' @note Pre-built eQTL datasets are described below according to the data sources.\cr
 #' 1. Context-specific eQTLs in monocytes: resting and activating states. Sourced from Science 2014, 343(6175):1246949
 #' \itemize{
 #'  \item{\code{JKscience_TS2A}: cis-eQTLs in either state (based on 228 individuals with expression data available for all experimental conditions).}

@@ -279,6 +279,158 @@ seed genes. The priority score is the affinity score. Parallel
 computing is also supported for Linux or Mac operating systems. It
 returns an object of class "pNode".
 }
+\note{
+The search procedure is heuristic to find the subgraph with the maximum
+score:
+\itemize{
+\item{i) \code{\link{xSNPscores}} used to calculate the SNP score.}
+\item{ii) \code{\link{xSNP2nGenes}} used to define and score the nearby
+genes.}
+\item{iii) \code{\link{xSNP2eGenes}} used to define and score the eQTL
+genes.}
+\item{iv) \code{\link{xSNP2cGenes}} used to define and score the HiC
+genes.}
+\item{v) define seed genes as the nearby genes in ii) and the eQTL
+genes in iii) and the HiC genes in iv), which are then scored in an
+integrative manner.}
+\item{vi) \code{\link{xPierGenes}} used to prioritise genes using an
+input graph and a list of seed genes and their scores from v). The
+priority score is the affinity score estimated by Random Walk with
+Restart (RWR), measured as the affinity of all nodes in the graph to
+the seeds.}
+}
+\cr
+Pre-built eQTL datasets are described below according to the data
+sources.\cr
+1. Context-specific eQTLs in monocytes: resting and activating states.
+Sourced from Science 2014, 343(6175):1246949
+\itemize{
+\item{\code{JKscience_TS2A}: cis-eQTLs in either state (based on 228
+individuals with expression data available for all experimental
+conditions).}
+\item{\code{JKscience_TS2A_CD14}: cis-eQTLs only in the resting/CD14+
+state (based on 228 individuals).}
+\item{\code{JKscience_TS2A_LPS2}: cis-eQTLs only in the activating
+state induced by 2-hour LPS (based on 228 individuals).}
+\item{\code{JKscience_TS2A_LPS24}: cis-eQTLs only in the activating
+state induced by 24-hour LPS (based on 228 individuals).}
+\item{\code{JKscience_TS2A_IFN}: cis-eQTLs only in the activating state
+induced by 24-hour interferon-gamma (based on 228 individuals).}
+\item{\code{JKscience_TS2B}: cis-eQTLs in either state (based on 432
+individuals).}
+\item{\code{JKscience_TS2B_CD14}: cis-eQTLs only in the resting/CD14+
+state (based on 432 individuals).}
+\item{\code{JKscience_TS2B_LPS2}: cis-eQTLs only in the activating
+state induced by 2-hour LPS (based on 432 individuals).}
+\item{\code{JKscience_TS2B_LPS24}: cis-eQTLs only in the activating
+state induced by 24-hour LPS (based on 432 individuals).}
+\item{\code{JKscience_TS2B_IFN}: cis-eQTLs only in the activating state
+induced by 24-hour interferon-gamma (based on 432 individuals).}
+\item{\code{JKscience_TS3A}: trans-eQTLs in either state.}
+}
+2. eQTLs in B cells. Sourced from Nature Genetics 2012, 44(5):502-510
+\itemize{
+\item{\code{JKng_bcell}: cis- and trans-eQTLs.}
+\item{\code{JKng_bcell_cis}: cis-eQTLs only.}
+\item{\code{JKng_bcell_trans}: trans-eQTLs only.}
+}
+3. eQTLs in monocytes. Sourced from Nature Genetics 2012, 44(5):502-510
+\itemize{
+\item{\code{JKng_mono}: cis- and trans-eQTLs.}
+\item{\code{JKng_mono_cis}: cis-eQTLs only.}
+\item{\code{JKng_mono_trans}: trans-eQTLs only.}
+}
+4. eQTLs in neutrophils. Sourced from Nature Communications 2015,
+7(6):7545
+\itemize{
+\item{\code{JKnc_neutro}: cis- and trans-eQTLs.}
+\item{\code{JKnc_neutro_cis}: cis-eQTLs only.}
+\item{\code{JKnc_neutro_trans}: trans-eQTLs only.}
+}
+5. eQTLs in NK cells. Unpublished
+\itemize{
+\item{\code{JK_nk}: cis-eQTLs.}
+}
+6. Tissue-specific eQTLs from GTEx (version 4; incuding 13 tissues).
+Sourced from Science 2015, 348(6235):648-60
+\itemize{
+\item{\code{GTEx_V4_Adipose_Subcutaneous}: cis-eQTLs in tissue 'Adipose
+Subcutaneous'.}
+\item{\code{GTEx_V4_Artery_Aorta}: cis-eQTLs in tissue 'Artery Aorta'.}
+\item{\code{GTEx_V4_Artery_Tibial}: cis-eQTLs in tissue 'Artery
+Tibial'.}
+\item{\code{GTEx_V4_Esophagus_Mucosa}: cis-eQTLs in tissue 'Esophagus
+Mucosa'.}
+\item{\code{GTEx_V4_Esophagus_Muscularis}: cis-eQTLs in tissue
+'Esophagus Muscularis'.}
+\item{\code{GTEx_V4_Heart_Left_Ventricle}: cis-eQTLs in tissue 'Heart
+Left Ventricle'.}
+\item{\code{GTEx_V4_Lung}: cis-eQTLs in tissue 'Lung'.}
+\item{\code{GTEx_V4_Muscle_Skeletal}: cis-eQTLs in tissue 'Muscle
+Skeletal'.}
+\item{\code{GTEx_V4_Nerve_Tibial}: cis-eQTLs in tissue 'Nerve Tibial'.}
+\item{\code{GTEx_V4_Skin_Sun_Exposed_Lower_leg}: cis-eQTLs in tissue
+'Skin Sun Exposed Lower leg'.}
+\item{\code{GTEx_V4_Stomach}: cis-eQTLs in tissue 'Stomach'.}
+\item{\code{GTEx_V4_Thyroid}: cis-eQTLs in tissue 'Thyroid'.}
+\item{\code{GTEx_V4_Whole_Blood}: cis-eQTLs in tissue 'Whole Blood'.}
+}
+\cr
+Pre-built HiC datasets are described below according to the data
+sources.\cr
+1. Promoter Capture HiC datasets in 17 primary blood cell types.
+Sourced from Cell 2016, 167(5):1369-1384.e19
+\itemize{
+\item{\code{Monocytes}: physical interactions (CHiCAGO score >=5) of
+promoters (baits) with the other end (preys) in Monocytes.}
+\item{\code{Macrophages_M0}: promoter interactomes in Macrophages M0.}
+\item{\code{Macrophages_M1}: promoter interactomes in Macrophages M1.}
+\item{\code{Macrophages_M2}: promoter interactomes in Macrophages M2.}
+\item{\code{Neutrophils}: promoter interactomes in Neutrophils.}
+\item{\code{Megakaryocytes}: promoter interactomes in Megakaryocytes.}
+\item{\code{Endothelial_precursors}: promoter interactomes in
+Endothelial precursors.}
+\item{\code{Fetal_thymus}: promoter interactomes in Fetal thymus.}
+\item{\code{Naive_CD4_T_cells}: promoter interactomes in Naive CD4+ T
+cells.}
+\item{\code{Total_CD4_T_cells}: promoter interactomes in Total CD4+ T
+cells.}
+\item{\code{Activated_total_CD4_T_cells}: promoter interactomes in
+Activated total CD4+ T cells.}
+\item{\code{Nonactivated_total_CD4_T_cells}: promoter interactomes in
+Nonactivated total CD4+ T cells.}
+\item{\code{Naive_CD8_T_cells}: promoter interactomes in Naive CD8+ T
+cells.}
+\item{\code{Total_CD8_T_cells}: promoter interactomes in Total CD8+ T
+cells.}
+\item{\code{Naive_B_cells}: promoter interactomes in Naive B cells.}
+\item{\code{Total_B_cells}: promoter interactomes in Total B cells.}
+}
+2. Promoter Capture HiC datasets (involving active promoters and
+enhancers) in 9 primary blood cell types. Sourced from Cell 2016,
+167(5):1369-1384.e19
+\itemize{
+\item{\code{PE.Monocytes}: physical interactions (CHiCAGO score >=5) of
+promoters (baits) with the other end (enhancers as preys) in
+Monocytes.}
+\item{\code{PE.Macrophages_M0}: promoter-enhancer interactomes in
+Macrophages M0.}
+\item{\code{PE.Macrophages_M1}: promoter-enhancer interactomes in
+Macrophages M1.}
+\item{\code{PE.Macrophages_M2}: promoter-enhancer interactomes in
+Macrophages M2.}
+\item{\code{PE.Neutrophils}: promoter-enhancer interactomes in
+Neutrophils.}
+\item{\code{PE.Megakaryocytes}: promoter-enhancer interactomes in
+Megakaryocytes.}
+\item{\code{PE.Erythroblasts}: promoter-enhancer interactomes in
+Erythroblasts.}
+\item{\code{PE.Naive_CD4_T_cells}: promoter-enhancer interactomes in
+Naive CD4+ T cells.}
+\item{\code{PE.Naive_CD8_T_cells}: promoter-enhancer interactomes in
+Naive CD8+ T cells.}
+}
+}
 \examples{
 \dontrun{
 # Load the library

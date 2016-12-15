@@ -94,7 +94,7 @@ SNPs.
 }
 \note{
 Pre-built HiC datasets are described below according to the data
-sources.
+sources.\cr
 1. Promoter Capture HiC datasets in 17 primary blood cell types.
 Sourced from Cell 2016, 167(5):1369-1384.e19
 \itemize{

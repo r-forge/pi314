@@ -18,7 +18,7 @@
 #'  \item{\code{Sig}: the interaction score (the higher stronger)}
 #'  \item{\code{Weight}: the HiC weight}
 #' }
-#' @note Pre-built HiC datasets are described below according to the data sources.
+#' @note Pre-built HiC datasets are described below according to the data sources.\cr
 #' 1. Promoter Capture HiC datasets in 17 primary blood cell types. Sourced from Cell 2016, 167(5):1369-1384.e19
 #' \itemize{
 #'  \item{\code{Monocytes}: physical interactions (CHiCAGO score >=5) of promoters (baits) with the other end (preys) in Monocytes.}

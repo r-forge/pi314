@@ -15,7 +15,7 @@
 #'  \item{\code{Sig}: the eQTL mapping significant level}
 #'  \item{\code{Context}: the context in which eQTL data was generated}
 #' }
-#' @note Pre-built eQTL datasets are described below according to the data sources.
+#' @note Pre-built eQTL datasets are described below according to the data sources.\cr
 #' 1. Context-specific eQTLs in monocytes: resting and activating states. Sourced from Science 2014, 343(6175):1246949
 #' \itemize{
 #'  \item{\code{JKscience_TS2A}: cis-eQTLs in either state (based on 228 individuals with expression data available for all experimental conditions).}
@@ -47,6 +47,7 @@
 #'  \item{\code{JKnc_neutro}: cis- and trans-eQTLs.}
 #'  \item{\code{JKnc_neutro_cis}: cis-eQTLs only.}
 #'  \item{\code{JKnc_neutro_trans}: trans-eQTLs only.}
+#' }
 #' 5. eQTLs in NK cells. Unpublished
 #' \itemize{
 #'  \item{\code{JK_nk}: cis-eQTLs.}

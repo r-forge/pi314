@@ -10,24 +10,32 @@ decay.kernel = c("rapid", "slow", "linear", "constant"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.eQTL =
 c(NA,
-"JKscience_TS2A", "JKscience_TS2B", "JKscience_TS3A", "JKng_bcell",
-"JKng_mono", "JKnc_neutro", "JK_nk", "GTEx_V4_Adipose_Subcutaneous",
-"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
-"GTEx_V4_Esophagus_Mucosa",
+"JKscience_TS2A", "JKscience_TS2A_CD14", "JKscience_TS2A_LPS2",
+"JKscience_TS2A_LPS24", "JKscience_TS2A_IFN", "JKscience_TS2B",
+"JKscience_TS2B_CD14", "JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24",
+"JKscience_TS2B_IFN", "JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis",
+"JKng_bcell_trans", "JKng_mono", "JKng_mono_cis", "JKng_mono_trans",
+"JKnc_neutro", "JKnc_neutro_cis", "JKnc_neutro_trans", "JK_nk",
+"GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
+"GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
 "GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
 "GTEx_V4_Thyroid",
 "GTEx_V4_Whole_Blood", "eQTLdb_NK", "eQTLdb_CD14", "eQTLdb_LPS2",
-"eQTLdb_LPS24", "eQTLdb_IFN"), eQTL.customised = NULL,
-include.HiC = c(NA, "Monocytes", "Macrophages_M0", "Macrophages_M1",
-"Macrophages_M2", "Neutrophils", "Megakaryocytes",
-"Endothelial_precursors",
-"Erythroblasts", "Fetal_thymus", "Naive_CD4_T_cells",
-"Total_CD4_T_cells",
+"eQTLdb_LPS24", "eQTLdb_IFN"), eQTL.customised = NULL, include.HiC =
+c(NA,
+"Monocytes", "Macrophages_M0", "Macrophages_M1", "Macrophages_M2",
+"Neutrophils", "Megakaryocytes", "Endothelial_precursors",
+"Erythroblasts",
+"Fetal_thymus", "Naive_CD4_T_cells", "Total_CD4_T_cells",
 "Activated_total_CD4_T_cells", "Nonactivated_total_CD4_T_cells",
 "Naive_CD8_T_cells", "Total_CD8_T_cells", "Naive_B_cells",
-"Total_B_cells"),
+"Total_B_cells",
+"PE.Monocytes", "PE.Macrophages_M0", "PE.Macrophages_M1",
+"PE.Macrophages_M2",
+"PE.Neutrophils", "PE.Megakaryocytes", "PE.Erythroblasts",
+"PE.Naive_CD4_T_cells", "PE.Naive_CD8_T_cells"),
 cdf.function = c("empirical", "exponential"), relative.importance =
 c(1/3,
 1/3, 1/3), scoring.scheme = c("max", "sum", "sequential"),
@@ -122,28 +130,20 @@ directly}
 
 \item{include.eQTL}{genes modulated by eQTL (also Lead SNPs or in LD
 with Lead SNPs) are also included. By default, it is 'NA' to disable
-this option. Otherwise, those genes modulated by eQTL will be included:
-immune stimulation in monocytes ('JKscience_TS1A' and 'JKscience_TS2B'
-for cis-eQTLs or 'JKscience_TS3A' for trans-eQTLs) from Science 2014,
-343(6175):1246949; cis- and trans-eQTLs in B cells ('JKng_bcell') and
-in monocytes ('JKng_mono') from Nature Genetics 2012, 44(5):502-510;
-cis- and trans-eQTLs in neutrophils ('JKnc_neutro') from Nature
-Communications 2015, 7(6):7545; cis-eQTLs in NK cells ('JK_nk') which
-is unpublished. Also supported are GTEx cis-eQTLs from Science 2015,
-348(6235):648-60, including 13 tissues:
-"GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood".}
+this option. Otherwise, those genes modulated by eQTL will be included.
+Pre-built eQTL datasets are detailed in the section 'Note'}
 
 \item{eQTL.customised}{a user-input matrix or data frame with 3
 columns: 1st column for SNPs/eQTLs, 2nd column for Genes, and 3rd for
 eQTL mapping significance level (p-values or FDR). It is designed to
 allow the user analysing their eQTL data. This customisation (if
-provided) has the high priority over built-in eQTL data.}
+provided) has the high priority over built-in eQTL data}
 
 \item{include.HiC}{genes linked to input SNPs are also included. By
-default, it is 'NA' to disable this option. Genes linked to input SNPs
-are based on Promoter Capture HiC (PCHic), including 17 primary blood
-cell types:
-"Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells".}
+default, it is 'NA' to disable this option. Otherwise, those genes
+linked to SNPs will be included according to Promoter Capture HiC
+(PCHiC) datasets. Pre-built HiC datasets are detailed in the section
+'Note'}
 
 \item{cdf.function}{a character specifying a Cumulative Distribution
 Function (cdf). It can be one of 'exponential' based on exponential
@@ -278,27 +278,6 @@ calculate the affinity score of all nodes in the input graph to the
 seed genes. The priority score is the affinity score. Parallel
 computing is also supported for Linux or Mac operating systems. It
 returns an object of class "pNode".
-}
-\note{
-The search procedure is heuristic to find the subgraph with the maximum
-score:
-\itemize{
-\item{i) \code{\link{xSNPscores}} used to calculate the SNP score.}
-\item{ii) \code{\link{xSNP2nGenes}} used to define and score the nearby
-genes.}
-\item{iii) \code{\link{xSNP2eGenes}} used to define and score the eQTL
-genes.}
-\item{iv) \code{\link{xSNP2cGenes}} used to define and score the HiC
-genes.}
-\item{v) define seed genes as the nearby genes in ii) and the eQTL
-genes in iii) and the HiC genes in iv), which are then scored in an
-integrative manner.}
-\item{vi) \code{\link{xPierGenes}} used to prioritise genes using an
-input graph and a list of seed genes and their scores from v). The
-priority score is the affinity score estimated by Random Walk with
-Restart (RWR), measured as the affinity of all nodes in the graph to
-the seeds.}
-}
 }
 \examples{
 \dontrun{

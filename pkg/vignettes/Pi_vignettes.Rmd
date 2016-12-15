@@ -53,11 +53,11 @@ The latest version on different platforms can be installed following instruction
 
 ## Packages
 
-**Install `Pi` (the latest stable release from Bioconductor):**
+**Install [`Pi`](http://www.bioconductor.org/packages/Pi) (the latest stable release version from Bioconductor):**
 
 ```{r eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
-# to use the latest version of Bioconductor, please also run: biocLite("BiocUpgrade") 
+# to use the latest version of Bioconductor, upgrade it: biocLite("BiocUpgrade") 
 biocLite("Pi")
 ```
 
@@ -76,7 +76,7 @@ install_github(c("hfang-bristol/XGR", "hfang-bristol/Pi"))
 
 # Workflow
 
-```{r fig.width=3, fig.height=2, fig.align="center", echo=FALSE, eval=TRUE}
+```{r fig.width=3, fig.height=3, fig.align="center", echo=FALSE, eval=TRUE}
 library(png)
 library(grid)
 img <- readPNG("saved.Pi.workflow.png")
@@ -88,7 +88,7 @@ grid.raster(img)
 
 Priority functions are designed in a nested way. The core relation follows this route: `xPierSNPs` -> `xPierGenes` -> `xPier` -> `xRWR`, achieving gene-level prioritisation from an input list of SNPs (along with their significant level). The output of this route is taken as the input of either `xPierManhattan` for visualising gene priority scores, `xPierPathways` for prioritising pathways, or `xPierSubnet` for identifying a network of top prioritised genes.
 
-```{r fig.width=1.8, fig.height=1.8, fig.align="center", echo=FALSE, eval=TRUE}
+```{r fig.width=4, fig.height=2, fig.align="center", echo=FALSE, eval=TRUE}
 library(png)
 library(grid)
 img <- readPNG("saved.Pi.functions.png")
@@ -104,16 +104,16 @@ grid.raster(img)
 ## xPierGenes
 *[`xPierGenes`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierGenes.html)*: prioritises gene targets from an input gene interaction network and the score info imposed on its seed nodes/genes. This function can be considered to be a specific instance of `xPier`, that is, specifying a gene interaction network as a graph and seed nodes as seed genes.
 
-There are two sources of gene interaction network information: the STRING database [@Szklarczyk2015] and the Pathways Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from a functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from a physical/pathway aspect. In addition to interaction type, users can choose the interactions of varying quality: 
+There are two sources of gene interaction network information: the STRING database [@Szklarczyk2015] and the Pathway Commons database [@Cerami2011]. STRING is a meta-integration of undirect interactions from a functional aspect, while Pathway Commons mainly contains both undirect and direct interactions from a physical/pathway aspect. In addition to interaction type, users can choose the interactions of varying quality: 
 
 ```{r, eval=TRUE, echo=FALSE}
 net <- list()
 net[['STRING_high']] <- c('STRING', 'Functional interactions (with high confidence scores>=700)', 'STRING_high')
 net[['STRING_medium']] <- c('STRING', 'Functional interactions (with medium confidence scores>=400)', 'STRING_medium')
-net[['PCommonsUN_high']] <- c('Pathways Commons', 'Physical/undirect interactions (with references & >=2 sources)', 'PCommonsUN_high')
-net[['PCommonsUN_medium']] <- c('Pathways Commons', 'Physical/undirect interactions (with references & >=1 sources)', 'PCommonsUN_medium')
-net[['PCommonsDN_high']] <- c('Pathways Commons', 'Pathway/direct interactions (with references & >=2 sources)', 'PCommonsDN_high')
-net[['PCommonsDN_medium']] <- c('Pathways Commons', 'Pathway/direct interactions (with references & >=1 sources)', 'PCommonsDN_medium')
+net[['PCommonsUN_high']] <- c('Pathway Commons', 'Physical/undirect interactions (with references & >=2 sources)', 'PCommonsUN_high')
+net[['PCommonsUN_medium']] <- c('Pathway Commons', 'Physical/undirect interactions (with references & >=1 sources)', 'PCommonsUN_medium')
+net[['PCommonsDN_high']] <- c('Pathway Commons', 'Pathway/direct interactions (with references & >=2 sources)', 'PCommonsDN_high')
+net[['PCommonsDN_medium']] <- c('Pathway Commons', 'Pathway/direct interactions (with references & >=1 sources)', 'PCommonsDN_medium')
 df_net <- do.call(rbind, net)
 colnames(df_net) <- c('Database', 'Interaction (type and quality)', 'Code')
 knitr::kable(df_net[,c(3,2,1)], caption="", row.names=FALSE)
@@ -190,7 +190,11 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 - *[`xPredictCompare`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPredictCompare.html)*: compares the prediction/prioritisation performance.
 
-## Infrastructure functions
+## Integral functions (under development)
+
+- *[`xMLrandomforest`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLrandomforest.html)*: integrates predictor matrix via machine learning algorithm random forest and returns an object of class `pTarget`.
+
+## Elementary functions
 
 - *[`xPierMatrix`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierMatrix.html)*: extracts priority matrix from a list of `pNode` objects, in which rows are genes and columns for the predictors (corresponding to the `pNode` objects).
 
@@ -296,11 +300,11 @@ write.table(pNode$priority, file="Genes_priority.txt", sep="\t", row.names=FALSE
 Top genes can be highlighted in manhattan plot, in which priority scores for genes are displayed on the Y-axis along with genomic locations on the X-axis. 
 
 ```{r, fig.width=10, fig.height=5, echo=TRUE}
-mp <- xPierManhattan(pNode, top=25, y.scale="sqrt", RData.location=RData.location)
+mp <- xPierManhattan(pNode, top=40, y.scale="sqrt", RData.location=RData.location)
 print(mp)
 ```
 ```{r, eval=FALSE, echo=FALSE}
-png(file="saved.Pi.gene_manhattan.png", height=480, width=480*2, res=96*1.2)
+png(file="saved.Pi.gene_manhattan.png", height=480, width=480*2.2, res=96*1.3)
 print(mp)
 dev.off()
 ```
@@ -331,7 +335,7 @@ write.table(output, file="Pathways_priority.nonredundant.txt", sep="\t", row.nam
 
 Barplot of prioritised pathways (non-redundant and informative):
 ```{r, fig.width=10, fig.height=5, echo=TRUE}
-bp <- xEnrichBarplot(eTerm_nonred, top_num="auto", displayBy="fdr", FDR.cutoff=1e-3, wrap.width=100)
+bp <- xEnrichBarplot(eTerm_nonred, top_num="auto", displayBy="fdr", FDR.cutoff=1e-3, wrap.width=50, signature=FALSE)
 bp
 ```
 ```{r, eval=FALSE, echo=FALSE}
@@ -339,7 +343,7 @@ png(file="saved.Pi.pathway_barplot.png", height=360, width=360*3, res=96)
 print(bp)
 dev.off()
 ```
-```{r fig.width=4, fig.height=2, fig.align="center", echo=FALSE, eval=TRUE}
+```{r fig.width=6, fig.height=3, fig.align="center", echo=FALSE, eval=TRUE}
 library(png)
 library(grid)
 img <- readPNG("saved.Pi.pathway_barplot.png")
@@ -368,11 +372,11 @@ The identified gene network has nodes/genes colored according to their priority 
 ```{r, fig.width=6, fig.height=6, echo=TRUE}
 pattern <- as.numeric(V(g)$priority)
 zmax <- ceiling(quantile(pattern,0.75)*1000)/1000
-xVisNet(g, pattern=pattern, vertex.shape="sphere", colormap="yr", newpage=FALSE, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2, zlim=c(0,zmax))
+xVisNet(g, pattern=pattern, vertex.shape="sphere", colormap="yr", newpage=FALSE, edge.arrow.size=0.3, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2, zlim=c(0,zmax), signature=FALSE)
 ```
 ```{r, eval=FALSE, cache=FALSE, echo=FALSE}
 png(file="saved.Pi.network_vis.png", height=480*2, width=480*2, res=96*1.5)
-xVisNet(g, pattern=pattern, vertex.shape="sphere", colormap="yr", newpage=FALSE, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2, zlim=c(0,zmax))
+xVisNet(g, pattern=pattern, vertex.shape="sphere", colormap="yr", newpage=FALSE, vertex.label.color="blue", vertex.label.dist=0.35, vertex.label.font=2, zlim=c(0,zmax), signature=FALSE)
 dev.off()
 ```
 ```{r fig.width=2, fig.height=2, fig.align="center", echo=FALSE, eval=TRUE}

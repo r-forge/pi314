@@ -197,12 +197,12 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS
 				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,5], stringsAsFactors=FALSE)
 				## trans
 				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], Sig=res_ls$trans[,5], stringsAsFactors=FALSE)
-				if(x=='JKng_bcell'){
+				if(x=='JKng_mono'){
 					## both
 					df <- rbind(df_cis, df_trans)
-				}else if(x=='JKng_bcell_cis'){
+				}else if(x=='JKng_mono_cis'){
 					df <- df_cis
-				}else if(x=='JKng_bcell_trans'){
+				}else if(x=='JKng_mono_trans'){
 					df <- df_trans
 				}
 				df <- cbind(df, Context=rep(x,nrow(df)))

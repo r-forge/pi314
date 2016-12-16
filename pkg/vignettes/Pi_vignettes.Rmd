@@ -318,7 +318,7 @@ grid.raster(img)
 
 ## Pathway-level prioritisation
 
-Pathway-level prioritisation is based on top 100 genes using a compendium of pathways from diverse sources (Canonical, KEGG, BioCarta and Reactome). Since diverse sources are used, it is necessary to remove redundant pathways (of the same granularity to the similar pathways with higher priority scores).
+Pathway-level prioritisation is based on top 100 genes using a compendium of pathways from diverse sources (Canonical, KEGG, BioCarta and Reactome). Since diverse sources are used, it is necessary to remove redundant pathways (of the same granularity to the similar pathways with higher priority scores), done by XGR [@Fang2016].
 
 ```{r, results="hide"}
 eTerm <- xPierPathways(pNode, priority.top=100, ontology="MsigdbC2CPall", RData.location=RData.location)

@@ -118,5 +118,16 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","pvalue"), combin
 		
 	}
 	
+	if(verbose){
+		
+		if(displayBy=="pvalue" & aggregateBy!="none"){
+			message(sprintf("A total of %d genes are prioritised, combined by '%s' and aggregated by '%s' from %d predictors", nrow(df_priority$priority), combineBy, aggregateBy, length(list_pNode)), appendLF=TRUE)
+		}else{
+			message(sprintf("A matrix of %d genes x %d predictors are generated, displayed by '%s' and combined by '%s'", nrow(df_priority), ncol(df_priority), displayBy, combineBy), appendLF=TRUE)
+		}
+		
+	}
+	
+	
     invisible(df_priority)
 }

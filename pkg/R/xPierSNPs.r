@@ -394,7 +394,7 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
     }
     
     #######################
-    ## if pNodew==NULL, return NULL
+    ## if pNode==NULL, return NULL
     if(is.null(pNode)){
     	return(NULL)
     }

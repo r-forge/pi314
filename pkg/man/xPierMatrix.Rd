@@ -29,7 +29,9 @@ displayed in the screen. By default, it sets to true for display}
 }
 \description{
 \code{xPierMatrix} is supposed to extract priority matrix from a list
-of pNode objects
+of pNode objects. Also supported is the aggregation of priority matrix
+(similar to the meta-analysis) generating the priority results; we call
+this functionality as the discovery mode of the prioritisation.
 }
 \note{
 none

@@ -138,6 +138,9 @@ colnames(df_pop) <- c('Project', 'Population', 'Code')
 knitr::kable(df_pop[,c(3,2,1)], caption="", row.names=FALSE)
 ```
 
+## xPierMatrix
+*[`xPierMatrix`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierMatrix.html)*: extracts priority matrix from a list of `pNode` objects, in which rows are genes and columns for the predictors (corresponding to the `pNode` objects). Also highlighted is to generate priority results in the discovery mode, that is, (similar to meta-analysis) aggregation of priority matrix.
+
 ## xPierManhattan
 *[`xPierManhattan`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierManhattan.html)*: visualises prioritised genes using manhattan plot, in which priority for genes is displayed on the Y-axis along with genomic locations on the X-axis. Also highlighted are genes with the top priority.
 
@@ -198,7 +201,7 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 ## Elementary functions
 
-- *[`xPierMatrix`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierMatrix.html)*: extracts priority matrix from a list of `pNode` objects, in which rows are genes and columns for the predictors (corresponding to the `pNode` objects).
+- *[`xPierSNPsAdv`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierSNPs.html)*: prepares genetic predictors given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values). 
 
 - *[`xSNPeqtl`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNPeqtl.html)*: extracts eQTL-gene pairs given a list of SNPs.
 

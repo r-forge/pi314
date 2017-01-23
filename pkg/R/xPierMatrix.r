@@ -1,6 +1,6 @@
 #' Function to extract priority matrix from a list of pNode objects
 #'
-#' \code{xPierMatrix} is supposed to extract priority matrix from a list of pNode objects 
+#' \code{xPierMatrix} is supposed to extract priority matrix from a list of pNode objects. Also supported is the aggregation of priority matrix (similar to the meta-analysis) generating the priority results; we call this functionality as the discovery mode of the prioritisation.
 #'
 #' @param list_pNode a list of "pNode" objects
 #' @param displayBy which priority will be extracted. It can be "score" for priority score (by default), "rank" for priority rank, "pvalue" for priority p-value

@@ -3,8 +3,8 @@
 #' \code{xPredictROCR} is supposed to assess the prediction performance via Receiver Operating Characteristic (ROC) and Precision-Recall (PR) analysis. It requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative (GSN) targets; 3) prediction containing predicted targets and predictive scores.
 #'
 #' @param prediction a data frame containing predictions along with predictive scores. It has two columns: 1st column for target, 2nd column for predictive scores (the higher the better). Alternatively, it can be an object of class "pNode" from which a data frame is extracted
-#' @param GSP a vector containing Gold Standard Positive (GSP)
-#' @param GSN a vector containing Gold Standard Negative (GSN)
+#' @param GSP a vector containing Gold Standard Positives (GSP)
+#' @param GSN a vector containing Gold Standard Negatives (GSN)
 #' @param rescale logical to indicate whether to linearly rescale predictive scores for GSP/GSN targets to the range [0,1]. By default, it sets to TRUE
 #' @param plot the way to plot performance curve. It can be 'none' for no curve returned, 'ROC' for ROC curve, and 'PR' for PR curve. 
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display

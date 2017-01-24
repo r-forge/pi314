@@ -189,11 +189,13 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 ## xPierSubnet
 *[`xPierSubnet`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierSubnet.html)*: identifies a gene network that contains as many highly prioritised genes as possible but a few lowly prioritised genes as linkers. An iterative procedure of choosing different priority cutoff is also used to identify the network with a desired number of nodes/genes.
 
-## xPredictROCR and xPredictCompare
+## Evaluation functions
 
 - *[`xPredictROCR`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPredictROCR.html)*: assess the prediction/prioritisation performance via Receiver Operating Characteristic (ROC) and Precision-Recall (PR) analysis.
 
 - *[`xPredictCompare`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPredictCompare.html)*: compares the prediction/prioritisation performance.
+
+- *[`xGSsimulator`](http://rawgit.com/hfang-bristol/Pi/master/inst/xGSsimulator.html)*: simulates the gold standard negatives from gold standard positives (GSP) based on the interaction netwok.
 
 ## Integral functions (under development)
 

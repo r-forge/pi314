@@ -73,6 +73,13 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
         message(sprintf("Of %d targets in GSN, %d also predicted for evaluation (%s).", length(gsn), length(gsn_predicted), as.character(now)), appendLF=TRUE)
     }
     
+    ########
+    if(length(gsp_predicted)==0 | length(gsn_predicted)==0){
+    	warnings("No GSP and/or GSN is predicted!")
+    	return(NULL)
+    }
+    ########
+    
     ######################################
 	## prepare input for ROCR	
 	gsp_pred_label <- data.frame(pred=pred[gsp_predicted], label=rep(1,length(gsp_predicted)), stringsAsFactors=FALSE)

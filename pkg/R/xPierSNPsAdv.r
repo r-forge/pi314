@@ -197,6 +197,7 @@ xPierSNPsAdv <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, sig
 			}
 			return(pNode)
 		})
+		names(ls_pNode_eQTL) <- paste('eQTL_', names(ls_pNode_eQTL), sep='')
     }else{
     	ls_pNode_eQTL <- NULL
     }

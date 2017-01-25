@@ -35,7 +35,11 @@ xPredictCompare <- function(list_pPerf, displayBy=c("ROC","PR"), sort=TRUE, deta
    	if(any(class(list_pPerf) %in% c("gg","ggplot","pPerf"))){
 		list_pPerf <- list(list_pPerf)
 	}else if(class(list_pPerf)=="list"){
-		list_pPerf <- list_pPerf
+		## Remove null elements in a list
+		list_pPerf <- base::Filter(base::Negate(is.null), list_pPerf)
+		if(length(list_pPerf)==0){
+			return(NULL)
+		}
 	}else{
 		stop("The function must apply to an 'list' object, or an 'pPerf'/'ggplot' object.\n")
 	}

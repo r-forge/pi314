@@ -27,10 +27,30 @@ order statistics of p-values, "fishers" for Fisher's method,
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 }
+\value{
+If aggregateBy is 'none' (by default), a data frame containing priority
+matrix, with each column/predictor for either priority score, or
+priorty rank or priority p-value.
+If aggregateBy is not 'none', an object of the class "dTarget", a list
+with following components:
+\itemize{
+\item{\code{priority}: a data frame of nGene X 5 containing gene
+priority (aggregated) information, where nGene is the number of genes,
+and the 5 columns are "name" (gene names), "rank" (ranks of the
+priority scores), "pvalue" (the aggregated p-value, converted from
+empirical cumulative distribution of the probability of being GSP),
+"fdr" (fdr adjusted from the aggregated p-value), "priority"
+(-log10(pvalue) but rescaled into the 0-10 range)}
+\item{\code{predictor}: a data frame containing priority matrix, with
+each column/predictor for either priority score, or priorty rank or
+priority p-value}
+\item{\code{call}: the call that produced this result}
+}
+}
 \description{
 \code{xPierMatrix} is supposed to extract priority matrix from a list
 of pNode objects. Also supported is the aggregation of priority matrix
-(similar to the meta-analysis) generating the priority results; we call
+(similar to the meta-analysis) generating the priority results; we view
 this functionality as the discovery mode of the prioritisation.
 }
 \note{

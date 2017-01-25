@@ -11,7 +11,7 @@
 
 <p><code>xPierMatrix</code> is supposed to extract priority matrix from a list
 of pNode objects. Also supported is the aggregation of priority matrix
-(similar to the meta-analysis) generating the priority results; we call
+(similar to the meta-analysis) generating the priority results; we view
 this functionality as the discovery mode of the prioritisation.
 </p>
 
@@ -57,6 +57,36 @@ order statistics of p-values, &quot;fishers&quot; for Fisher's method,
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
 </table>
+
+
+<h3>Value</h3>
+
+<p>If aggregateBy is 'none' (by default), a data frame containing priority
+matrix, with each column/predictor for either priority score, or
+priorty rank or priority p-value.
+If aggregateBy is not 'none', an object of the class &quot;dTarget&quot;, a list
+with following components:
+</p>
+
+<ul>
+<li><p><code>priority</code>: a data frame of nGene X 5 containing gene
+priority (aggregated) information, where nGene is the number of genes,
+and the 5 columns are &quot;name&quot; (gene names), &quot;rank&quot; (ranks of the
+priority scores), &quot;pvalue&quot; (the aggregated p-value, converted from
+empirical cumulative distribution of the probability of being GSP),
+&quot;fdr&quot; (fdr adjusted from the aggregated p-value), &quot;priority&quot;
+(-log10(pvalue) but rescaled into the 0-10 range)
+</p>
+</li>
+<li><p><code>predictor</code>: a data frame containing priority matrix, with
+each column/predictor for either priority score, or priorty rank or
+priority p-value
+</p>
+</li>
+<li><p><code>call</code>: the call that produced this result
+</p>
+</li></ul>
+
 
 
 <h3>Note</h3>

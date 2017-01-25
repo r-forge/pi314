@@ -2,6 +2,7 @@
 
 export(xContour)
 export(xGSsimulator)
+export(xMLplot)
 export(xMLrandomforest)
 export(xPCHiCplot)
 export(xPier)

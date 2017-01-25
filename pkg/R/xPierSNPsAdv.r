@@ -179,7 +179,8 @@ xPierSNPsAdv <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, sig
 		message(sprintf("Preparing the distance predictor (%s) ...", as.character(now)), appendLF=TRUE)
 	}
     pNode_distance <- xPierSNPs(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.eQTL=NA, eQTL.customised=NULL, include.HiC=NA, cdf.function=cdf.function, relative.importance=c(1,0,0), scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose.details, RData.location=RData.location)
-    ls_pNode_distance <- list(Distance=pNode_distance)
+    ls_pNode_distance <- list(pNode_distance)
+    names(ls_pNode_distance) <- paste('nearbyGenes_', distance.max, '_', decay.kernel, sep='')
     
     ####################################################################################
     

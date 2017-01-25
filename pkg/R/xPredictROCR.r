@@ -21,6 +21,7 @@
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' If plot is 'ROC' or 'PR', it will return a ggplot object after being appended with the same components as mentioned above.
+#' If no GSP and/or GSN is predicted, it will return NULL
 #' @note
 #' AUC: the area under ROC
 #' F-measure: the maximum of a harmonic mean between precision and recall along PR curve
@@ -47,7 +48,7 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
     }
 
     res_ls <- split(x=as.numeric(prediction[,2]), f=prediction[,1])
-    pred <- unlist(lapply(res_ls, max))
+    pred <- unlist(lapply(res_ls, base::max))
     if(verbose){
         now <- Sys.time()
         message(sprintf("There are %d targets in predictions (%s).", length(pred), as.character(now)), appendLF=TRUE)
@@ -73,12 +74,14 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
         message(sprintf("Of %d targets in GSN, %d also predicted for evaluation (%s).", length(gsn), length(gsn_predicted), as.character(now)), appendLF=TRUE)
     }
     
-    ########
+    ########################################
+    # NULL if no GSP and/or GSN is predicted
+    ########################################
     if(length(gsp_predicted)==0 | length(gsn_predicted)==0){
     	warnings("No GSP and/or GSN is predicted!")
     	return(NULL)
     }
-    ########
+    ########################################
     
     ######################################
 	## prepare input for ROCR	
@@ -150,7 +153,7 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 		p <- p + labs(title=title) + theme(plot.title=element_text(hjust=0.5))
 		## caption
 		if(signature){
-			caption <- paste("Created by xPredictROCR from Pi version", utils ::packageVersion("XGR"))
+			caption <- paste("Created by xPredictROCR from Pi version", utils ::packageVersion("Pi"))
 			p <- p + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
 		}
 		## put arrows on both axes
@@ -183,7 +186,7 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 		p <- p + labs(title=title) + theme(plot.title=element_text(hjust=0.5))
 		## caption
 		if(signature){
-			caption <- paste("Created by xPredictROCR from Pi version", utils ::packageVersion("XGR"))
+			caption <- paste("Created by xPredictROCR from Pi version", utils ::packageVersion("Pi"))
 			p <- p + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
 		}
 		## put arrows on both axes

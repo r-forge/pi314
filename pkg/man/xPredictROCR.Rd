@@ -48,6 +48,7 @@ for calculating other performance measures)}
 }
 If plot is 'ROC' or 'PR', it will return a ggplot object after being
 appended with the same components as mentioned above.
+If no GSP and/or GSN is predicted, it will return NULL
 }
 \description{
 \code{xPredictROCR} is supposed to assess the prediction performance

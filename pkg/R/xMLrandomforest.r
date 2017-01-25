@@ -78,7 +78,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
         if(nfold==1){
 			message(sprintf("2. GS matrix of %d rows/genes X %d columns (predictors+class) are used as train set (%s) ...", nrow(df_predictor_class), ncol(df_predictor_class), as.character(now)), appendLF=TRUE)
         }else{
-        	message(sprintf("2. GS matrix of %d rows/genes X %d columns (predictors+class) are split (by rows/genes) into %d non-redundant sets: each time '%d/%d' as train set and the remaining '1/%d' as test set (%s) ...", nrow(df_predictor_class), ncol(df_predictor_class), nfold, nfold-1, nfold, nfold, as.character(now)), appendLF=TRUE)
+        	message(sprintf("2. GS matrix of %d rows/genes X %d columns (predictors+class) are split (by rows/genes) into %d non-redundant sets: each fold '%d/%d' are used as train set and the remaining '1/%d' as test set (%s) ...", nrow(df_predictor_class), ncol(df_predictor_class), nfold, nfold-1, nfold, nfold, as.character(now)), appendLF=TRUE)
         }
     }
     
@@ -109,7 +109,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
         if(nfold==1){
 			message(sprintf("3. Do random forest: '1/%d' as train set (%s) ...", nfold, as.character(now)), appendLF=TRUE)
 		}else{
-			message(sprintf("3. Do random forest: each time '%d/%d' as train set and the remaining '1/%d' as test set (%s) ...", nfold-1, nfold, nfold, as.character(now)), appendLF=TRUE)
+			message(sprintf("3. Do random forest: %d-fold cross-validation (%s) ...", nfold, as.character(now)), appendLF=TRUE)
 		}
     }
 	
@@ -131,7 +131,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 				}
 			}
 			set.seed(i)
-			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry))
+			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 		})
 		
 	}else{
@@ -155,7 +155,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 			}
 
 			set.seed(i)
-			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry))
+			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 		})
 	
 	}
@@ -227,7 +227,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		vec_predict_test <- predict(rf.model, newdata=testset[,-ncol(testset)], type='prob')[,2]
 		### do preparation
 		ind <- match(rownames(testset), rownames(df_predictor))
-		df_predictor_test <- cbind(Integrated=as.numeric(vec_predict_test), df_predictor[ind,])
+		df_predictor_test <- cbind(Integrated_randomforest=as.numeric(vec_predict_test), df_predictor[ind,])
 		rownames(df_predictor_test) <- rownames(df_predictor[ind,])
 		df_pred <- df_predictor_test
 		ls_predictors <- lapply(colnames(df_pred), function(x){
@@ -254,7 +254,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	if(!is.null(df_res)){
 		## df_ROC
 		df_res <- as.matrix(xSparseMatrix(df_res[,-4], verbose=FALSE))
-		ind <- match(c("Integrated",colnames(df_predictor)), rownames(df_res))
+		ind <- match(c("Integrated_randomforest",colnames(df_predictor)), rownames(df_res))
 		if(nfold==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'fold_1'
@@ -270,7 +270,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		## df_Fmax
 		df_res <- do.call(rbind, ls_res)
 		df_res <- as.matrix(xSparseMatrix(df_res[,-3], verbose=FALSE))
-		ind <- match(c("Integrated",colnames(df_predictor)), rownames(df_res))
+		ind <- match(c("Integrated_randomforest",colnames(df_predictor)), rownames(df_res))
 		if(nfold==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'fold_1'
@@ -361,7 +361,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	## overall evaluation
 	######################
 	### do preparation
-	df_predictor_overall <- cbind(Integrated=df_priority$priority, df_predictor_gs[,-c(1,2)])
+	df_predictor_overall <- cbind(Integrated_randomforest=df_priority$priority, df_predictor_gs[,-c(1,2)])
 	rownames(df_predictor_overall) <- rownames(df_priority)
 	df_pred <- df_predictor_overall
 	ls_predictors <- lapply(colnames(df_pred), function(x){
@@ -375,7 +375,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	# do plotting
 	bp <- xPredictCompare(ls_pPerf, displayBy=c("ROC","PR"))
 	df <- unique(bp$data[,c('Method','auroc','fmax')])
-	df_evaluation <- data.frame(ROC=df$auroc, Fmax=df$fmax, stringsAsFactors=FALSE)
+	df_evaluation <- cbind(ROC=df$auroc, Fmax=df$fmax)
 	rownames(df_evaluation) <- df$Method
 	#####################
 	#####################

@@ -29,7 +29,7 @@
 #' df_score <- xPierMatrix(ls_pNode)
 #' }
 
-xPierMatrix <- function(list_pNode, displayBy=c("score","rank","pvalue"), combineBy=c('intersect','union'), aggregateBy=c("none","orderStatistic","fishers","Ztransform"), verbose=TRUE)
+xPierMatrix <- function(list_pNode, displayBy=c("score","rank","pvalue"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","orderStatistic","Ztransform"), verbose=TRUE)
 {
 
     displayBy <- match.arg(displayBy)

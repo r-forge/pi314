@@ -32,6 +32,7 @@ Collate:
     'xMLrandomforest.r'
     'xPierSNPsAdv.r'
     'xGSsimulator.r'
+    'xMLplot.r'
 License: GPL-3
 VignetteBuilder: knitr
 biocViews: Software, Genetics, GraphAndNetwork, Pathways, GeneExpression, GeneTarget, GenomeWideAssociation, LinkageDisequilibrium, Network, HiC

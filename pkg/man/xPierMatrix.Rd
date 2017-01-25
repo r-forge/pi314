@@ -5,8 +5,8 @@
 \title{Function to extract priority matrix from a list of pNode objects}
 \usage{
 xPierMatrix(list_pNode, displayBy = c("score", "rank", "pvalue"),
-combineBy = c("intersect", "union"), aggregateBy = c("none",
-"orderStatistic", "fishers", "Ztransform"), verbose = TRUE)
+combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
+"orderStatistic", "Ztransform"), verbose = TRUE)
 }
 \arguments{
 \item{list_pNode}{a list of "pNode" objects}

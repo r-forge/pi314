@@ -21,7 +21,7 @@ this functionality as the discovery mode of the prioritisation.
 <pre>
 xPierMatrix(list_pNode, displayBy = c("score", "rank", "pvalue"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
-"orderStatistic", "Ztransform"), verbose = TRUE)
+"logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
 </pre>
 
 
@@ -49,7 +49,15 @@ objects. It can be &quot;intersect&quot; for intersecting nodes (by default),
 <p>the aggregate method used. It can be either &quot;none&quot;
 for no aggregation, or &quot;orderStatistic&quot; for the method based on the
 order statistics of p-values, &quot;fishers&quot; for Fisher's method,
-&quot;Ztransform&quot; for Z-transform method</p>
+&quot;Ztransform&quot; for Z-transform method, &quot;logistic&quot; for the logistic
+method. Without loss of generality, the Z-transform method does well in
+problems where evidence against the combined null is spread widely
+(equal footings) or when the total evidence is weak; Fisher's method
+does best in problems where the evidence is concentrated in a
+relatively small fraction of the individual tests or when the evidence
+is at least moderately strong; the logistic method provides a
+compromise between these two. Notably, the aggregate methods 'fishers'
+and 'logistic' are preferred here</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

@@ -6,7 +6,7 @@
 \usage{
 xPierMatrix(list_pNode, displayBy = c("score", "rank", "pvalue"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
-"orderStatistic", "Ztransform"), verbose = TRUE)
+"logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
 }
 \arguments{
 \item{list_pNode}{a list of "pNode" objects}
@@ -22,7 +22,15 @@ objects. It can be "intersect" for intersecting nodes (by default),
 \item{aggregateBy}{the aggregate method used. It can be either "none"
 for no aggregation, or "orderStatistic" for the method based on the
 order statistics of p-values, "fishers" for Fisher's method,
-"Ztransform" for Z-transform method}
+"Ztransform" for Z-transform method, "logistic" for the logistic
+method. Without loss of generality, the Z-transform method does well in
+problems where evidence against the combined null is spread widely
+(equal footings) or when the total evidence is weak; Fisher's method
+does best in problems where the evidence is concentrated in a
+relatively small fraction of the individual tests or when the evidence
+is at least moderately strong; the logistic method provides a
+compromise between these two. Notably, the aggregate methods 'fishers'
+and 'logistic' are preferred here}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

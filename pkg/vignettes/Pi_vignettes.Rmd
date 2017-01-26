@@ -201,6 +201,8 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 - *[`xMLrandomforest`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLrandomforest.html)*: integrates predictor matrix via machine learning algorithm random forest and returns an object of class `pTarget`.
 
+- *[`xMLplot`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLplot.html)*: visualise machine learning results (an `pTarget` object) and returns an object of class `ggplot`.
+
 ## Elementary functions
 
 - *[`xPierSNPsAdv`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierSNPs.html)*: prepares genetic predictors given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values). 

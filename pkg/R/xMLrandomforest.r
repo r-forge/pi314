@@ -8,7 +8,7 @@
 #' @param nfold an integer specifying the number of folds for cross validataion
 #' @param mtry an integer specifying the number of predictors randomly sampled as candidates at each split. If NULL, it will be tuned by `randomForest::tuneRF`, with starting value as sqrt(p) where p is the number of predictors. The minimum value is 3
 #' @param ntree an integer specifying the number of trees to grow. By default, it sets to 2000
-#' @param fold.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method
+#' @param fold.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
 #' @param ... additional graphic parameters. Please refer to 'randomForest::randomForest' for the complete list.
 #' @return 
@@ -38,7 +38,7 @@
 #' pTarget <- xMLrandomforest(df_prediction, GSP, GSN)
 #' }
 
-xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=2000, fold.aggregateBy=c("fishers","orderStatistic","Ztransform"), verbose=TRUE, ...)
+xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=2000, fold.aggregateBy=c("Ztransform","logistic","fishers","orderStatistic"), verbose=TRUE, ...)
 {
 	
     startT <- Sys.time()

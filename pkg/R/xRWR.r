@@ -31,6 +31,7 @@
 #' @import stats
 #' @importFrom ggbio autoplot
 #' @importFrom ggrepel geom_text_repel geom_label_repel
+#' @importFrom ggforce facet_zoom
 #' @importFrom ROCR prediction performance plot
 #' @importFrom supraHex sDistance visColormap
 #' @importFrom scales sqrt_trans log_trans trans_breaks trans_format math_format

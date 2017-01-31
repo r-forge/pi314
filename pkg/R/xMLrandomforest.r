@@ -292,7 +292,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
     if(verbose){
         now <- Sys.time()
         message(sprintf("6. Do prediction for fullset (%s).", as.character(now)), appendLF=TRUE)
-        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds (%s) ...", ncol(df_predictor_class), nfold, as.character(now)), appendLF=TRUE)
+        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds (%s), aggregated via '%s' ...", ncol(df_predictor_class), nfold, fold.aggregateBy, as.character(now)), appendLF=TRUE)
     }
 	
 	ls_full <- lapply(1:length(ls_model), function(i){

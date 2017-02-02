@@ -5,6 +5,7 @@
 #' @param pNode an object of class "pNode" (or "pTarget" or "dTarget")
 #' @param priority.top the number of the top targets used for GSEA. By default, it is NULL meaning all targets are used
 #' @param ontology the ontology supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PS" for phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for domain superfamily assignments, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, and Drug-Gene Interaction database (DGIdb) for drugable categories, and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
+#' @param customised.genesets a list each containing gene symbols. By default, it is NULL. If the list provided, it will overtake the previous parameter "ontology"
 #' @param size.range the minimum and maximum size of members of each term in consideration. By default, it sets to a minimum of 10 but no more than 500
 #' @param path.mode the mode of paths induced by vertices/nodes with input annotation data. It can be "all_paths" for all possible paths to the root, "shortest_paths" for only one path to the root (for each node in query), "all_shortest_paths" for all shortest paths to the root (i.e. for each node, find all shortest paths with the equal lengths)
 #' @param weight an integer specifying score weight. It can be "0" for unweighted (an equivalent to Kolmogorov-Smirnov, only considering the rank), "1" for weighted by input gene score (by default), and "2" for over-weighted, and so on
@@ -48,7 +49,7 @@
 #' gp <- xGSEAdotplot(eGSEA, top=1)
 #' }
 
-xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN"), size.range=c(10,500), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), weight=1, nperm=2000, fast=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN"), customised.genesets=NULL, size.range=c(10,500), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), weight=1, nperm=2000, fast=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
     message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
@@ -88,11 +89,15 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 	name_GeneID <- xSymbol2GeneID(rownames(df_priority), check.symbol.identity=FALSE, verbose=verbose, RData.location=RData.location)
 	
 	ind <- which(!is.na(name_GeneID))
-    data <- data.frame(priority=df_priority$priority[ind], row.names=name_GeneID[ind], stringsAsFactors=FALSE)
+	GeneID <- name_GeneID[ind]
+	priority <- df_priority$priority[ind]
+	# also remove duplicated GeneID
+	flag <- !duplicated(GeneID)
+    data <- data.frame(priority=priority[flag], row.names=GeneID[flag], stringsAsFactors=FALSE)
     
     #############################################################################################
 
-    if(!is.na(ontology)){
+    if(is.null(customised.genesets)){
 	
 		if(verbose){
 			now <- Sys.time()
@@ -154,14 +159,35 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 			true.path.rule <- FALSE
 		}
 	
-		# obtain the induced subgraph according to the input annotation data based on shortest paths (i.e. the most concise subgraph induced)
+		# obtain the induced subgraph according to the input annotation data
 		subg <- xDAGanno(g=g, annotation=anno, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose)
 		anno <- V(subg)$anno
 		names(anno) <- V(subg)$name
 		g <- subg
 	
 	}else{
-		stop("There is no input for the ontology.\n")
+        if(is.list(customised.genesets)){
+            if(is.null(names(customised.genesets))){
+                names(customised.genesets) <- paste("C", 1:length(customised.genesets), sep="")
+            }
+			anno <- lapply(customised.genesets, function(x){
+				GeneID <- xSymbol2GeneID(x, check.symbol.identity=FALSE, verbose=verbose, RData.location=RData.location)
+				GeneID <- GeneID[!is.na(GeneID)]
+				return(GeneID)
+			})
+			nodes <- data.frame(name=names(customised.genesets), term_id=names(customised.genesets), term_name=names(customised.genesets), term_distance=rep(1, length(customised.genesets)), stringsAsFactors=FALSE)
+			nodes <- rbind(nodes, c('root','root','root','root'))
+			relations <- data.frame(from='root', to=nodes$name)
+			g <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
+            true.path.rule <- FALSE
+			subg <- xDAGanno(g=g, annotation=anno, path.mode=path.mode, true.path.rule=true.path.rule, verbose=verbose)
+			anno <- V(subg)$anno
+			names(anno) <- V(subg)$name
+			g <- subg
+			
+        }else{
+			stop("There is no input for the ontology.\n")
+		}
 	}
     #############################################################################################
     
@@ -197,7 +223,7 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 						   stringsAsFactors=FALSE
 						  )
 		pvalue <- nES <- NULL
-		res <- tab[with(tab,order(pvalue,-nES)),]
+		res <- tab[with(tab,order(pvalue,-nES,-ES)),]
 	
 		if(verbose){
 			now <- Sys.time()

@@ -27,9 +27,9 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
 "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN"), size.range = c(10, 500), path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), weight = 1, nperm = 2000,
-fast = TRUE, verbose = TRUE,
+"CreedsGeneDN"), customised.genesets = NULL, size.range = c(10, 500),
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+weight = 1, nperm = 2000, fast = TRUE, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -63,6 +63,12 @@ including &quot;MsigdbH&quot;, &quot;MsigdbC1&quot;, &quot;MsigdbC2CGP&quot;, &q
 &quot;MsigdbC2CP&quot;, &quot;MsigdbC2KEGG&quot;, &quot;MsigdbC2REACTOME&quot;, &quot;MsigdbC2BIOCARTA&quot;,
 &quot;MsigdbC3TFT&quot;, &quot;MsigdbC3MIR&quot;, &quot;MsigdbC4CGN&quot;, &quot;MsigdbC4CM&quot;,
 &quot;MsigdbC5BP&quot;, &quot;MsigdbC5MF&quot;, &quot;MsigdbC5CC&quot;, &quot;MsigdbC6&quot;, &quot;MsigdbC7&quot;)</p>
+</td></tr>
+<tr valign="top"><td><code>customised.genesets</code></td>
+<td>
+<p>a list each containing gene symbols. By
+default, it is NULL. If the list provided, it will overtake the
+previous parameter &quot;ontology&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>size.range</code></td>
 <td>

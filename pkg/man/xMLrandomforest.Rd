@@ -77,7 +77,7 @@ the importance across folds), "min" (the minimum of the importance
 across folds), "max" (the maximum of the importance across folds), and
 the rest columns storing the per-fold importance}
 \item{\code{roc2fold}: a data frame of 1+nPredictor X 4+nfold
-containing the integrated/predictor ROC info (AUC values), where
+containing the supervised/predictor ROC info (AUC values), where
 nPredictor is the number of predictors, nfold is the number of folds
 for cross validataion, and the first 4 columns are "median" (the median
 of the AUC values across folds), "mad" (the median of absolute
@@ -85,7 +85,7 @@ deviation of the AUC values across folds), "min" (the minimum of the
 AUC values across folds), "max" (the maximum of the AUC values across
 folds), and the rest columns storing the per-fold AUC values}
 \item{\code{fmax2fold}: a data frame of 1+nPredictor X 4+nfold
-containing the integrated/predictor PR info (F-max values), where
+containing the supervised/predictor PR info (F-max values), where
 nPredictor is the number of predictors, nfold is the number of folds
 for cross validataion, and the first 4 columns are "median" (the median
 of the F-max values across folds), "mad" (the median of absolute
@@ -102,7 +102,7 @@ informative predictors), while "MeanDecreaseGini" measures how pure the
 nodes are at the end of the tree (a high score means the predictor was
 important if each predictor is taken out)}
 \item{\code{performance}: a data frame of 1+nPredictor X 2 containing
-the integrated/predictor performance info predictor importance info,
+the supervised/predictor performance info predictor importance info,
 where nPredictor is the number of predictors, two columns are "ROC"
 (AUC values) and "Fmax" (F-max values)}
 \item{\code{call}: the call that produced this result}

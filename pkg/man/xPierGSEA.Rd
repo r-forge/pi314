@@ -13,9 +13,9 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
 "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN"), size.range = c(10, 500), path.mode = c("all_paths",
-"shortest_paths", "all_shortest_paths"), weight = 1, nperm = 2000,
-fast = TRUE, verbose = TRUE,
+"CreedsGeneDN"), customised.genesets = NULL, size.range = c(10, 500),
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+weight = 1, nperm = 2000, fast = TRUE, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -39,6 +39,10 @@ including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall",
 "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
 "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
 "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
+
+\item{customised.genesets}{a list each containing gene symbols. By
+default, it is NULL. If the list provided, it will overtake the
+previous parameter "ontology"}
 
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more

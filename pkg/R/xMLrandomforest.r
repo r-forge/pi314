@@ -19,10 +19,10 @@
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting an additional column 'GS' in the first column}
 #'  \item{\code{prob2fold}: a data frame of nGene X 2+nfold containing the probability of being GSP, where nGene is the number of genes in the input data frame, nfold is the number of folds for cross validataion, and the first two columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), and the rest columns storing the per-fold probability of being GSP}
 #'  \item{\code{importance2fold}: a data frame of nPredictor X 4+nfold containing the predictor importance info per fold, where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the importance across folds), "mad" (the median of absolute deviation of the importance across folds), "min" (the minimum of the importance across folds), "max" (the maximum of the importance across folds), and the rest columns storing the per-fold importance}
-#'  \item{\code{roc2fold}: a data frame of 1+nPredictor X 4+nfold containing the integrated/predictor ROC info (AUC values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the AUC values across folds), "mad" (the median of absolute deviation of the AUC values across folds), "min" (the minimum of the AUC values across folds), "max" (the maximum of the AUC values across folds), and the rest columns storing the per-fold AUC values}
-#'  \item{\code{fmax2fold}: a data frame of 1+nPredictor X 4+nfold containing the integrated/predictor PR info (F-max values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the F-max values across folds), "mad" (the median of absolute deviation of the F-max values across folds), "min" (the minimum of the F-max values across folds), "max" (the maximum of the F-max values across folds), and the rest columns storing the per-fold F-max values}
+#'  \item{\code{roc2fold}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor ROC info (AUC values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the AUC values across folds), "mad" (the median of absolute deviation of the AUC values across folds), "min" (the minimum of the AUC values across folds), "max" (the maximum of the AUC values across folds), and the rest columns storing the per-fold AUC values}
+#'  \item{\code{fmax2fold}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor PR info (F-max values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the F-max values across folds), "mad" (the median of absolute deviation of the F-max values across folds), "min" (the minimum of the F-max values across folds), "max" (the maximum of the F-max values across folds), and the rest columns storing the per-fold F-max values}
 #'  \item{\code{importance}: a data frame of nPredictor X 2 containing the predictor importance info, where nPredictor is the number of predictors, two columns for two types ("MeanDecreaseAccuracy" and "MeanDecreaseGini") of predictor importance measures. "MeanDecreaseAccuracy" sees how worse the model performs without each predictor (a high decrease in accuracy would be expected for very informative predictors), while "MeanDecreaseGini" measures how pure the nodes are at the end of the tree (a high score means the predictor was important if each predictor is taken out)}
-#'  \item{\code{performance}: a data frame of 1+nPredictor X 2 containing the integrated/predictor performance info predictor importance info, where nPredictor is the number of predictors, two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
+#'  \item{\code{performance}: a data frame of 1+nPredictor X 2 containing the supervised/predictor performance info predictor importance info, where nPredictor is the number of predictors, two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
@@ -213,7 +213,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
     if(verbose){
         now <- Sys.time()
         message(sprintf("5. Performance evaluation using test sets (%s).", as.character(now)), appendLF=TRUE)
-        message(sprintf("Extract the ROC matrix of %d rows (Integrated + predictors) X %d columns/folds (%s).", ncol(df_predictor_class), nfold, as.character(now)), appendLF=TRUE)
+        message(sprintf("Extract the ROC matrix of %d rows (Supervised + predictors) X %d columns/folds (%s).", ncol(df_predictor_class), nfold, as.character(now)), appendLF=TRUE)
     }
 	
 	######################
@@ -227,7 +227,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		vec_predict_test <- predict(rf.model, newdata=testset[,-ncol(testset)], type='prob')[,2]
 		### do preparation
 		ind <- match(rownames(testset), rownames(df_predictor))
-		df_predictor_test <- cbind(Integrated_randomforest=as.numeric(vec_predict_test), df_predictor[ind,])
+		df_predictor_test <- cbind(Supervised_randomforest=as.numeric(vec_predict_test), df_predictor[ind,])
 		rownames(df_predictor_test) <- rownames(df_predictor[ind,])
 		df_pred <- df_predictor_test
 		ls_predictors <- lapply(colnames(df_pred), function(x){
@@ -254,7 +254,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	if(!is.null(df_res)){
 		## df_ROC
 		df_res <- as.matrix(xSparseMatrix(df_res[,-4], verbose=FALSE))
-		ind <- match(c("Integrated_randomforest",colnames(df_predictor)), rownames(df_res))
+		ind <- match(c("Supervised_randomforest",colnames(df_predictor)), rownames(df_res))
 		if(nfold==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'fold_1'
@@ -270,7 +270,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		## df_Fmax
 		df_res <- do.call(rbind, ls_res)
 		df_res <- as.matrix(xSparseMatrix(df_res[,-3], verbose=FALSE))
-		ind <- match(c("Integrated_randomforest",colnames(df_predictor)), rownames(df_res))
+		ind <- match(c("Supervised_randomforest",colnames(df_predictor)), rownames(df_res))
 		if(nfold==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'fold_1'
@@ -361,7 +361,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	## overall evaluation
 	######################
 	### do preparation
-	df_predictor_overall <- cbind(Integrated_randomforest=df_priority$priority, df_predictor_gs[,-c(1,2)])
+	df_predictor_overall <- cbind(Supervised_randomforest=df_priority$priority, df_predictor_gs[,-c(1,2)])
 	rownames(df_predictor_overall) <- rownames(df_priority)
 	df_pred <- df_predictor_overall
 	ls_predictors <- lapply(colnames(df_pred), function(x){

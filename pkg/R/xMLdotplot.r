@@ -31,15 +31,17 @@ xMLdotplot <- function(pTarget, displayBy=c("importance2fold","roc2fold","fmax2f
     	stop("The function must apply to a 'pTarget' object.\n")
     }
     
+    nfold <- length(pTarget$model)
+    
     if(displayBy == "importance2fold"){
     	df <- pTarget$importance2fold
-    	xlab <- "Decrease in accuracy across folds\n(a measure of predictor importance)"
+    	xlab <- paste0("Decrease in accuracy across ", nfold, " folds\n(a measure of predictor importance)")
     }else if(displayBy=='roc2fold'){
     	df <- pTarget$roc2fold
-    	xlab <- "AUC across folds\n(a measure of ROC)"
+    	xlab <- paste0("AUC across ", nfold, " folds\n(a measure of ROC)")
     }else if(displayBy=='fmax2fold'){
     	df <- pTarget$fmax2fold
-    	xlab <- "F-max across folds\n(a measure of Precision-Recall curve)"
+    	xlab <- paste0("F-max across ", nfold, " folds\n(a measure of Precision-Recall curve)")
     }else if(displayBy=='importance_accurancy'){
     	df <- data.frame(Val=pTarget$importance[,1], stringsAsFactors=FALSE)
     	rownames(df) <- rownames(pTarget$importance)
@@ -47,13 +49,21 @@ xMLdotplot <- function(pTarget, displayBy=c("importance2fold","roc2fold","fmax2f
     }else if(displayBy=='importance_gini'){
     	df <- data.frame(Val=pTarget$importance[,2], stringsAsFactors=FALSE)
     	rownames(df) <- rownames(pTarget$importance)
-    	xlab <- "Decrease in Gini\n(a measure of predictor importance)"
+    	xlab <- "Decrease in gini\n(a measure of predictor importance)"
     }else if(displayBy=='ROC'){
-    	df <- data.frame(Val=pTarget$performance[,1], stringsAsFactors=FALSE)
+    	#### replace with roc2fold for Supervised_randomforest
+    	Val <- pTarget$performance[,1]
+    	Val[1] <- pTarget$roc2fold[1,1]
+    	############
+    	df <- data.frame(Val=Val, stringsAsFactors=FALSE)
     	rownames(df) <- rownames(pTarget$performance)
     	xlab <- "AUC\n(a measure of ROC)"
     }else if(displayBy=='Fmax'){
-    	df <- data.frame(Val=pTarget$performance[,2], stringsAsFactors=FALSE)
+    	#### replace with fmax2fold for Supervised_randomforest
+    	Val <- pTarget$performance[,2]
+    	Val[1] <- pTarget$fmax2fold[1,1]
+    	############
+    	df <- data.frame(Val=Val, stringsAsFactors=FALSE)
     	rownames(df) <- rownames(pTarget$performance)
     	xlab <- "F-max\n(a measure of Precision-Recall curve)"
     }
@@ -62,7 +72,7 @@ xMLdotplot <- function(pTarget, displayBy=c("importance2fold","roc2fold","fmax2f
     
     ## extract info on 'Predictor' and 'Method'
 	tmp <- rownames(df)
-	tmp <- gsub('^Integrated_', 'Integrated\n(', tmp)
+	tmp <- gsub('^Supervised_', 'Supervised\n(', tmp)
 	tmp <- gsub('^Annotation_', 'Annotation\n(', tmp)
 	tmp <- gsub('^nearbyGenes_', 'nearbyGenes\n(', tmp)
 	tmp <- gsub('^eQTL_', 'eQTL\n(', tmp)
@@ -105,8 +115,11 @@ xMLdotplot <- function(pTarget, displayBy=c("importance2fold","roc2fold","fmax2f
 	bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
 	## x-axis position
-	bp <- bp + scale_x_continuous(position="top")
-	
+    if(displayBy == "ROC" | displayBy == "roc2fold"){
+    	bp <- bp + scale_x_continuous(position="top", limits=c(0.5,1))
+    }else{
+		bp <- bp + scale_x_continuous(position="top")
+	}
 	
 	invisible(bp)
 }

@@ -132,7 +132,7 @@ the rest columns storing the per-fold importance
 </p>
 </li>
 <li><p><code>roc2fold</code>: a data frame of 1+nPredictor X 4+nfold
-containing the integrated/predictor ROC info (AUC values), where
+containing the supervised/predictor ROC info (AUC values), where
 nPredictor is the number of predictors, nfold is the number of folds
 for cross validataion, and the first 4 columns are &quot;median&quot; (the median
 of the AUC values across folds), &quot;mad&quot; (the median of absolute
@@ -142,7 +142,7 @@ folds), and the rest columns storing the per-fold AUC values
 </p>
 </li>
 <li><p><code>fmax2fold</code>: a data frame of 1+nPredictor X 4+nfold
-containing the integrated/predictor PR info (F-max values), where
+containing the supervised/predictor PR info (F-max values), where
 nPredictor is the number of predictors, nfold is the number of folds
 for cross validataion, and the first 4 columns are &quot;median&quot; (the median
 of the F-max values across folds), &quot;mad&quot; (the median of absolute
@@ -163,7 +163,7 @@ important if each predictor is taken out)
 </p>
 </li>
 <li><p><code>performance</code>: a data frame of 1+nPredictor X 2 containing
-the integrated/predictor performance info predictor importance info,
+the supervised/predictor performance info predictor importance info,
 where nPredictor is the number of predictors, two columns are &quot;ROC&quot;
 (AUC values) and &quot;Fmax&quot; (F-max values)
 </p>

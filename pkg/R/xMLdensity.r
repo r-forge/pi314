@@ -57,7 +57,7 @@ xMLdensity <- function(pTarget, displayBy=c("All","GS","GSN","GSP","Putative"), 
 	gp <- ggplot(df, aes(Score, fill=GS, color=GS)) + geom_density(alpha=0.1,adjust=1)
 	gp <- gp + scale_color_manual(values=color) + scale_fill_manual(values=color)
 	gp <- gp + theme_bw() + theme(legend.position="right", legend.title=element_blank(), axis.title.y=element_text(size=14,color="black",face="bold"), axis.title.x=element_text(size=14,color="black",face="bold"), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
-	gp <- gp + xlab("Composite score (a measure of discriminating GSP against GSN)")
+	gp <- gp + xlab("Composite scores\n(quantifying separation of GSP against GSN)") + ylab("Density of target genes")
 	
 	## x scale
     if(x.scale=="sqrt"){

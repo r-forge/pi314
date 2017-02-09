@@ -14,9 +14,10 @@
 #' @return 
 #' an object of class "pTarget", a list with following components:
 #' \itemize{
-#'  \item{\code{model}: a list of models, each results from per-fold train set}
+#'  \item{\code{model}: a list of models, results from per-fold train set}
 #'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority information, where nGene is the number of genes in the input data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the cross-fold aggregated p-value of being GSP, per-fold p-value converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(fdr))}
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting an additional column 'GS' in the first column}
+#'  \item{\code{pred2fold}: a list of data frame, results from per-fold test set}
 #'  \item{\code{prob2fold}: a data frame of nGene X 2+nfold containing the probability of being GSP, where nGene is the number of genes in the input data frame, nfold is the number of folds for cross validataion, and the first two columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), and the rest columns storing the per-fold probability of being GSP}
 #'  \item{\code{importance2fold}: a data frame of nPredictor X 4+nfold containing the predictor importance info per fold, where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the importance across folds), "mad" (the median of absolute deviation of the importance across folds), "min" (the minimum of the importance across folds), "max" (the maximum of the importance across folds), and the rest columns storing the per-fold importance}
 #'  \item{\code{roc2fold}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor ROC info (AUC values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the AUC values across folds), "mad" (the median of absolute deviation of the AUC values across folds), "min" (the minimum of the AUC values across folds), "max" (the maximum of the AUC values across folds), and the rest columns storing the per-fold AUC values}
@@ -219,7 +220,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	######################
 	## evaluation per fold
 	######################
-	ls_res <- lapply(1:length(ls_model), function(i){
+	lsls_predictors <- lapply(1:length(ls_model), function(i){
 		rf.model <- ls_model[[i]]
 		## prediction for testset: ?predict.randomForest
 		testindex <- index_sets[[i]]
@@ -234,6 +235,10 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 			data.frame(rownames(df_pred), df_pred[,x], stringsAsFactors=FALSE)
 		})
 		names(ls_predictors) <- colnames(df_pred)
+		return(ls_predictors)
+	})
+	ls_res <- lapply(1:length(lsls_predictors), function(i){
+		ls_predictors <- lsls_predictors[[i]]
 		# do evaluation
 		ls_pPerf <- lapply(ls_predictors, function(x){
 			pPerf <- xPredictROCR(prediction=x, GSP=GSP, GSN=GSN, verbose=FALSE)
@@ -292,7 +297,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
     if(verbose){
         now <- Sys.time()
         message(sprintf("6. Do prediction for fullset (%s).", as.character(now)), appendLF=TRUE)
-        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds (%s), aggregated via '%s' ...", ncol(df_predictor_class), nfold, fold.aggregateBy, as.character(now)), appendLF=TRUE)
+        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds, aggregated via '%s' (%s) ...", ncol(df_predictor_class), nfold, fold.aggregateBy, as.character(now)), appendLF=TRUE)
     }
 	
 	ls_full <- lapply(1:length(ls_model), function(i){
@@ -354,7 +359,14 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	output_df_predictor <- df_predictor[ind,]
 	df_predictor_gs <- data.frame(GS=output_gs, name=names(df_ap), output_df_predictor, stringsAsFactors=FALSE)
 	df_full_gs <- data.frame(GS=output_gs, name=names(df_ap), output_df_full, stringsAsFactors=FALSE)
-
+	
+	### pred2fold
+	pred2fold <- lapply(1:length(lsls_predictors), function(i){
+		x <- lsls_predictors[[i]][[1]]
+		colnames(x) <- c("name","prob")
+		return(x)
+	})
+	names(pred2fold) <- paste0('fold_',1:nfold)
     ####################################################################################
 
 	######################
@@ -383,6 +395,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
     pTarget <- list(model = ls_model,
     				priority = df_priority,
     				predictor = df_predictor_gs,
+    				pred2fold = pred2fold,
     				prob2fold = df_full_gs,
     				importance2fold = df_importance,
     				roc2fold = df_ROC,

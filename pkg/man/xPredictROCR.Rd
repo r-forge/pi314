@@ -12,7 +12,8 @@ xPredictROCR(prediction, GSP, GSN, rescale = TRUE, plot = c("none",
 \item{prediction}{a data frame containing predictions along with
 predictive scores. It has two columns: 1st column for target, 2nd
 column for predictive scores (the higher the better). Alternatively, it
-can be an object of class "pNode" from which a data frame is extracted}
+can be an object of class "pNode" (or "pTarget" or "dTarget") from
+which a data frame is extracted}
 
 \item{GSP}{a vector containing Gold Standard Positives (GSP)}
 
@@ -72,4 +73,3 @@ RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 pPerf <- xPredictROCR(prediction, GSP, GSN)
 }
 }
-

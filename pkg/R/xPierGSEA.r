@@ -222,7 +222,7 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 						   setSize      = fgseaRes$size,
 						   stringsAsFactors=FALSE
 						  )
-		pvalue <- nES <- NULL
+		pvalue <- nES <- ES <- NULL
 		res <- tab[with(tab,order(pvalue,-nES,-ES)),]
 	
 		if(verbose){

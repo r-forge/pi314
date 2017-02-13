@@ -65,7 +65,7 @@ xGSEAbarplot <- function(eGSEA, top_num=10, displayBy=c("nes","adjp","fdr","pval
 		df$name <- unlist(res_list)
 	}
 	
-	adjp <- nes <- pvalue <- NULL
+	adjp <- nes <- es <- pvalue <- NULL
 	name <- height <- NULL
 	if(displayBy=='adjp' | displayBy=='fdr'){
 		df <- df[with(df,order(-adjp,nes,es)),]

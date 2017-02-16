@@ -92,13 +92,16 @@ distance or metadata)}
 \item{\code{leading}: a list of gene sets, each storing leading gene
 info (i.e. the named vector with names for gene symbols and elements
 for priority rank). Always, gene sets are identified by "setID"}
-\item{\code{leading}: a list of gene sets, each storing full info on
-gene set enrichment analysis result (i.e. a data frame of nGene x 5,
-where nGene is the number of genes, and the 5 columns are "GeneID",
-"Rank" for priority rank, "Score" for priority score, "RES" for running
+\item{\code{full}: a list of gene sets, each storing full info on gene
+set enrichment analysis result (i.e. a data frame of nGene x 5, where
+nGene is the number of genes, and the 5 columns are "GeneID", "Rank"
+for priority rank, "Score" for priority score, "RES" for running
 enrichment score, and "Hits" for gene set hits info with 1 for gene
 hit, 2 for leading gene hit, 3 for the point defining leading genes, 0
 for no hit). Always, gene sets are identified by "setID"}
+\item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell
+for the leading genes observed in an individaul term, and off-diagnal
+cell for the overlapped leading genes shared between two terms}
 }
 }
 \description{

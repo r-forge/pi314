@@ -18,7 +18,8 @@
 #' \itemize{
 #'  \item{\code{df_summary}: a data frame of nTerm x 9 containing gene set enrichment analysis result, where nTerm is the number of terms/genesets, and the 9 columns are "setID" (i.e. "Term ID"), "name" (i.e. "Term Name"), "nAnno" (i.e. number in members annotated by a term), "nLead" (i.e. number in members as leading genes), "es" (i.e. enrichment score), "nes" (i.e. normalised enrichment score; enrichment score but after being normalised by gene set size), "pvalue" (i.e. nominal p value), "adjp" (i.e. adjusted p value; p value but after being adjusted for multiple comparisons), "distance" (i.e. term distance or metadata)}
 #'  \item{\code{leading}: a list of gene sets, each storing leading gene info (i.e. the named vector with names for gene symbols and elements for priority rank). Always, gene sets are identified by "setID"}
-#'  \item{\code{leading}: a list of gene sets, each storing full info on gene set enrichment analysis result (i.e. a data frame of nGene x 5, where nGene is the number of genes, and the 5 columns are "GeneID", "Rank" for priority rank, "Score" for priority score, "RES" for running enrichment score, and "Hits" for gene set hits info with 1 for gene hit, 2 for leading gene hit, 3 for the point defining leading genes, 0 for no hit). Always, gene sets are identified by "setID"}
+#'  \item{\code{full}: a list of gene sets, each storing full info on gene set enrichment analysis result (i.e. a data frame of nGene x 5, where nGene is the number of genes, and the 5 columns are "GeneID", "Rank" for priority rank, "Score" for priority score, "RES" for running enrichment score, and "Hits" for gene set hits info with 1 for gene hit, 2 for leading gene hit, 3 for the point defining leading genes, 0 for no hit). Always, gene sets are identified by "setID"}
+#'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the leading genes observed in an individaul term, and off-diagnal cell for the overlapped leading genes shared between two terms}
 #' }
 #' @note none
 #' @export
@@ -347,9 +348,26 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 	summary$adjp <- signif(summary$adjp, digits=3)
 	summary$adjp <- ifelse(summary$adjp<0.01 & summary$adjp!=0, as.numeric(format(summary$adjp,scientific=TRUE)), summary$adjp)
 	
+    ################################
+    cross <- matrix(0, nrow=length(leadingGenes), ncol=length(leadingGenes))
+    if(length(leadingGenes)>=2){
+		for(i in seq(1,length(leadingGenes)-1)){
+			x1 <- names(leadingGenes[[i]])
+			for(j in seq(i+1,length(leadingGenes))){
+				x2 <- names(leadingGenes[[j]])
+				cross[i,j] <- length(intersect(x1, x2))
+				cross[j,i] <- length(intersect(x1, x2))
+			}
+		}
+		colnames(cross) <- rownames(cross) <- names(leadingGenes)
+		diag(cross) <- sapply(leadingGenes, length)
+    }
+    ####################################################################################
+	
     eGSEA <- list(df_summary = summary,
     			  leading = leadingGenes,
     			  full = ls_df_leading,
+    			  cross = cross,
     			  Call = match.call()
                  )
     class(eGSEA) <- "eGSEA"

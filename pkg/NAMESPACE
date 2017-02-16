@@ -2,6 +2,7 @@
 
 export(xContour)
 export(xGSEAbarplot)
+export(xGSEAconciser)
 export(xGSEAdotplot)
 export(xGSsimulator)
 export(xMLdensity)

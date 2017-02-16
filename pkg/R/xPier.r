@@ -43,7 +43,7 @@
 #' pNode <- xPier(seeds=data, g=g, restart=0.75)
 #' }
 
-xPier <- function(seeds, g, seeds.inclusive=TRUE, normalise=c("laplacian","row","column","none"), restart=0.75, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE)
+xPier <- function(seeds, g, seeds.inclusive=TRUE, normalise=c("laplacian","row","column","none"), restart=0.7, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one

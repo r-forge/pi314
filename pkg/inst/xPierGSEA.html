@@ -142,13 +142,18 @@ info (i.e. the named vector with names for gene symbols and elements
 for priority rank). Always, gene sets are identified by &quot;setID&quot;
 </p>
 </li>
-<li><p><code>leading</code>: a list of gene sets, each storing full info on
-gene set enrichment analysis result (i.e. a data frame of nGene x 5,
-where nGene is the number of genes, and the 5 columns are &quot;GeneID&quot;,
-&quot;Rank&quot; for priority rank, &quot;Score&quot; for priority score, &quot;RES&quot; for running
+<li><p><code>full</code>: a list of gene sets, each storing full info on gene
+set enrichment analysis result (i.e. a data frame of nGene x 5, where
+nGene is the number of genes, and the 5 columns are &quot;GeneID&quot;, &quot;Rank&quot;
+for priority rank, &quot;Score&quot; for priority score, &quot;RES&quot; for running
 enrichment score, and &quot;Hits&quot; for gene set hits info with 1 for gene
 hit, 2 for leading gene hit, 3 for the point defining leading genes, 0
 for no hit). Always, gene sets are identified by &quot;setID&quot;
+</p>
+</li>
+<li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell
+for the leading genes observed in an individaul term, and off-diagnal
+cell for the overlapped leading genes shared between two terms
 </p>
 </li></ul>
 

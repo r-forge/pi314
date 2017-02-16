@@ -278,12 +278,12 @@ cGene-SNP pair info per context}
 \description{
 \code{xPierSNPs} is supposed to prioritise genes given a list of seed
 SNPs together with the significance level. To prioritise genes, it
-first defines and scores seed genes: nearby genes and eQTL genes. With
-seed genes and their scores, it then uses Random Walk with Restart
-(RWR) to calculate the affinity score of all nodes in the input graph
-to the seed genes. The priority score is the affinity score. Parallel
-computing is also supported for Linux-like or Windows operating
-systems. It returns an object of class "pNode".
+first defines and scores seed genes: nearby genes, eQTL genes and Hi-C
+genes. With seed genes and their scores, it then uses Random Walk with
+Restart (RWR) to calculate the affinity score of all nodes in the input
+graph to the seed genes. The priority score is the affinity score.
+Parallel computing is also supported for Linux-like or Windows
+operating systems. It returns an object of class "pNode".
 }
 \note{
 The prioritisation procedure (from SNPs to target genes) consists of

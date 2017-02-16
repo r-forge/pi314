@@ -19,7 +19,8 @@ this functionality as the discovery mode of the prioritisation.
 <h3>Usage</h3>
 
 <pre>
-xPierMatrix(list_pNode, displayBy = c("score", "rank", "pvalue"),
+xPierMatrix(list_pNode, displayBy = c("score", "rank", "weight",
+"pvalue"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 "logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
 </pre>
@@ -30,13 +31,13 @@ combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 <table summary="R argblock">
 <tr valign="top"><td><code>list_pNode</code></td>
 <td>
-<p>a list of &quot;pNode&quot; objects</p>
+<p>a list of &quot;pNode&quot; objects or a &quot;pNode&quot; object</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
 <p>which priority will be extracted. It can be &quot;score&quot;
-for priority score (by default), &quot;rank&quot; for priority rank, &quot;pvalue&quot; for
-priority p-value</p>
+for priority score (by default), &quot;rank&quot; for priority rank, &quot;weight&quot; for
+seed weight, &quot;pvalue&quot; for priority p-value</p>
 </td></tr>
 <tr valign="top"><td><code>combineBy</code></td>
 <td>

@@ -4,16 +4,17 @@
 \alias{xPierMatrix}
 \title{Function to extract priority matrix from a list of pNode objects}
 \usage{
-xPierMatrix(list_pNode, displayBy = c("score", "rank", "pvalue"),
+xPierMatrix(list_pNode, displayBy = c("score", "rank", "weight",
+"pvalue"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 "logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
 }
 \arguments{
-\item{list_pNode}{a list of "pNode" objects}
+\item{list_pNode}{a list of "pNode" objects or a "pNode" object}
 
 \item{displayBy}{which priority will be extracted. It can be "score"
-for priority score (by default), "rank" for priority rank, "pvalue" for
-priority p-value}
+for priority score (by default), "rank" for priority rank, "weight" for
+seed weight, "pvalue" for priority p-value}
 
 \item{combineBy}{how to resolve nodes/targets from a list of "pNode"
 objects. It can be "intersect" for intersecting nodes (by default),

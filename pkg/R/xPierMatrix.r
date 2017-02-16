@@ -2,8 +2,8 @@
 #'
 #' \code{xPierMatrix} is supposed to extract priority matrix from a list of pNode objects. Also supported is the aggregation of priority matrix (similar to the meta-analysis) generating the priority results; we view this functionality as the discovery mode of the prioritisation.
 #'
-#' @param list_pNode a list of "pNode" objects
-#' @param displayBy which priority will be extracted. It can be "score" for priority score (by default), "rank" for priority rank, "pvalue" for priority p-value
+#' @param list_pNode a list of "pNode" objects or a "pNode" object
+#' @param displayBy which priority will be extracted. It can be "score" for priority score (by default), "rank" for priority rank, "weight" for seed weight, "pvalue" for priority p-value
 #' @param combineBy how to resolve nodes/targets from a list of "pNode" objects. It can be "intersect" for intersecting nodes (by default), "union" for unionising nodes
 #' @param aggregateBy the aggregate method used. It can be either "none" for no aggregation, or "orderStatistic" for the method based on the order statistics of p-values, "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'fishers' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
@@ -29,7 +29,7 @@
 #' df_score <- xPierMatrix(ls_pNode)
 #' }
 
-xPierMatrix <- function(list_pNode, displayBy=c("score","rank","pvalue"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE)
+xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE)
 {
 
     displayBy <- match.arg(displayBy)
@@ -45,7 +45,7 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","pvalue"), combin
 			return(NULL)
 		}
 	}else{
-		stop("The function must apply to an 'list' object or an 'pNode' object.\n")
+		stop("The function must apply to 'list' of 'pNode' objects or a 'pNode' object.\n")
 	}
 	
 	## get nodes involved
@@ -72,13 +72,15 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","pvalue"), combin
 			res <- p[ind, c("priority")]
 		}else if(displayBy=='rank'){
 			res <- p[ind, c("rank")]
+		}else if(displayBy=='weight'){
+			res <- p[ind, c("weight")]
 		}
 	})
 	df_predictor <- do.call(cbind, ls_priority)
 	rownames(df_predictor) <- nodes
 	
 	## replace NA with worst value
-	if(displayBy=='score' | displayBy=='pvalue'){
+	if(displayBy=='score' | displayBy=='weight' | displayBy=='pvalue'){
 		df_predictor[is.na(df_predictor)] <- 0
 	}else if(displayBy=='rank'){
 		df_predictor[is.na(df_predictor)] <- length(nodes)

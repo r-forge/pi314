@@ -17,7 +17,7 @@
 #' }
 #' @note none
 #' @export
-#' @seealso \code{\link{xPierSNPs}}
+#' @seealso \code{\link{xPierSNPsAdv}}
 #' @include xPierMatrix.r
 #' @examples
 #' \dontrun{
@@ -63,6 +63,7 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 	list_names <- names(list_pNode)
 	if(is.null(list_names)){
 		list_names <- paste('Predictor', 1:length(list_pNode), sep=' ')
+		names(list_pNode) <- list_names
 	}
 	ls_priority <- lapply(list_pNode, function(pNode){
 		p <- pNode$priority

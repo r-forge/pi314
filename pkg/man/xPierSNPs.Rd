@@ -265,7 +265,7 @@ and the 4 columns are "SNP" (dbSNP), "Score" (the SNP score), "Pval"
 \item{\code{Gene2SNP}: a data frame of nPair X 3 containing Gene-SNP
 pair info, where nPair is the number of Gene-SNP pairs, and the 3
 columns are "Gene" (seed genes), "SNP" (dbSNP), "Score" (an SNP's
-genetic influential score on a seed gene), "Pval" (the SNP p-value)}
+genetic influential score on a seed gene)}
 \item{\code{nGenes}: if not NULL, it is a data frame containing
 nGene-SNP pair info}
 \item{\code{eGenes}: if not NULL, it is a data frame containing

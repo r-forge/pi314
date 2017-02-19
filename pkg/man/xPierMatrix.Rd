@@ -76,5 +76,5 @@ df_score <- xPierMatrix(ls_pNode)
 }
 }
 \seealso{
-\code{\link{xPierSNPs}}
+\code{\link{xPierSNPsAdv}}
 }

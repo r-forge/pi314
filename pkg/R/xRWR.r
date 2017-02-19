@@ -21,6 +21,8 @@
 #' @importFrom Matrix Diagonal rowSums colSums Matrix
 #' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame
 #' @importFrom GenomeInfoDb seqlevels
+#' @importFrom Gviz IdeogramTrack GenomeAxisTrack AnnotationTrack DataTrack plotTracks
+#' @importFrom lattice xyplot
 #' @import igraph
 #' @import dnet
 #' @import XGR

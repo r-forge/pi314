@@ -29,6 +29,7 @@
 #' @import ggplot2
 #' @import graphics
 #' @importFrom randomForest randomForest tuneRF importance
+#' @importFrom glmnet cv.glmnet predict.glmnet
 #' @import stats
 #' @importFrom ggbio autoplot
 #' @importFrom ggrepel geom_text_repel geom_label_repel

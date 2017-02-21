@@ -44,7 +44,7 @@ provides a compromise between these two. Notably, the aggregate methods
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display}
 
-\item{...}{additional graphic parameters. Please refer to
+\item{...}{additional parameters. Please refer to
 'randomForest::randomForest' for the complete list.}
 }
 \value{

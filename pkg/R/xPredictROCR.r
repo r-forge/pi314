@@ -101,7 +101,10 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 	}
 	
 	## ROCR
-	pred_obj <- ROCR::prediction(predictions=pred_label$pred, labels=pred_label$label)
+	if(length(suppressWarnings(tryCatch(pred_obj <- ROCR::prediction(predictions=pred_label$pred, labels=pred_label$label), error=function(e) e, warning=function(w) w)))==2){
+		return(NULL)
+	}
+	#pred_obj <- ROCR::prediction(predictions=pred_label$pred, labels=pred_label$label)
 	
 	## auc: Area under the ROC curve
 	res <- ROCR::performance(pred_obj, measure="auc")

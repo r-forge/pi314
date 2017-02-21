@@ -15,8 +15,11 @@ c(NA,
 "JKscience_TS2B_CD14", "JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24",
 "JKscience_TS2B_IFN", "JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis",
 "JKng_bcell_trans", "JKng_mono", "JKng_mono_cis", "JKng_mono_trans",
-"JKnc_neutro", "JKnc_neutro_cis", "JKnc_neutro_trans", "JK_nk",
-"GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
+"JKpg_CD4", "JKpg_CD4_cis", "JKpg_CD4_trans", "JKpg_CD8",
+"JKpg_CD8_cis",
+"JKpg_CD8_trans", "JKnc_neutro", "JKnc_neutro_cis",
+"JKnc_neutro_trans",
+"JK_nk", "GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
 "GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
 "GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
@@ -379,6 +382,18 @@ Skeletal'.}
 \item{\code{GTEx_V4_Stomach}: cis-eQTLs in tissue 'Stomach'.}
 \item{\code{GTEx_V4_Thyroid}: cis-eQTLs in tissue 'Thyroid'.}
 \item{\code{GTEx_V4_Whole_Blood}: cis-eQTLs in tissue 'Whole Blood'.}
+}
+7. eQTLs in CD4 T cells. Sourced from PLoS Genetics 2017
+\itemize{
+\item{\code{JKpg_CD4}: cis- and trans-eQTLs.}
+\item{\code{JKpg_CD4_cis}: cis-eQTLs only.}
+\item{\code{JKpg_CD4_trans}: trans-eQTLs only.}
+}
+8. eQTLs in CD8 T cells. Sourced from PLoS Genetics 2017
+\itemize{
+\item{\code{JKpg_CD8}: cis- and trans-eQTLs.}
+\item{\code{JKpg_CD8_cis}: cis-eQTLs only.}
+\item{\code{JKpg_CD8_trans}: trans-eQTLs only.}
 }
 Pre-built HiC datasets are described below according to the data
 sources.\cr

@@ -68,6 +68,18 @@
 #'  \item{\code{GTEx_V4_Thyroid}: cis-eQTLs in tissue 'Thyroid'.}
 #'  \item{\code{GTEx_V4_Whole_Blood}: cis-eQTLs in tissue 'Whole Blood'.}
 #' }
+#' 7. eQTLs in CD4 T cells. Sourced from PLoS Genetics 2017
+#' \itemize{
+#'  \item{\code{JKpg_CD4}: cis- and trans-eQTLs.}
+#'  \item{\code{JKpg_CD4_cis}: cis-eQTLs only.}
+#'  \item{\code{JKpg_CD4_trans}: trans-eQTLs only.}
+#' }
+#' 8. eQTLs in CD8 T cells. Sourced from PLoS Genetics 2017
+#' \itemize{
+#'  \item{\code{JKpg_CD8}: cis- and trans-eQTLs.}
+#'  \item{\code{JKpg_CD8_cis}: cis-eQTLs only.}
+#'  \item{\code{JKpg_CD8_trans}: trans-eQTLs only.}
+#' }
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
 #' @include xSNPeqtl.r
@@ -91,14 +103,14 @@
 #' df_SGS <- xSNPeqtl(data=AS[,1], include.eQTL="JKscience_TS2A", RData.location=RData.location)
 #' }
 
-xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN"), eQTL.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN"), eQTL.customised=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ######################################################
     # Link to targets based on eQTL
     ######################################################
     
-    default.include.eQTL <- c("JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN")
+    default.include.eQTL <- c("JKscience_TS2A","JKscience_TS2A_CD14","JKscience_TS2A_LPS2","JKscience_TS2A_LPS24","JKscience_TS2A_IFN","JKscience_TS2B","JKscience_TS2B_CD14","JKscience_TS2B_LPS2","JKscience_TS2B_LPS24","JKscience_TS2B_IFN","JKscience_TS3A","JKng_bcell","JKng_bcell_cis","JKng_bcell_trans","JKng_mono","JKng_mono_cis","JKng_mono_trans","JKpg_CD4","JKpg_CD4_cis","JKpg_CD4_trans","JKpg_CD8","JKpg_CD8_cis","JKpg_CD8_trans","JKnc_neutro","JKnc_neutro_cis","JKnc_neutro_trans","JK_nk", "GTEx_V4_Adipose_Subcutaneous","GTEx_V4_Artery_Aorta","GTEx_V4_Artery_Tibial","GTEx_V4_Esophagus_Mucosa","GTEx_V4_Esophagus_Muscularis","GTEx_V4_Heart_Left_Ventricle","GTEx_V4_Lung","GTEx_V4_Muscle_Skeletal","GTEx_V4_Nerve_Tibial","GTEx_V4_Skin_Sun_Exposed_Lower_leg","GTEx_V4_Stomach","GTEx_V4_Thyroid","GTEx_V4_Whole_Blood","eQTLdb_NK","eQTLdb_CD14","eQTLdb_LPS2","eQTLdb_LPS24","eQTLdb_IFN")
 	ind <- match(default.include.eQTL, include.eQTL)
 	include.eQTL <- default.include.eQTL[!is.na(ind)]
     
@@ -207,19 +219,36 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_TS2A","JKscience_TS
 				}
 				df <- cbind(df, Context=rep(x,nrow(df)))
 				
-			}else if(x=='JKng_mono'){
-				# monocytes
-				res_ls <- xRDataLoader(RData.customised='JKng_mono', RData.location=RData.location, verbose=verbose)
+			}else if(x=='JKpg_CD4'){
+				# CD4
+				res_ls <- xRDataLoader(RData.customised='JKpg_CD4', RData.location=RData.location, verbose=verbose)
 				## cis
-				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,5], stringsAsFactors=FALSE)
+				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
 				## trans
-				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], Sig=res_ls$trans[,5], stringsAsFactors=FALSE)
-				if(x=='JKng_mono'){
+				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], Sig=res_ls$trans[,6], stringsAsFactors=FALSE)
+				if(x=='JKpg_CD4'){
 					## both
 					df <- rbind(df_cis, df_trans)
-				}else if(x=='JKng_mono_cis'){
+				}else if(x=='JKpg_CD4_cis'){
 					df <- df_cis
-				}else if(x=='JKng_mono_trans'){
+				}else if(x=='JKpg_CD4_trans'){
+					df <- df_trans
+				}
+				df <- cbind(df, Context=rep(x,nrow(df)))
+				
+			}else if(x=='JKpg_CD8'){
+				# CD8
+				res_ls <- xRDataLoader(RData.customised='JKpg_CD8', RData.location=RData.location, verbose=verbose)
+				## cis
+				df_cis <- data.frame(SNP=res_ls$cis[,1], Gene=res_ls$cis[,2], Sig=res_ls$cis[,6], stringsAsFactors=FALSE)
+				## trans
+				df_trans <- data.frame(SNP=res_ls$trans[,1], Gene=res_ls$trans[,2], Sig=res_ls$trans[,6], stringsAsFactors=FALSE)
+				if(x=='JKpg_CD8'){
+					## both
+					df <- rbind(df_cis, df_trans)
+				}else if(x=='JKpg_CD8_cis'){
+					df <- df_cis
+				}else if(x=='JKpg_CD8_trans'){
 					df <- df_trans
 				}
 				df <- cbind(df, Context=rep(x,nrow(df)))

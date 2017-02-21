@@ -10,7 +10,7 @@
 #' @param ntree an integer specifying the number of trees to grow. By default, it sets to 2000
 #' @param fold.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
-#' @param ... additional graphic parameters. Please refer to 'randomForest::randomForest' for the complete list.
+#' @param ... additional parameters. Please refer to 'randomForest::randomForest' for the complete list.
 #' @return 
 #' an object of class "pTarget", a list with following components:
 #' \itemize{
@@ -132,7 +132,8 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 				}
 			}
 			set.seed(i)
-			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+			#suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry))
 		})
 		
 	}else{
@@ -156,7 +157,8 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 			}
 
 			set.seed(i)
-			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+			#suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
+			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry))
 		})
 	
 	}
@@ -297,7 +299,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
     if(verbose){
         now <- Sys.time()
         message(sprintf("6. Do prediction for fullset (%s).", as.character(now)), appendLF=TRUE)
-        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds, aggregated via '%s' (%s) ...", ncol(df_predictor_class), nfold, fold.aggregateBy, as.character(now)), appendLF=TRUE)
+        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds, aggregated via '%s' (%s) ...", nrow(df_predictor_class), nfold, fold.aggregateBy, as.character(now)), appendLF=TRUE)
     }
 	
 	ls_full <- lapply(1:length(ls_model), function(i){

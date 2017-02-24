@@ -5,7 +5,8 @@
 #' @param df_predictor a data frame containing genes (in rows) and predictors (in columns), with their predictive scores inside it. This data frame must has gene symbols as row names
 #' @param GSP a vector containing Gold Standard Positive (GSP)
 #' @param GSN a vector containing Gold Standard Negative (GSN)
-#' @param nfold an integer specifying the number of folds for cross validataion
+#' @param nfold an integer specifying the number of folds for cross validataion. Per fold creates balanced splits of the data preserving the overall distribution for each class (GSP and GSN), therefore generating balanced cross-vallidation train sets and testing sets. By default, it is 3 meaning 3-fold cross validation
+#' @param nrepeat an integer specifying the number of repeats for cross validataion. By default, it is 10 indicating the cross-validation repeated 10 times
 #' @param mtry an integer specifying the number of predictors randomly sampled as candidates at each split. If NULL, it will be tuned by `randomForest::tuneRF`, with starting value as sqrt(p) where p is the number of predictors. The minimum value is 3
 #' @param ntree an integer specifying the number of trees to grow. By default, it sets to 2000
 #' @param fold.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
@@ -39,7 +40,7 @@
 #' pTarget <- xMLrandomforest(df_prediction, GSP, GSN)
 #' }
 
-xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=2000, fold.aggregateBy=c("Ztransform","logistic","fishers","orderStatistic"), verbose=TRUE, ...)
+xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, mtry=NULL, ntree=2000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, ...)
 {
 	
     startT <- Sys.time()
@@ -74,34 +75,50 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	#####################################
 	
 	nfold <- as.integer(nfold)
+	nrepeat <- as.integer(nrepeat)
     if(verbose){
         now <- Sys.time()
         if(nfold==1){
 			message(sprintf("2. GS matrix of %d rows/genes X %d columns (predictors+class) are used as train set (%s) ...", nrow(df_predictor_class), ncol(df_predictor_class), as.character(now)), appendLF=TRUE)
         }else{
-        	message(sprintf("2. GS matrix of %d rows/genes X %d columns (predictors+class) are split (by rows/genes) into %d non-redundant sets: each fold '%d/%d' are used as train set and the remaining '1/%d' as test set (%s) ...", nrow(df_predictor_class), ncol(df_predictor_class), nfold, nfold-1, nfold, nfold, as.character(now)), appendLF=TRUE)
+        	message(sprintf("2. GS matrix of %d rows/genes X %d columns (predictors+class) are split (by rows/genes) into %d non-redundant sets: each fold '%d/%d' are used as train set and the remaining '1/%d' as test set. These spits are repeated over %d times (%s) ...", nrow(df_predictor_class), ncol(df_predictor_class), nfold, nfold-1, nfold, nfold, nrepeat, as.character(now)), appendLF=TRUE)
         }
     }
     
     ## create non-redundant sets
     index_sets <- list()
-    if(nfold==1){
-    	index_sets[[nfold]] <- 1:nrow(df_predictor_class)
-    }else if(nfold >= 2){
-		index <- 1:nrow(df_predictor_class)
-		#nsample <- base::trunc(length(index)/nfold)
-		nsample <- base::round(length(index)/nfold)
-		index_rest <- index
-		for(i in 1:(nfold-1)){
-			set.seed(i)
-			index_sets[[i]] <- base::sample(index_rest, nsample)
-			index_rest <- setdiff(index_rest, index_sets[[i]])
+    if(FALSE){
+		if(nfold==1){
+			index_sets[[nfold]] <- 1:nrow(df_predictor_class)
+		}else if(nfold >= 2){
+			index <- 1:nrow(df_predictor_class)
+			#nsample <- base::trunc(length(index)/nfold)
+			nsample <- base::round(length(index)/nfold)
+			index_rest <- index
+			for(i in 1:(nfold-1)){
+				set.seed(i)
+				index_sets[[i]] <- base::sample(index_rest, nsample)
+				index_rest <- setdiff(index_rest, index_sets[[i]])
+			}
+			## the last split
+			index_sets[[nfold]] <- index_rest
+			#sapply(index_sets, length)
+			#base::Reduce(union, index_sets)
 		}
-		## the last split
-		index_sets[[nfold]] <- index_rest
-		#sapply(index_sets, length)
-		#base::Reduce(union, index_sets)
-    }
+	}else{
+		# create balanced splits of the data
+		# preserve the overall class distribution
+		# generate balanced cross–validation groupings from a set of data
+		index_sets <- lapply(1:nrepeat, function(i){
+			set.seed(i)
+			res_ls <- caret::createFolds(y=df_predictor_class$class, k=nfold, list=TRUE, returnTrain=TRUE)
+			#length(base::Reduce(union, index_sets))
+			names(res_ls) <- paste0("F",1:nfold)
+			names(res_ls) <- paste0("R",i,names(res_ls))
+			res_ls
+		})
+		index_sets <- unlist(index_sets, recursive=FALSE)
+	}
 	
 	#####################################
 	
@@ -114,12 +131,12 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		}
     }
 	
-	if(nfold==1){
+	if(nfold==1 & nrepeat==1){
 		ls_model <- lapply(1:length(index_sets), function(i){
 			trainset <- df_predictor_class[index_sets[[i]],]
 			
 			if(verbose){
-				message(sprintf("\tfold %d: %d GSP + %d GSN", i, table(trainset$class)[2], table(trainset$class)[1]), appendLF=TRUE)
+				message(sprintf("\tFold %d: %d GSP + %d GSN", i, table(trainset$class)[2], table(trainset$class)[1]), appendLF=TRUE)
 			}
 			
 			if(is.null(mtry)){
@@ -143,7 +160,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 			trainset <- df_predictor_class[-testindex,]
 		
 			if(verbose){
-				message(sprintf("\tfold %d: %d GSP + %d GSN", i, table(trainset$class)[2], table(trainset$class)[1]), appendLF=TRUE)
+				message(sprintf("\tRepeatFold %d: %d GSP + %d GSN", i, table(trainset$class)[2], table(trainset$class)[1]), appendLF=TRUE)
 			}
 		
 			if(is.null(mtry)){
@@ -160,6 +177,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 			#suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry, ...))
 			suppressMessages(rf.model <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry))
 		})
+		names(ls_model) <- names(index_sets)
 	
 	}
 	
@@ -167,7 +185,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	
     if(verbose){
         now <- Sys.time()
-        message(sprintf("4. Extract the predictor/feature importance matrix of %d rows/predictors X %d columns/folds (%s).", ncol(df_predictor_class)-1, nfold, as.character(now)), appendLF=TRUE)
+        message(sprintf("4. Extract the predictor/feature importance matrix of %d rows/predictors X %d columns/repeats*folds (%s).", ncol(df_predictor_class)-1, nfold*nrepeat, as.character(now)), appendLF=TRUE)
     }
 	
 	######################
@@ -176,12 +194,12 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	ls_res <- lapply(1:length(ls_model), function(i){
 		rf.model <- ls_model[[i]]
 		rf.model.importance <- randomForest::importance(rf.model)[,3]
-		df <- data.frame(predictor=names(rf.model.importance), model=paste0('fold_',rep(i,length(rf.model.importance))), importance=rf.model.importance, stringsAsFactors=FALSE)
+		df <- data.frame(predictor=names(rf.model.importance), model=rep(names(ls_model)[i],length(rf.model.importance)), importance=rf.model.importance, stringsAsFactors=FALSE)
 	})
 	df_res <- do.call(rbind, ls_res)
 	df_res <- as.matrix(xSparseMatrix(df_res, verbose=FALSE))
 	ind <- match(colnames(df_predictor), rownames(df_res))
-	if(nfold==1){
+	if(nfold==1 & nrepeat==1){
 		df_res <- as.matrix(df_res[ind,], ncol=nfold)
 		colnames(df_res) <- 'fold_1'
 	}else{
@@ -209,14 +227,14 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	set.seed(1)
 	suppressMessages(rf.model.overall <- randomForest::randomForest(class ~ ., data=trainset, importance=TRUE, ntree=ntree, mtry=mtry))
 	rf.model.overall.importance <- randomForest::importance(rf.model.overall, type=NULL, class=NULL, scale=TRUE)[,3:4]
-	#randomForest::varImpPlot(rf.model.overall.importance)
+	#randomForest::varImpPlot(rf.model.overall)
 	
 	#####################################
 
     if(verbose){
         now <- Sys.time()
         message(sprintf("5. Performance evaluation using test sets (%s).", as.character(now)), appendLF=TRUE)
-        message(sprintf("Extract the ROC matrix of %d rows (Supervised + predictors) X %d columns/folds (%s).", ncol(df_predictor_class), nfold, as.character(now)), appendLF=TRUE)
+        message(sprintf("Extract the ROC matrix of %d rows (Supervised + predictors) X %d columns/repeats*folds (%s).", ncol(df_predictor_class), nfold*nrepeat, as.character(now)), appendLF=TRUE)
     }
 	
 	######################
@@ -239,6 +257,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		names(ls_predictors) <- colnames(df_pred)
 		return(ls_predictors)
 	})
+	names(lsls_predictors) <- names(ls_model)
 	ls_res <- lapply(1:length(lsls_predictors), function(i){
 		ls_predictors <- lsls_predictors[[i]]
 		# do evaluation
@@ -252,7 +271,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 			df <- NULL
 		}else{
 			df <- unique(bp$data[,c('Method','auroc','fmax')])
-			df <- data.frame(predictor=df$Method, model=paste0('fold_',rep(i,nrow(df))), ROC=df$auroc, Fmax=df$fmax, stringsAsFactors=FALSE)
+			df <- data.frame(predictor=df$Method, model=rep(names(ls_model)[i],nrow(df)), ROC=df$auroc, Fmax=df$fmax, stringsAsFactors=FALSE)
 		}
 		
 		return(df)
@@ -262,7 +281,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		## df_ROC
 		df_res <- as.matrix(xSparseMatrix(df_res[,-4], verbose=FALSE))
 		ind <- match(c("Supervised_randomforest",colnames(df_predictor)), rownames(df_res))
-		if(nfold==1){
+		if(nfold==1 & nrepeat==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'fold_1'
 		}else{
@@ -278,7 +297,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		df_res <- do.call(rbind, ls_res)
 		df_res <- as.matrix(xSparseMatrix(df_res[,-3], verbose=FALSE))
 		ind <- match(c("Supervised_randomforest",colnames(df_predictor)), rownames(df_res))
-		if(nfold==1){
+		if(nfold==1 & nrepeat==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'fold_1'
 		}else{
@@ -299,7 +318,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
     if(verbose){
         now <- Sys.time()
         message(sprintf("6. Do prediction for fullset (%s).", as.character(now)), appendLF=TRUE)
-        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/folds, aggregated via '%s' (%s) ...", nrow(df_predictor_class), nfold, fold.aggregateBy, as.character(now)), appendLF=TRUE)
+        message(sprintf("Extract the full prediction matrix of %d rows/genes X %d columns/repeats*folds, aggregated via '%s' (%s) ...", nrow(df_predictor_class), nfold*nrepeat, fold.aggregateBy, as.character(now)), appendLF=TRUE)
     }
 	
 	ls_full <- lapply(1:length(ls_model), function(i){
@@ -307,7 +326,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		## prediction for fullset: ?predict.randomForest
 		vec_predict_full <- predict(rf.model, newdata=df_predictor, type='prob')[,2]
 		# output
-		df <- data.frame(genes=names(vec_predict_full), model=paste0('fold_',rep(i,length(vec_predict_full))), prob=vec_predict_full, stringsAsFactors=FALSE)
+		df <- data.frame(genes=names(vec_predict_full), model=rep(names(ls_model)[i],length(vec_predict_full)), prob=vec_predict_full, stringsAsFactors=FALSE)
 	})
 	df_full <- do.call(rbind, ls_full)
 	df_full <- as.matrix(xSparseMatrix(df_full, verbose=FALSE))
@@ -352,7 +371,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 	df_priority <- data.frame(GS=output_gs, name=names(df_ap), rank=df_rank, pvalue=df_ap, fdr=df_adjp, priority=priority, stringsAsFactors=FALSE)
 	### df_predictor_gs df_full_gs
 	ind <- match(names(df_ap), rownames(df_predictor))
-	if(nfold==1){
+	if(nfold==1 & nrepeat==1){
 		output_df_full <- as.matrix(df_full[ind,], ncol=nfold)
 		colnames(output_df_full) <- 'fold_1'
 	}else{
@@ -368,7 +387,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, mtry=NULL, ntree=20
 		colnames(x) <- c("name","prob")
 		return(x)
 	})
-	names(pred2fold) <- paste0('fold_',1:nfold)
+	names(pred2fold) <- names(lsls_predictors)
     ####################################################################################
 
 	######################

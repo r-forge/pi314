@@ -13,7 +13,8 @@ xSNPeqtl(data = NULL, include.eQTL = c(NA, "JKscience_TS2A",
 "JKpg_CD4_cis",
 "JKpg_CD4_trans", "JKpg_CD8", "JKpg_CD8_cis", "JKpg_CD8_trans",
 "JKnc_neutro",
-"JKnc_neutro_cis", "JKnc_neutro_trans", "JK_nk",
+"JKnc_neutro_cis", "JKnc_neutro_trans", "WESTRAng_blood",
+"WESTRAng_blood_cis", "WESTRAng_blood_trans", "JK_nk",
 "GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
 "GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
@@ -148,6 +149,12 @@ Skeletal'.}
 \item{\code{JKpg_CD8}: cis- and trans-eQTLs.}
 \item{\code{JKpg_CD8_cis}: cis-eQTLs only.}
 \item{\code{JKpg_CD8_trans}: trans-eQTLs only.}
+}
+9. eQTLs in blood. Sourced from Nature Genetics 2013, 45(10):1238-1243
+\itemize{
+\item{\code{WESTRAng_blood}: cis- and trans-eQTLs.}
+\item{\code{WESTRAng_blood_cis}: cis-eQTLs only.}
+\item{\code{WESTRAng_blood_trans}: trans-eQTLs only.}
 }
 }
 \examples{

@@ -85,7 +85,7 @@ xPierAnno <- function(data, list_pNode, network=c("STRING_highest","STRING_high"
 	}
     
     ## get weight for seeds
-    df_predictor <- xPierMatrix(list_pNode, displayBy="weight", combineBy='union', aggregateBy="none", verbose=verbose)
+    df_predictor <- suppressMessages(xPierMatrix(list_pNode, displayBy="weight", combineBy='union', aggregateBy="none", verbose=verbose))
     ind <- which(apply(df_predictor,1,sum)>0)
     weight_seeds <- rownames(df_predictor)[ind]
 

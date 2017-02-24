@@ -21,9 +21,9 @@ it. It returns an object of class 'pTarget'.
 <h3>Usage</h3>
 
 <pre>
-xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, mtry = NULL,
-ntree = 2000, fold.aggregateBy = c("Ztransform", "logistic", "fishers",
-"orderStatistic"), verbose = TRUE, ...)
+xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
+mtry = NULL, ntree = 2000, fold.aggregateBy = c("logistic",
+"Ztransform", "fishers", "orderStatistic"), verbose = TRUE, ...)
 </pre>
 
 
@@ -47,7 +47,16 @@ data frame must has gene symbols as row names</p>
 <tr valign="top"><td><code>nfold</code></td>
 <td>
 <p>an integer specifying the number of folds for cross
-validataion</p>
+validataion. Per fold creates balanced splits of the data preserving
+the overall distribution for each class (GSP and GSN), therefore
+generating balanced cross-vallidation train sets and testing sets. By
+default, it is 3 meaning 3-fold cross validation</p>
+</td></tr>
+<tr valign="top"><td><code>nrepeat</code></td>
+<td>
+<p>an integer specifying the number of repeats for cross
+validataion. By default, it is 10 indicating the cross-validation
+repeated 10 times</p>
 </td></tr>
 <tr valign="top"><td><code>mtry</code></td>
 <td>

@@ -51,7 +51,11 @@ xMLglmnet <- function(df_predictor, GSP, GSN, family=c("binomial","gaussian"), t
 	
     family <- match.arg(family)
     type.measure <- match.arg(type.measure)
-
+	
+	if(family=="gaussian"){
+		type.measure <- "mse"
+	}
+	
 	## pre-process GSP and GSN
 	gsp <- unique(GSP)
 	gsn <- unique(GSN)
@@ -94,20 +98,31 @@ xMLglmnet <- function(df_predictor, GSP, GSN, family=c("binomial","gaussian"), t
 		}
 		
 		set.seed(alpha*100)
-		cvfit <- glmnet::cv.glmnet(xTrain, yTrain, nfold=nfold, family=family, type.measure=type.measure, alpha=alpha/100, parallel=TRUE, nlambda=100, standardize=standardize, lower.limits=lower.limits, ...)
+		#cvfit <- glmnet::cv.glmnet(xTrain, yTrain, nfold=nfold, family=family, type.measure=type.measure, alpha=alpha/100, parallel=FALSE, nlambda=100, standardize=standardize, lower.limits=lower.limits, ...)
+		cvfit <- glmnet::cv.glmnet(xTrain, yTrain, nfold=nfold, family=family, type.measure=type.measure, alpha=alpha/100, parallel=FALSE, nlambda=100, standardize=standardize, lower.limits=lower.limits)
 		#coef(cvfit, s=c(cvfit$lambda.min, cvfit$lambda.1se))
 		
 		## non-zero predictors
 		nonzero.min <- predict(cvfit, newx=xTrain, s="lambda.min", type="nonzero")
 		nonzero.1se <- predict(cvfit, newx=xTrain, s="lambda.1se", type="nonzero")
-		vec_nonzero <- c(nrow(nonzero.min), nrow(nonzero.1se))
+		if(is.null(nrow(nonzero.min))){
+			n.nonzero.min <- 0
+		}else{
+			n.nonzero.min <- nrow(nonzero.min)
+		}
+		if(is.null(nrow(nonzero.1se))){
+			n.nonzero.1se <- 0
+		}else{
+			n.nonzero.1se <- nrow(nonzero.1se)
+		}
+		vec_nonzero <- c(n.nonzero.min, n.nonzero.1se)
 		names(vec_nonzero) <- c("min", "1se")
 		
 		## performance
 		ind <- which(cvfit$lambda==cvfit$lambda.min)
 		cvm.min <- cvfit$cvm[ind]
 		ind <- which(cvfit$lambda==cvfit$lambda.1se)
-		cvm.1se <- cvfit$cvm[ind]		
+		cvm.1se <- cvfit$cvm[ind]
 		vec_cvm <- c(cvm.min, cvm.1se)
 		names(vec_cvm) <- c("min", "1se")
 		
@@ -121,7 +136,11 @@ xMLglmnet <- function(df_predictor, GSP, GSN, family=c("binomial","gaussian"), t
 	mat_cvm <- do.call(rbind, lapply(ls_cvfit, function(x) x$vec_cvm))
 	
 	# ?predict.glmnet
-	vec_ind <- which(mat_cvm==max(mat_cvm), arr.ind=TRUE)[1,]
+	if(type.measure=="auc"){
+		vec_ind <- which(mat_cvm==max(mat_cvm), arr.ind=TRUE)[1,]
+	}else{
+		vec_ind <- which(mat_cvm==min(mat_cvm), arr.ind=TRUE)[1,]
+	}
 	cvfit_best <- ls_cvfit[[vec_ind[1]]]
     if(verbose){
         message(sprintf("\tBest model: alpha=%s, lambda.%s, %d nonzero predictors.", rownames(mat_cvm)[vec_ind[1]], colnames(mat_cvm)[vec_ind[2]], mat_nonzero[vec_ind[1],vec_ind[2]]), appendLF=TRUE)
@@ -143,7 +162,7 @@ xMLglmnet <- function(df_predictor, GSP, GSN, family=c("binomial","gaussian"), t
 	#####################################
     if(verbose){
         now <- Sys.time()
-        message(sprintf("3. Do prediction for fullset (%s).", as.character(now)), appendLF=TRUE)
+        message(sprintf("3. Do prediction for full set (%s).", as.character(now)), appendLF=TRUE)
     }
 	
 	df_full <- predict(cvfit_best, newx=df_predictor, s=s, type="response")

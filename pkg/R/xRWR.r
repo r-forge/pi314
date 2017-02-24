@@ -30,6 +30,7 @@
 #' @import graphics
 #' @importFrom randomForest randomForest tuneRF importance
 #' @importFrom glmnet cv.glmnet predict.glmnet
+#' @importFrom caret createFolds
 #' @import stats
 #' @importFrom ggbio autoplot
 #' @importFrom ggrepel geom_text_repel geom_label_repel

@@ -4,9 +4,9 @@
 \alias{xMLrandomforest}
 \title{Function to integrate predictor matrix in a supervised manner via machine learning algorithm random forest.}
 \usage{
-xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, mtry = NULL,
-ntree = 2000, fold.aggregateBy = c("Ztransform", "logistic", "fishers",
-"orderStatistic"), verbose = TRUE, ...)
+xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
+mtry = NULL, ntree = 2000, fold.aggregateBy = c("logistic",
+"Ztransform", "fishers", "orderStatistic"), verbose = TRUE, ...)
 }
 \arguments{
 \item{df_predictor}{a data frame containing genes (in rows) and
@@ -18,7 +18,14 @@ data frame must has gene symbols as row names}
 \item{GSN}{a vector containing Gold Standard Negative (GSN)}
 
 \item{nfold}{an integer specifying the number of folds for cross
-validataion}
+validataion. Per fold creates balanced splits of the data preserving
+the overall distribution for each class (GSP and GSN), therefore
+generating balanced cross-vallidation train sets and testing sets. By
+default, it is 3 meaning 3-fold cross validation}
+
+\item{nrepeat}{an integer specifying the number of repeats for cross
+validataion. By default, it is 10 indicating the cross-validation
+repeated 10 times}
 
 \item{mtry}{an integer specifying the number of predictors randomly
 sampled as candidates at each split. If NULL, it will be tuned by

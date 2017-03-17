@@ -22,8 +22,10 @@ it. It returns an object of class 'pTarget'.
 
 <pre>
 xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-mtry = NULL, ntree = 2000, fold.aggregateBy = c("logistic",
-"Ztransform", "fishers", "orderStatistic"), verbose = TRUE, ...)
+seed = 825, mtry = NULL, ntree = 1000,
+fold.aggregateBy = c("logistic", "Ztransform", "fishers",
+"orderStatistic"),
+verbose = TRUE, ...)
 </pre>
 
 
@@ -57,6 +59,10 @@ default, it is 3 meaning 3-fold cross validation</p>
 <p>an integer specifying the number of repeats for cross
 validataion. By default, it is 10 indicating the cross-validation
 repeated 10 times</p>
+</td></tr>
+<tr valign="top"><td><code>seed</code></td>
+<td>
+<p>an integer specifying the seed</p>
 </td></tr>
 <tr valign="top"><td><code>mtry</code></td>
 <td>
@@ -175,7 +181,7 @@ important if each predictor is taken out)
 </p>
 </li>
 <li><p><code>performance</code>: a data frame of 1+nPredictor X 2 containing
-the supervised/predictor performance info predictor importance info,
+the supervised/predictor performance info predictor performance info,
 where nPredictor is the number of predictors, two columns are &quot;ROC&quot;
 (AUC values) and &quot;Fmax&quot; (F-max values)
 </p>

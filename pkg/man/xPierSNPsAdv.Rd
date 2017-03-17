@@ -10,6 +10,7 @@ decay.kernel = c("slow", "constant", "linear", "rapid"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.eQTL =
 c(NA,
+"JKscience_CD14", "JKscience_LPS2", "JKscience_LPS24", "JKscience_IFN",
 "JKscience_TS2A", "JKscience_TS2A_CD14", "JKscience_TS2A_LPS2",
 "JKscience_TS2A_LPS24", "JKscience_TS2A_IFN", "JKscience_TS2B",
 "JKscience_TS2B_CD14", "JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24",
@@ -21,8 +22,9 @@ c(NA,
 "JKnc_neutro_trans",
 "WESTRAng_blood", "WESTRAng_blood_cis", "WESTRAng_blood_trans",
 "JK_nk",
-"GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
-"GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
+"JK_nk_cis", "JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous",
+"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
+"GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
 "GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
@@ -313,6 +315,14 @@ state induced by 24-hour LPS (based on 432 individuals).}
 \item{\code{JKscience_TS2B_IFN}: cis-eQTLs only in the activating state
 induced by 24-hour interferon-gamma (based on 432 individuals).}
 \item{\code{JKscience_TS3A}: trans-eQTLs in either state.}
+\item{\code{JKscience_CD14}: cis and trans-eQTLs in the resting/CD14+
+state (based on 228 individuals).}
+\item{\code{JKscience_LPS2}: cis and trans-eQTLs in the activating
+state induced by 2-hour LPS (based on 228 individuals).}
+\item{\code{JKscience_LPS24}: cis and trans-eQTLs in the activating
+state induced by 24-hour LPS (based on 228 individuals).}
+\item{\code{JKscience_IFN}: cis and trans-eQTLs in the activating state
+induced by 24-hour interferon-gamma (based on 228 individuals).}
 }
 2. eQTLs in B cells. Sourced from Nature Genetics 2012, 44(5):502-510
 \itemize{
@@ -335,7 +345,9 @@ induced by 24-hour interferon-gamma (based on 432 individuals).}
 }
 5. eQTLs in NK cells. Unpublished
 \itemize{
-\item{\code{JK_nk}: cis-eQTLs.}
+\item{\code{JK_nk}: cis- and trans-eQTLs.}
+\item{\code{JK_nk_cis}: cis-eQTLs only.}
+\item{\code{JK_nk_trans}: trans-eQTLs only.}
 }
 6. Tissue-specific eQTLs from GTEx (version 4; incuding 13 tissues).
 Sourced from Science 2015, 348(6235):648-60

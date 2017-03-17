@@ -93,7 +93,11 @@ xPierAnno <- function(data, list_pNode, network=c("STRING_highest","STRING_high"
     ##########
 	if(is.data.frame(data)){
 		ind <- match(data[,1], weight_seeds)
-    	data_subset <- data[!is.na(ind),]
+		if(sum(!is.na(ind)) >= 1){
+    		data_subset <- data[!is.na(ind),]
+    	}else{
+    		return(NULL)
+    	}
     }else{
     	return(NULL)
     }

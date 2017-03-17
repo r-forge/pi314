@@ -76,7 +76,7 @@ xMLdotplot <- function(pTarget, displayBy=c("importance2fold","roc2fold","fmax2f
 	tmp <- gsub('^Annotation_', 'Annotation\n(', tmp)
 	tmp <- gsub('^nearbyGenes_', 'nearbyGenes\n(', tmp)
 	tmp <- gsub('^eQTL_', 'eQTL\n(', tmp)
-	tmp <- gsub('^HiC_', 'HiC\n(', tmp)
+	tmp <- gsub('^HiC_', 'Hi-C\n(', tmp)
 	tmp <- gsub('^Expression_', 'Expression\n(', tmp)
 	tmp <- paste(tmp,')',sep='')
 	df <- data.frame(name=tmp, df, stringsAsFactors=FALSE)

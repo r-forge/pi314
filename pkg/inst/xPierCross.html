@@ -1,26 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to extract priority matrix from a list of pNode...</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to extract priority matrix from a list of dTarget...</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xPierMatrix"><tr><td>xPierMatrix</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xPierCross"><tr><td>xPierCross</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to extract priority matrix from a list of pNode objects</h2>
+<h2>Function to extract priority matrix from a list of dTarget objects</h2>
 
 <h3>Description</h3>
 
-<p><code>xPierMatrix</code> is supposed to extract priority matrix from a list
-of pNode objects. Also supported is the aggregation of priority matrix
+<p><code>xPierCross</code> is supposed to extract priority matrix from a list of
+dTarget objects. Also supported is the aggregation of priority matrix
 (similar to the meta-analysis) generating the priority results; we view
-this functionality as the discovery mode of the prioritisation.
+this functionality as the cross mode of the prioritisation.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xPierMatrix(list_pNode, displayBy = c("score", "rank", "weight",
-"pvalue"),
+xPierCross(list_dTarget, displayBy = c("priority", "rank", "pvalue",
+"fdr"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 "logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
 </pre>
@@ -29,19 +29,19 @@ combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>list_pNode</code></td>
+<tr valign="top"><td><code>list_dTarget</code></td>
 <td>
-<p>a list of &quot;pNode&quot; objects or a &quot;pNode&quot; object</p>
+<p>a list of &quot;dTarget&quot; objects or a &quot;dTarget&quot; object</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
-<p>which priority will be extracted. It can be &quot;score&quot;
-for priority score (by default), &quot;rank&quot; for priority rank, &quot;weight&quot; for
-seed weight, &quot;pvalue&quot; for priority p-value</p>
+<p>which priority will be extracted. It can be &quot;priority&quot;
+for priority score (by default), &quot;rank&quot; for priority rank, &quot;pvalue&quot; for
+priority p-value, &quot;fdr&quot; for priority fdr</p>
 </td></tr>
 <tr valign="top"><td><code>combineBy</code></td>
 <td>
-<p>how to resolve nodes/targets from a list of &quot;pNode&quot;
+<p>how to resolve nodes/targets from a list of &quot;dTarget&quot;
 objects. It can be &quot;intersect&quot; for intersecting nodes (by default),
 &quot;union&quot; for unionising nodes</p>
 </td></tr>
@@ -71,9 +71,9 @@ displayed in the screen. By default, it sets to true for display</p>
 <h3>Value</h3>
 
 <p>If aggregateBy is 'none' (by default), a data frame containing priority
-matrix, with each column/predictor for either priority score, or
-priorty rank or priority p-value.
-If aggregateBy is not 'none', an object of the class &quot;dTarget&quot;, a list
+matrix, with each column/disease for either priority score, or priorty
+rank or priority p-value.
+If aggregateBy is not 'none', an object of the class &quot;cTarget&quot;, a list
 with following components:
 </p>
 
@@ -84,18 +84,12 @@ and the 5 columns are &quot;name&quot; (gene names), &quot;rank&quot; (ranks of 
 priority scores), &quot;pvalue&quot; (the aggregated p-value, converted from
 empirical cumulative distribution of the probability of being GSP),
 &quot;fdr&quot; (fdr adjusted from the aggregated p-value), &quot;priority&quot;
-(-log10(pvalue) but rescaled into the 0-10 range), and seed info
-including &quot;Overall&quot; for the number of different types of seeds,
-followed by details on individual type of seeds (that is, &quot;OMIM&quot;,
-&quot;Phenotype&quot;, &quot;Function&quot;, &quot;nearbyGenes&quot;, &quot;eQTL&quot;, &quot;HiC&quot;)
+(-log10(pvalue) but rescaled into the 0-10 range)
 </p>
 </li>
-<li><p><code>predictor</code>: a data frame containing predictor matrix, with
-each column/predictor for either priority score, or priorty rank or
-priority p-value
-</p>
-</li>
-<li><p><code>metag</code>: an input &quot;igraph&quot; object
+<li><p><code>disease</code>: a data frame containing disease matrix, with each
+column/disease for either priority score, or priorty rank or priority
+p-value
 </p>
 </li>
 <li><p><code>call</code>: the call that produced this result
@@ -112,7 +106,7 @@ priority p-value
 
 <h3>See Also</h3>
 
-<p><code>xPierSNPsAdv</code>
+<p><code>xPierMatrix</code>
 </p>
 
 
@@ -126,7 +120,7 @@ library(Pi)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
-df_score &lt;- xPierMatrix(ls_pNode)
+df_score &lt;- xPierCross(ls_dTarget)
 
 ## End(Not run)
 </pre>

@@ -5,8 +5,10 @@
 \title{Function to integrate predictor matrix in a supervised manner via machine learning algorithm random forest.}
 \usage{
 xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-mtry = NULL, ntree = 2000, fold.aggregateBy = c("logistic",
-"Ztransform", "fishers", "orderStatistic"), verbose = TRUE, ...)
+seed = 825, mtry = NULL, ntree = 1000,
+fold.aggregateBy = c("logistic", "Ztransform", "fishers",
+"orderStatistic"),
+verbose = TRUE, ...)
 }
 \arguments{
 \item{df_predictor}{a data frame containing genes (in rows) and
@@ -26,6 +28,8 @@ default, it is 3 meaning 3-fold cross validation}
 \item{nrepeat}{an integer specifying the number of repeats for cross
 validataion. By default, it is 10 indicating the cross-validation
 repeated 10 times}
+
+\item{seed}{an integer specifying the seed}
 
 \item{mtry}{an integer specifying the number of predictors randomly
 sampled as candidates at each split. If NULL, it will be tuned by
@@ -110,7 +114,7 @@ informative predictors), while "MeanDecreaseGini" measures how pure the
 nodes are at the end of the tree (a high score means the predictor was
 important if each predictor is taken out)}
 \item{\code{performance}: a data frame of 1+nPredictor X 2 containing
-the supervised/predictor performance info predictor importance info,
+the supervised/predictor performance info predictor performance info,
 where nPredictor is the number of predictors, two columns are "ROC"
 (AUC values) and "Fmax" (F-max values)}
 \item{\code{call}: the call that produced this result}

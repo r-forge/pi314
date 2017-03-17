@@ -22,7 +22,8 @@
 #' @importFrom GenomicRanges findOverlaps distance mcols seqnames as.data.frame
 #' @importFrom GenomeInfoDb seqlevels
 #' @importFrom Gviz IdeogramTrack GenomeAxisTrack AnnotationTrack DataTrack plotTracks
-#' @importFrom lattice xyplot
+#' @importFrom lattice xyplot contourplot levelplot
+#' @importFrom plot3D persp3D scatter3D text3D
 #' @import igraph
 #' @import dnet
 #' @import XGR
@@ -30,7 +31,7 @@
 #' @import graphics
 #' @importFrom randomForest randomForest tuneRF importance
 #' @importFrom glmnet cv.glmnet predict.glmnet
-#' @importFrom caret createFolds
+#' @importFrom caret createFolds createMultiFolds featurePlot trainControl twoClassSummary train getModelInfo varImp
 #' @import stats
 #' @importFrom ggbio autoplot
 #' @importFrom ggrepel geom_text_repel geom_label_repel

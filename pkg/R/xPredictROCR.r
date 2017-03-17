@@ -53,6 +53,9 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 
     res_ls <- split(x=as.numeric(prediction[,2]), f=prediction[,1])
     pred <- unlist(lapply(res_ls, base::max))
+    ####
+    pred <- pred[!is.na(pred)]
+    ####
     if(verbose){
         now <- Sys.time()
         message(sprintf("There are %d targets in predictions (%s).", length(pred), as.character(now)), appendLF=TRUE)

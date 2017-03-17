@@ -44,7 +44,7 @@ xPredictCompare <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("curve",
 			return(NULL)
 		}
 	}else{
-		stop("The function must apply to an 'list' object, or an 'pPerf'/'ggplot' object.\n")
+		stop("The function must apply to a 'list' object, or a 'pPerf'/'ggplot' object.\n")
 	}
     
 	## Combine into a data frame called 'df_PRS'

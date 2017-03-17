@@ -173,9 +173,9 @@ xMLglmnet <- function(df_predictor, GSP, GSN, family=c("binomial","gaussian"), t
 	## get rank
 	vec_rank <- rank(-1*vec_full, ties.method="min")
 	
-	## priority: being rescaled into the [0,10] range
+	## priority: being rescaled into the [0,5] range
 	priority <- vec_full
-	vec_priority <- 10 * (priority - min(priority))/(max(priority) - min(priority))
+	vec_priority <- 5 * (priority - min(priority))/(max(priority) - min(priority))
 	
 	#########################################
 	## output

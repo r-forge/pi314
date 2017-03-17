@@ -11,8 +11,9 @@
 #' If aggregateBy is 'none' (by default), a data frame containing priority matrix, with each column/predictor for either priority score, or priorty rank or priority p-value.
 #' If aggregateBy is not 'none', an object of the class "dTarget", a list with following components:
 #' \itemize{
-#'  \item{\code{priority}: a data frame of nGene X 5 containing gene priority (aggregated) information, where nGene is the number of genes, and the 5 columns are "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the aggregated p-value, converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 0-10 range)}
-#'  \item{\code{predictor}: a data frame containing priority matrix, with each column/predictor for either priority score, or priorty rank or priority p-value}
+#'  \item{\code{priority}: a data frame of nGene X 5 containing gene priority (aggregated) information, where nGene is the number of genes, and the 5 columns are "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the aggregated p-value, converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 0-10 range), and seed info including "Overall" for the number of different types of seeds, followed by details on individual type of seeds (that is, "OMIM", "Phenotype", "Function", "nearbyGenes", "eQTL", "HiC")}
+#'  \item{\code{predictor}: a data frame containing predictor matrix, with each column/predictor for either priority score, or priorty rank or priority p-value}
+#'  \item{\code{metag}: an input "igraph" object}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
@@ -113,9 +114,9 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 			## adjp
 			df_adjp <- stats::p.adjust(df_ap, method="BH")
 			######
-			## priority: first log10-transformed ap and then being rescaled into the [0,10] range
+			## priority: first log10-transformed ap and then being rescaled into the [0,5] range
 			priority <- -log10(df_ap)
-			priority <- 10 * (priority - min(priority))/(max(priority) - min(priority))
+			priority <- 5 * (priority - min(priority))/(max(priority) - min(priority))
 			
 			## df_priority
 			df_priority <- data.frame(name=names(df_ap), rank=df_rank, pvalue=df_ap, fdr=df_adjp, priority=priority, stringsAsFactors=FALSE)
@@ -124,9 +125,38 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 			ind <- match(names(df_ap), rownames(df_predictor))
 			df_predictor <- df_predictor[ind,]
 			
-			dTarget <- list(priority = df_priority,
-							predictor = df_predictor, 
-							Call     = match.call()
+			############
+			## seed info
+			predictor_names <- names(list_pNode)
+			predictor_names <- gsub('^Annotation_', '', predictor_names)
+			predictor_names <- gsub('_.*', '', predictor_names)
+			ls_df <- lapply(1:length(list_pNode), function(i){
+				pNode <- list_pNode[[i]]
+				genes <- rownames(pNode$priority)[pNode$priority$seed==1]
+				df <- data.frame(Gene=genes, Predictor=rep(predictor_names[i], length(genes)), stringsAsFactors=FALSE)
+			})
+			df <- do.call(rbind, ls_df)
+			mat <- as.matrix(xSparseMatrix(df, rows=df_priority$name, columns=NULL, verbose=FALSE))
+			ind_row <- match(df_priority$name, rownames(mat))
+			ind_col <- match(unique(predictor_names), colnames(mat))
+			mat <- mat[ind_row, ind_col]
+			overall <- apply(mat!=0, 1, sum)
+			############
+			
+			##############
+			## get edges involved
+			ls_edges <- lapply(list_pNode, function(x){
+				relations <- igraph::get.data.frame(x$g, what="edges")
+			})
+			edges <- unique(do.call(rbind, ls_edges))
+			## get metag
+			metag <- igraph::graph.data.frame(d=edges, directed=FALSE, vertices=nodes)
+			##############
+			
+			dTarget <- list(priority  = cbind(df_priority,Overall=overall, mat),
+							predictor = df_predictor,
+							metag	  = metag, 
+							Call      = match.call()
 						 )
 			class(dTarget) <- "dTarget"
 			

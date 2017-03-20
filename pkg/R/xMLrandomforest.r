@@ -12,12 +12,13 @@
 #' @param ntree an integer specifying the number of trees to grow. By default, it sets to 2000
 #' @param fold.aggregateBy the aggregate method used to aggregate results from k-fold cross validataion. It can be either "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
+#' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @param ... additional parameters. Please refer to 'randomForest::randomForest' for the complete list.
 #' @return 
 #' an object of class "pTarget", a list with following components:
 #' \itemize{
 #'  \item{\code{model}: a list of models, results from per-fold train set}
-#'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority information, where nGene is the number of genes in the input data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the cross-fold aggregated p-value of being GSP, per-fold p-value converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(fdr))}
+#'  \item{\code{priority}: a data frame of nGene X 7 containing gene priority information, where nGene is the number of genes in the input data frame, and the 7 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the cross-fold aggregated p-value of being GSP, per-fold p-value converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 5-star ratings), and "description" (gene description)}
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting an additional column 'GS' in the first column}
 #'  \item{\code{pred2fold}: a list of data frame, results from per-fold test set}
 #'  \item{\code{prob2fold}: a data frame of nGene X 2+nfold containing the probability of being GSP, where nGene is the number of genes in the input data frame, nfold is the number of folds for cross validataion, and the first two columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), and the rest columns storing the per-fold probability of being GSP}
@@ -41,7 +42,7 @@
 #' pTarget <- xMLrandomforest(df_prediction, GSP, GSN)
 #' }
 
-xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, ...)
+xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
 	
     startT <- Sys.time()
@@ -354,6 +355,10 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
 	output_gs[output_gs=='0'] <- 'GSN'
 	output_gs[output_gs=='1'] <- 'GSP'
 	df_priority <- data.frame(GS=output_gs, name=names(df_ap), rank=df_rank, pvalue=df_ap, fdr=df_adjp, priority=priority, stringsAsFactors=FALSE)
+	### add description
+	df_priority$description <- xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
+	###
+	
 	### df_predictor_gs df_full_gs
 	ind <- match(names(df_ap), rownames(df_predictor))
 	if(nfold==1 & nrepeat==1){

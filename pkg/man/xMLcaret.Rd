@@ -10,7 +10,8 @@ xMLcaret(df_predictor, GSP, GSN, method = c("gbm", "svmRadial", "rda",
 "LogitBoost", "xgbLinear", "xgbTree"), nfold = 3, nrepeat = 10,
 seed = 825, aggregateBy = c("none", "logistic", "Ztransform",
 "fishers",
-"orderStatistic"), verbose = TRUE)
+"orderStatistic"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{df_predictor}{a data frame containing genes (in rows) and
@@ -62,6 +63,9 @@ the aggregate methods 'Ztransform' and 'logistic' are preferred here}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display}
+
+\item{RData.location}{the characters to tell the location of built-in
+RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 an object of class "pTarget", a list with following components:
@@ -73,7 +77,8 @@ cross-validation}
 priority information, where nGene is the number of genes in the input
 data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or
 'Putative'), "name" (gene names), "rank" (ranks of the priority
-scores), "priority" (5-star priority score)}
+scores), "priority" (5-star priority score), and "description" (gene
+description)}
 \item{\code{predictor}: a data frame, which is the same as the input
 data frame but inserting two additional columns ('GS' in the first
 column, 'name' in the second column)}

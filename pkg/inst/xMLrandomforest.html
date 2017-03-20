@@ -25,7 +25,9 @@ xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
 seed = 825, mtry = NULL, ntree = 1000,
 fold.aggregateBy = c("logistic", "Ztransform", "fishers",
 "orderStatistic"),
-verbose = TRUE, ...)
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata",
+...)
 </pre>
 
 
@@ -96,6 +98,11 @@ provides a compromise between these two. Notably, the aggregate methods
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display</p>
 </td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 <p>additional parameters. Please refer to
@@ -113,14 +120,15 @@ displayed in the screen. By default, it sets to TRUE for display</p>
 <li><p><code>model</code>: a list of models, results from per-fold train set
 </p>
 </li>
-<li><p><code>priority</code>: a data frame of nGene X 6 containing gene
+<li><p><code>priority</code>: a data frame of nGene X 7 containing gene
 priority information, where nGene is the number of genes in the input
-data frame, and the 6 columns are &quot;GS&quot; (either 'GSP', or 'GSN', or
+data frame, and the 7 columns are &quot;GS&quot; (either 'GSP', or 'GSN', or
 'Putative'), &quot;name&quot; (gene names), &quot;rank&quot; (ranks of the priority
 scores), &quot;pvalue&quot; (the cross-fold aggregated p-value of being GSP,
 per-fold p-value converted from empirical cumulative distribution of
 the probability of being GSP), &quot;fdr&quot; (fdr adjusted from the aggregated
-p-value), &quot;priority&quot; (-log10(fdr))
+p-value), &quot;priority&quot; (-log10(pvalue) but rescaled into the 5-star
+ratings), and &quot;description&quot; (gene description)
 </p>
 </li>
 <li><p><code>predictor</code>: a data frame, which is the same as the input

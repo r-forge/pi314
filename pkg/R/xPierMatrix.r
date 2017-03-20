@@ -7,13 +7,14 @@
 #' @param combineBy how to resolve nodes/targets from a list of "pNode" objects. It can be "intersect" for intersecting nodes (by default), "union" for unionising nodes
 #' @param aggregateBy the aggregate method used. It can be either "none" for no aggregation, or "orderStatistic" for the method based on the order statistics of p-values, "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'fishers' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
+#' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' If aggregateBy is 'none' (by default), a data frame containing priority matrix, with each column/predictor for either priority score, or priorty rank or priority p-value.
 #' If aggregateBy is not 'none', an object of the class "dTarget", a list with following components:
 #' \itemize{
-#'  \item{\code{priority}: a data frame of nGene X 5 containing gene priority (aggregated) information, where nGene is the number of genes, and the 5 columns are "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the aggregated p-value, converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 0-10 range), and seed info including "Overall" for the number of different types of seeds, followed by details on individual type of seeds (that is, "OMIM", "Phenotype", "Function", "nearbyGenes", "eQTL", "HiC")}
+#'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority (aggregated) information, where nGene is the number of genes, and the 6 columns are "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the aggregated p-value, converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 5-star ratings), "description" (gene description) and seed info including "Overall" for the number of different types of seeds, followed by details on individual type of seeds (that is, "OMIM", "Phenotype", "Function", "nearbyGenes", "eQTL", "HiC")}
 #'  \item{\code{predictor}: a data frame containing predictor matrix, with each column/predictor for either priority score, or priorty rank or priority p-value}
-#'  \item{\code{metag}: an input "igraph" object}
+#'  \item{\code{metag}: an "igraph" object}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
@@ -30,7 +31,7 @@
 #' df_score <- xPierMatrix(ls_pNode)
 #' }
 
-xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE)
+xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     displayBy <- match.arg(displayBy)
@@ -120,6 +121,9 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 			
 			## df_priority
 			df_priority <- data.frame(name=names(df_ap), rank=df_rank, pvalue=df_ap, fdr=df_adjp, priority=priority, stringsAsFactors=FALSE)
+			### add description
+			df_priority$description <- xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
+			###
 			
 			## df_predictor
 			ind <- match(names(df_ap), rownames(df_predictor))

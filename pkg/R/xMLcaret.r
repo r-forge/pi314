@@ -11,12 +11,13 @@
 #' @param seed an integer specifying the seed
 #' @param aggregateBy the aggregate method used to aggregate results from repeated cross validataion. It can be either "none" for no aggregration (meaning the best model based on all data used for cross validation is used), or "orderStatistic" for the method based on the order statistics of p-values, or "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'Ztransform' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
+#' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
 #' an object of class "pTarget", a list with following components:
 #' \itemize{
 #'  \item{\code{model}: an object of class "train" as a best model}
 #'  \item{\code{ls_model}: a list of best models from repeated cross-validation}
-#'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority information, where nGene is the number of genes in the input data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "priority" (5-star priority score)}
+#'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority information, where nGene is the number of genes in the input data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "priority" (5-star priority score), and "description" (gene description)}
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting two additional columns ('GS' in the first column, 'name' in the second column)}
 #'  \item{\code{performance}: a data frame of 1+nPredictor X 2 containing the supervised/predictor performance info, where nPredictor is the number of predictors, two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
 #'  \item{\code{performance_cv}: a data frame of nfold*nrepeat X 2 containing the repeated cross-validation performance, where two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
@@ -38,7 +39,7 @@
 #' pTarget <- xMLcaret(df_prediction, GSP, GSN, method="myrf")
 #' }
 
-xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","knn","pls","nnet","rf","myrf","cforest","glmnet","glm","bayesglm","LogitBoost","xgbLinear","xgbTree"), nfold=3, nrepeat=10, seed=825, aggregateBy=c("none","logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE)
+xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","knn","pls","nnet","rf","myrf","cforest","glmnet","glm","bayesglm","LogitBoost","xgbLinear","xgbTree"), nfold=3, nrepeat=10, seed=825, aggregateBy=c("none","logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     startT <- Sys.time()
@@ -835,6 +836,9 @@ xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","k
 	output_gs[output_gs=='0'] <- 'GSN'
 	output_gs[output_gs=='1'] <- 'GSP'
 	df_priority <- data.frame(GS=output_gs, name=names(vec_priority), rank=vec_rank, priority=vec_priority, stringsAsFactors=FALSE)
+	### add description
+	df_priority$description <- xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
+	###
 	
 	### df_predictor_gs
 	ind <- match(names(vec_priority), rownames(df_predictor))

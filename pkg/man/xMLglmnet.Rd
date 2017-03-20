@@ -6,7 +6,8 @@
 \usage{
 xMLglmnet(df_predictor, GSP, GSN, family = c("binomial", "gaussian"),
 type.measure = c("auc", "mse"), nfold = 3, alphas = seq(0, 1, 0.1),
-standardize = TRUE, lower.limits = -Inf, verbose = TRUE, ...)
+standardize = TRUE, lower.limits = -Inf, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
 \arguments{
 \item{df_predictor}{a data frame containing genes (in rows) and
@@ -43,6 +44,9 @@ will apply to every coefficient}
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display}
 
+\item{RData.location}{the characters to tell the location of built-in
+RData files. See \code{\link{xRDataLoader}} for details}
+
 \item{...}{additional parameters. Please refer to 'glmnet::cv.glmnet'
 for the complete list.}
 }
@@ -50,11 +54,12 @@ for the complete list.}
 an object of class "pTarget", a list with following components:
 \itemize{
 \item{\code{model}: an object of class "cv.glmnet" as a best model}
-\item{\code{priority}: a data frame of nGene X 6 containing gene
+\item{\code{priority}: a data frame of nGene X 5 containing gene
 priority information, where nGene is the number of genes in the input
-data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or
+data frame, and the 5 columns are "GS" (either 'GSP', or 'GSN', or
 'Putative'), "name" (gene names), "rank" (ranks of the priority
-scores), "priority" (priority score)}
+scores), "priority" (priority score; rescaled into the 5-star ratings),
+and "description" (gene description)}
 \item{\code{predictor}: a data frame, which is the same as the input
 data frame but inserting an additional column 'GS' in the first column}
 \item{\code{cvm2alpha}: a data frame of nAlpha X 2 containing mean

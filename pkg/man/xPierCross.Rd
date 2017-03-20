@@ -7,7 +7,8 @@
 xPierCross(list_dTarget, displayBy = c("priority", "rank", "pvalue",
 "fdr"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
-"logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
+"logistic", "Ztransform", "orderStatistic"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{list_dTarget}{a list of "dTarget" objects or a "dTarget" object}
@@ -35,6 +36,9 @@ and 'logistic' are preferred here}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
+
+\item{RData.location}{the characters to tell the location of built-in
+RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 If aggregateBy is 'none' (by default), a data frame containing priority
@@ -43,13 +47,14 @@ rank or priority p-value.
 If aggregateBy is not 'none', an object of the class "cTarget", a list
 with following components:
 \itemize{
-\item{\code{priority}: a data frame of nGene X 5 containing gene
+\item{\code{priority}: a data frame of nGene X 6 containing gene
 priority (aggregated) information, where nGene is the number of genes,
-and the 5 columns are "name" (gene names), "rank" (ranks of the
+and the 6 columns are "name" (gene names), "rank" (ranks of the
 priority scores), "pvalue" (the aggregated p-value, converted from
 empirical cumulative distribution of the probability of being GSP),
 "fdr" (fdr adjusted from the aggregated p-value), "priority"
-(-log10(pvalue) but rescaled into the 0-10 range)}
+(-log10(pvalue) but rescaled into the 5-star ratings), "description"
+(gene description)}
 \item{\code{disease}: a data frame containing disease matrix, with each
 column/disease for either priority score, or priorty rank or priority
 p-value}

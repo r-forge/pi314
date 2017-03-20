@@ -23,7 +23,8 @@ returns an object of class 'pTarget'.
 <pre>
 xMLglmnet(df_predictor, GSP, GSN, family = c("binomial", "gaussian"),
 type.measure = c("auc", "mse"), nfold = 3, alphas = seq(0, 1, 0.1),
-standardize = TRUE, lower.limits = -Inf, verbose = TRUE, ...)
+standardize = TRUE, lower.limits = -Inf, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 </pre>
 
 
@@ -84,6 +85,11 @@ will apply to every coefficient</p>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to TRUE for display</p>
 </td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 <p>additional parameters. Please refer to 'glmnet::cv.glmnet'
@@ -101,11 +107,12 @@ for the complete list.</p>
 <li><p><code>model</code>: an object of class &quot;cv.glmnet&quot; as a best model
 </p>
 </li>
-<li><p><code>priority</code>: a data frame of nGene X 6 containing gene
+<li><p><code>priority</code>: a data frame of nGene X 5 containing gene
 priority information, where nGene is the number of genes in the input
-data frame, and the 6 columns are &quot;GS&quot; (either 'GSP', or 'GSN', or
+data frame, and the 5 columns are &quot;GS&quot; (either 'GSP', or 'GSN', or
 'Putative'), &quot;name&quot; (gene names), &quot;rank&quot; (ranks of the priority
-scores), &quot;priority&quot; (priority score)
+scores), &quot;priority&quot; (priority score; rescaled into the 5-star ratings),
+and &quot;description&quot; (gene description)
 </p>
 </li>
 <li><p><code>predictor</code>: a data frame, which is the same as the input

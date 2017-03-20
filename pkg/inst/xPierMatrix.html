@@ -22,7 +22,8 @@ this functionality as the discovery mode of the prioritisation.
 xPierMatrix(list_pNode, displayBy = c("score", "rank", "weight",
 "pvalue"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
-"logistic", "Ztransform", "orderStatistic"), verbose = TRUE)
+"logistic", "Ztransform", "orderStatistic"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -65,6 +66,11 @@ and 'logistic' are preferred here</p>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
 </td></tr>
+<tr valign="top"><td><code>RData.location</code></td>
+<td>
+<p>the characters to tell the location of built-in
+RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
 </table>
 
 
@@ -78,16 +84,17 @@ with following components:
 </p>
 
 <ul>
-<li><p><code>priority</code>: a data frame of nGene X 5 containing gene
+<li><p><code>priority</code>: a data frame of nGene X 6 containing gene
 priority (aggregated) information, where nGene is the number of genes,
-and the 5 columns are &quot;name&quot; (gene names), &quot;rank&quot; (ranks of the
+and the 6 columns are &quot;name&quot; (gene names), &quot;rank&quot; (ranks of the
 priority scores), &quot;pvalue&quot; (the aggregated p-value, converted from
 empirical cumulative distribution of the probability of being GSP),
 &quot;fdr&quot; (fdr adjusted from the aggregated p-value), &quot;priority&quot;
-(-log10(pvalue) but rescaled into the 0-10 range), and seed info
-including &quot;Overall&quot; for the number of different types of seeds,
-followed by details on individual type of seeds (that is, &quot;OMIM&quot;,
-&quot;Phenotype&quot;, &quot;Function&quot;, &quot;nearbyGenes&quot;, &quot;eQTL&quot;, &quot;HiC&quot;)
+(-log10(pvalue) but rescaled into the 5-star ratings), &quot;description&quot;
+(gene description) and seed info including &quot;Overall&quot; for the number of
+different types of seeds, followed by details on individual type of
+seeds (that is, &quot;OMIM&quot;, &quot;Phenotype&quot;, &quot;Function&quot;, &quot;nearbyGenes&quot;, &quot;eQTL&quot;,
+&quot;HiC&quot;)
 </p>
 </li>
 <li><p><code>predictor</code>: a data frame containing predictor matrix, with
@@ -95,7 +102,7 @@ each column/predictor for either priority score, or priorty rank or
 priority p-value
 </p>
 </li>
-<li><p><code>metag</code>: an input &quot;igraph&quot; object
+<li><p><code>metag</code>: an &quot;igraph&quot; object
 </p>
 </li>
 <li><p><code>call</code>: the call that produced this result

@@ -116,7 +116,7 @@ xPierSubnet <- function(pNode, priority.quantite=0.1, network=c(NA,"STRING_highe
 	## priority quantite
 	priority.quantite <- as.numeric(priority.quantite)
 	if(length(priority.quantite>0 & priority.quantite<1) & !is.na(priority.quantite)){
-		cf <- quantile(pval, priority.quantite, na.rm=TRUE)
+		cf <- stats::quantile(pval, priority.quantite, na.rm=TRUE)
 		ind <- which(pval<cf)
 		pval <- pval[ind]
 		

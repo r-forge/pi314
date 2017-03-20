@@ -32,7 +32,7 @@
 #' @importFrom randomForest randomForest tuneRF importance
 #' @importFrom glmnet cv.glmnet predict.glmnet
 #' @importFrom caret createFolds createMultiFolds featurePlot trainControl twoClassSummary train getModelInfo varImp
-#' @import stats
+#' @importFrom stats p.adjust ecdf mad approx pexp coef median predict quantile t.test
 #' @importFrom ggbio autoplot
 #' @importFrom ggrepel geom_text_repel geom_label_repel
 #' @importFrom ROCR prediction performance plot

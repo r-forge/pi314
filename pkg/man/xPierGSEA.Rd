@@ -7,6 +7,7 @@
 xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "GOCC",
 "PS", "PS2", "SF", "Pfam", "DO", "HPPA", "HPMI", "HPCM", "HPMA", "MP",
+"EF",
 "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
 "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
 "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
@@ -29,16 +30,23 @@ Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular
 Function, "GOCC" for Gene Ontology Cellular Component, "PS" for
 phylostratific age information, "PS2" for the collapsed PS version
 (inferred ancestors being collapsed into one with the known taxonomy
-information), "SF" for domain superfamily assignments, "DO" for Disease
-Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for
-Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype
-Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for
-Mammalian Phenotype, and Drug-Gene Interaction database (DGIdb) for
-drugable categories, and the molecular signatures database (Msigdb,
-including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall",
-"MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA",
-"MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM",
-"MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
+information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam
+domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype
+Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance,
+"HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human
+Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for
+Experimental Factor Ontology (used to annotate GWAS Catalog genes),
+Drug-Gene Interaction database ("DGIdb") for drugable categories,
+tissue-specific eQTL-containing genes from GTEx ("GTExV4" and
+"GTExV6"), crowd extracted expression of differential signatures from
+CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
+"CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
+"CreedsGeneUP" and "CreedsGeneDN"), and the molecular signatures
+database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP",
+"MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME",
+"MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN",
+"MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6",
+"MsigdbC7")}
 
 \item{customised.genesets}{a list each containing gene symbols. By
 default, it is NULL. If the list provided, it will overtake the

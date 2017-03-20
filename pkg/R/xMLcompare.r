@@ -68,7 +68,7 @@ xMLcompare <-function(list_ML, metric=c("ROC","Sens","Spec"), xlab=NA, xlimits=c
 		
 	}
 	
-	res_ttest <- lapply(df_ML, t.test)
+	res_ttest <- lapply(df_ML, stats::t.test)
 	ls_res <- lapply(1:length(res_ttest), function(i){
 		x <- res_ttest[[i]]
 		data.frame(ML=names(res_ttest)[i], mean=x$estimate, conf_lower=x$conf.int[1], conf_upper=x$conf.int[2])

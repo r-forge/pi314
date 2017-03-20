@@ -12,6 +12,7 @@
 #' @seealso \code{\link{xPierGSEA}}
 #' @include xGSEAconciser.r
 #' @examples
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
 #' eGSEA_concise <- xGSEAconciser(eGSEA)
 #' }

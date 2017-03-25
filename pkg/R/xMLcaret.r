@@ -837,7 +837,7 @@ xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","k
 	output_gs[output_gs=='1'] <- 'GSP'
 	df_priority <- data.frame(GS=output_gs, name=names(vec_priority), rank=vec_rank, priority=vec_priority, stringsAsFactors=FALSE)
 	### add description
-	df_priority$description <- xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
+	df_priority$description <- XGR::xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
 	###
 	
 	### df_predictor_gs

@@ -4,8 +4,8 @@
 \alias{xMLrandomforest}
 \title{Function to integrate predictor matrix in a supervised manner via machine learning algorithm random forest.}
 \usage{
-xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-seed = 825, mtry = NULL, ntree = 1000,
+xMLrandomforest(list_pNode = NULL, df_predictor = NULL, GSP, GSN,
+nfold = 3, nrepeat = 10, seed = 825, mtry = NULL, ntree = 1000,
 fold.aggregateBy = c("logistic", "Ztransform", "fishers",
 "orderStatistic"),
 verbose = TRUE, RData.location =
@@ -13,6 +13,8 @@ verbose = TRUE, RData.location =
 ...)
 }
 \arguments{
+\item{list_pNode}{a list of "pNode" objects or a "pNode" object}
+
 \item{df_predictor}{a data frame containing genes (in rows) and
 predictors (in columns), with their predictive scores inside it. This
 data frame must has gene symbols as row names}
@@ -123,6 +125,8 @@ important if each predictor is taken out)}
 the supervised/predictor performance info predictor performance info,
 where nPredictor is the number of predictors, two columns are "ROC"
 (AUC values) and "Fmax" (F-max values)}
+\item{\code{evidence}: an object of the class "eTarget", a list with
+following components "evidence" and "metag"}
 \item{\code{call}: the call that produced this result}
 }
 }

@@ -2,6 +2,7 @@
 #'
 #' \code{xMLrandomforest} is supposed to integrate predictor matrix in a supervised manner via machine learning algorithm random forest. It requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative (GSN) targets; 3) a predictor matrix containing genes in rows and predictors in columns, with their predictive scores inside it. It returns an object of class 'pTarget'.
 #'
+#' @param list_pNode a list of "pNode" objects or a "pNode" object
 #' @param df_predictor a data frame containing genes (in rows) and predictors (in columns), with their predictive scores inside it. This data frame must has gene symbols as row names
 #' @param GSP a vector containing Gold Standard Positive (GSP)
 #' @param GSN a vector containing Gold Standard Negative (GSN)
@@ -27,6 +28,7 @@
 #'  \item{\code{fmax2fold}: a data frame of 1+nPredictor X 4+nfold containing the supervised/predictor PR info (F-max values), where nPredictor is the number of predictors, nfold is the number of folds for cross validataion, and the first 4 columns are "median" (the median of the F-max values across folds), "mad" (the median of absolute deviation of the F-max values across folds), "min" (the minimum of the F-max values across folds), "max" (the maximum of the F-max values across folds), and the rest columns storing the per-fold F-max values}
 #'  \item{\code{importance}: a data frame of nPredictor X 2 containing the predictor importance info, where nPredictor is the number of predictors, two columns for two types ("MeanDecreaseAccuracy" and "MeanDecreaseGini") of predictor importance measures. "MeanDecreaseAccuracy" sees how worse the model performs without each predictor (a high decrease in accuracy would be expected for very informative predictors), while "MeanDecreaseGini" measures how pure the nodes are at the end of the tree (a high score means the predictor was important if each predictor is taken out)}
 #'  \item{\code{performance}: a data frame of 1+nPredictor X 2 containing the supervised/predictor performance info predictor performance info, where nPredictor is the number of predictors, two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
+#'  \item{\code{evidence}: an object of the class "eTarget", a list with following components "evidence" and "metag"}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
@@ -42,7 +44,7 @@
 #' pTarget <- xMLrandomforest(df_prediction, GSP, GSN)
 #' }
 
-xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
 	
     startT <- Sys.time()
@@ -52,7 +54,27 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
     }
     ####################################################################################
 	
-    fold.aggregateBy <- match.arg(fold.aggregateBy) 
+    fold.aggregateBy <- match.arg(fold.aggregateBy)
+	
+	if(class(list_pNode)=="list" & is.null(df_predictor)){
+		df_predictor <- xPierMatrix(list_pNode, displayBy="score", combineBy="union", aggregateBy="none", RData.location=RData.location)
+		
+		###########
+		## evidence
+		eTarget <- xPierMatrix(list_pNode, displayBy="evidence", combineBy="union", aggregateBy="none", verbose=FALSE, RData.location=RData.location)
+		###########
+				
+	}else if(!is.null(df_predictor)){
+		df_predictor <- df_predictor
+		
+		###########
+		## evidence
+		eTarget <- NULL
+		###########
+		
+	}else{
+		stop("The function must apply to 'list' of 'pNode' objects or a 'data.frame'.\n")
+	}
 	
 	## pre-process GSP and GSN
 	gsp <- unique(GSP)
@@ -90,7 +112,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
     ## create non-redundant sets
     # create balanced splits of the data
 	# preserve the overall class distribution
-	# generate balanced cross–validation groupings from a set of data
+	# generate balanced cross-validation groupings from a set of data
 	if(TRUE){
 		if(!is.null(seed)) set.seed(seed)
 		index_sets <- caret::createMultiFolds(y=df_predictor_class$class, k=nfold, times=nrepeat)
@@ -348,7 +370,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
 	#########################################
 	## output
 	### df_priority
-	output_gs <- rep('Putative', length(df_ap))
+	output_gs <- rep('Pi', length(df_ap))
 	names(output_gs) <- names(df_ap)
 	ind <- match(names(df_ap), names(gs_targets))
 	output_gs[!is.na(ind)] <- gs_targets[ind[!is.na(ind)]]
@@ -356,7 +378,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
 	output_gs[output_gs=='1'] <- 'GSP'
 	df_priority <- data.frame(GS=output_gs, name=names(df_ap), rank=df_rank, pvalue=df_ap, fdr=df_adjp, priority=priority, stringsAsFactors=FALSE)
 	### add description
-	df_priority$description <- xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
+	df_priority$description <- XGR::xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
 	###
 	
 	### df_predictor_gs df_full_gs
@@ -403,6 +425,11 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
 	#####################
 	#####################
 	
+	if(!is.null(eTarget)){
+		ind <- match(df_priority$name, rownames(eTarget$evidence))
+		eTarget$evidence <- eTarget$evidence[ind,]
+	}
+	
     pTarget <- list(ls_model = ls_model,
     				priority = df_priority,
     				predictor = df_predictor_gs,
@@ -413,6 +440,7 @@ xMLrandomforest <- function(df_predictor, GSP, GSN, nfold=3, nrepeat=10, seed=82
     				fmax2fold = df_Fmax,
     				importance = rf.model.overall.importance,
     				performance = df_evaluation,
+    				evidence = eTarget,
                   	Call     = match.call()
                  )
     class(pTarget) <- "pTarget"

@@ -4,25 +4,32 @@
 \alias{xVisEvidence}
 \title{Function to visualise evidence for prioritised genes in a gene network}
 \usage{
-xVisEvidence(dTarget, g = NA, nodes = NULL, neighbor.order = 1,
-neighbor.seed = TRUE, colormap = "ggplot2", legend.position =
-"topleft",
-verbose = TRUE, ...)
+xVisEvidence(xObject, g = NA, nodes = NULL, node.info = c("smart",
+"none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
+colormap = "ggplot2", legend.position = "topleft", verbose = TRUE, ...)
 }
 \arguments{
-\item{dTarget}{an object of class "dTarget"}
+\item{xObject}{an object of class "xObject"}
 
 \item{g}{an object of class "igraph". If NA, the 'metag' will be used,
-which is part of the object of class "dTarget"}
+which is part of the object of class "xObject"}
 
 \item{nodes}{which node genes are in query. If NULL, the top gene will
 be queried}
+
+\item{node.info}{tells the additional information used to label nodes.
+It can be one of "none" (only gene labeling), "smark" for (by default)
+using three pieces of information (if any): genes, 5-star ratings, and
+associated ranks (marked by an @ icon)}
 
 \item{neighbor.order}{an integer giving the order of the neighborhood.
 By default, it is 1-order neighborhood}
 
 \item{neighbor.seed}{logical to indicate whether neighbors are seeds
 only. By default, it sets to true}
+
+\item{neighbor.top}{the top number of the neighbors with the highest
+priority. By default, it sets to NULL to disable this parameter}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
@@ -59,9 +66,16 @@ library(Pi)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
-subg <- xVisEvidence(dTarget, nodes="B2M", neighbor.order=1,
-neighbor.seed=TRUE, vertex.label.color="black", vertex.label.cex=1,
-vertex.label.dist=1, legend.position="bottomleft", signature=FALSE)
+## TNFRSF1A
+xVisEvidence(pTarget, nodes="TNFRSF1A", neighbor.order=1,
+neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black",
+vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4,
+legend.position="bottomleft", newpage=FALSE)
+## UBA52
+xVisEvidence(pTarget, nodes="UBA52", neighbor.order=1,
+neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black",
+vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4,
+legend.position="bottomleft", newpage=FALSE)
 }
 }
 \seealso{

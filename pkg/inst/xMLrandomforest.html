@@ -21,8 +21,8 @@ it. It returns an object of class 'pTarget'.
 <h3>Usage</h3>
 
 <pre>
-xMLrandomforest(df_predictor, GSP, GSN, nfold = 3, nrepeat = 10,
-seed = 825, mtry = NULL, ntree = 1000,
+xMLrandomforest(list_pNode = NULL, df_predictor = NULL, GSP, GSN,
+nfold = 3, nrepeat = 10, seed = 825, mtry = NULL, ntree = 1000,
 fold.aggregateBy = c("logistic", "Ztransform", "fishers",
 "orderStatistic"),
 verbose = TRUE, RData.location =
@@ -34,6 +34,10 @@ verbose = TRUE, RData.location =
 <h3>Arguments</h3>
 
 <table summary="R argblock">
+<tr valign="top"><td><code>list_pNode</code></td>
+<td>
+<p>a list of &quot;pNode&quot; objects or a &quot;pNode&quot; object</p>
+</td></tr>
 <tr valign="top"><td><code>df_predictor</code></td>
 <td>
 <p>a data frame containing genes (in rows) and
@@ -192,6 +196,10 @@ important if each predictor is taken out)
 the supervised/predictor performance info predictor performance info,
 where nPredictor is the number of predictors, two columns are &quot;ROC&quot;
 (AUC values) and &quot;Fmax&quot; (F-max values)
+</p>
+</li>
+<li><p><code>evidence</code>: an object of the class &quot;eTarget&quot;, a list with
+following components &quot;evidence&quot; and &quot;metag&quot;
 </p>
 </li>
 <li><p><code>call</code>: the call that produced this result

@@ -17,29 +17,35 @@ genes in a gene network. It returns an object of class &quot;igraph&quot;.
 <h3>Usage</h3>
 
 <pre>
-xVisEvidence(dTarget, g = NA, nodes = NULL, neighbor.order = 1,
-neighbor.seed = TRUE, colormap = "ggplot2", legend.position =
-"topleft",
-verbose = TRUE, ...)
+xVisEvidence(xObject, g = NA, nodes = NULL, node.info = c("smart",
+"none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
+colormap = "ggplot2", legend.position = "topleft", verbose = TRUE, ...)
 </pre>
 
 
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>dTarget</code></td>
+<tr valign="top"><td><code>xObject</code></td>
 <td>
-<p>an object of class &quot;dTarget&quot;</p>
+<p>an object of class &quot;xObject&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>g</code></td>
 <td>
 <p>an object of class &quot;igraph&quot;. If NA, the 'metag' will be used,
-which is part of the object of class &quot;dTarget&quot;</p>
+which is part of the object of class &quot;xObject&quot;</p>
 </td></tr>
 <tr valign="top"><td><code>nodes</code></td>
 <td>
 <p>which node genes are in query. If NULL, the top gene will
 be queried</p>
+</td></tr>
+<tr valign="top"><td><code>node.info</code></td>
+<td>
+<p>tells the additional information used to label nodes.
+It can be one of &quot;none&quot; (only gene labeling), &quot;smark&quot; for (by default)
+using three pieces of information (if any): genes, 5-star ratings, and
+associated ranks (marked by an @ icon)</p>
 </td></tr>
 <tr valign="top"><td><code>neighbor.order</code></td>
 <td>
@@ -50,6 +56,11 @@ By default, it is 1-order neighborhood</p>
 <td>
 <p>logical to indicate whether neighbors are seeds
 only. By default, it sets to true</p>
+</td></tr>
+<tr valign="top"><td><code>neighbor.top</code></td>
+<td>
+<p>the top number of the neighbors with the highest
+priority. By default, it sets to NULL to disable this parameter</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -105,9 +116,16 @@ library(Pi)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
-subg &lt;- xVisEvidence(dTarget, nodes="B2M", neighbor.order=1,
-neighbor.seed=TRUE, vertex.label.color="black", vertex.label.cex=1,
-vertex.label.dist=1, legend.position="bottomleft", signature=FALSE)
+## TNFRSF1A
+xVisEvidence(pTarget, nodes="TNFRSF1A", neighbor.order=1,
+neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black",
+vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4,
+legend.position="bottomleft", newpage=FALSE)
+## UBA52
+xVisEvidence(pTarget, nodes="UBA52", neighbor.order=1,
+neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black",
+vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4,
+legend.position="bottomleft", newpage=FALSE)
 
 ## End(Not run)
 </pre>

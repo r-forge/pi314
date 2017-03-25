@@ -107,7 +107,7 @@ xPierCross <- function(list_dTarget, displayBy=c("priority","rank","pvalue","fdr
 			## df_priority
 			df_priority <- data.frame(name=names(df_ap), rank=df_rank, pvalue=df_ap, fdr=df_adjp, priority=priority, stringsAsFactors=FALSE)
 			### add description
-			df_priority$description <- xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
+			df_priority$description <- XGR::xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
 			###
 			
 			## df_disease

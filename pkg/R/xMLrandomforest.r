@@ -1,6 +1,6 @@
 #' Function to integrate predictor matrix in a supervised manner via machine learning algorithm random forest.
 #'
-#' \code{xMLrandomforest} is supposed to integrate predictor matrix in a supervised manner via machine learning algorithm random forest. It requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative (GSN) targets; 3) a predictor matrix containing genes in rows and predictors in columns, with their predictive scores inside it. It returns an object of class 'pTarget'.
+#' \code{xMLrandomforest} is supposed to integrate predictor matrix in a supervised manner via machine learning algorithm random forest. It requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative (GSN) targets; 3) a predictor matrix containing genes in rows and predictors in columns, with their predictive scores inside it. It returns an object of class 'sTarget'.
 #'
 #' @param list_pNode a list of "pNode" objects or a "pNode" object
 #' @param df_predictor a data frame containing genes (in rows) and predictors (in columns), with their predictive scores inside it. This data frame must has gene symbols as row names
@@ -16,7 +16,7 @@
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @param ... additional parameters. Please refer to 'randomForest::randomForest' for the complete list.
 #' @return 
-#' an object of class "pTarget", a list with following components:
+#' an object of class "sTarget", a list with following components:
 #' \itemize{
 #'  \item{\code{model}: a list of models, results from per-fold train set}
 #'  \item{\code{priority}: a data frame of nGene X 7 containing gene priority information, where nGene is the number of genes in the input data frame, and the 7 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the cross-fold aggregated p-value of being GSP, per-fold p-value converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 5-star ratings), and "description" (gene description)}
@@ -41,7 +41,7 @@
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
-#' pTarget <- xMLrandomforest(df_prediction, GSP, GSN)
+#' sTarget <- xMLrandomforest(df_prediction, GSP, GSN)
 #' }
 
 xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=3, nrepeat=10, seed=825, mtry=NULL, ntree=1000, fold.aggregateBy=c("logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
@@ -370,7 +370,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 	#########################################
 	## output
 	### df_priority
-	output_gs <- rep('Pi', length(df_ap))
+	output_gs <- rep('Predictive', length(df_ap))
 	names(output_gs) <- names(df_ap)
 	ind <- match(names(df_ap), names(gs_targets))
 	output_gs[!is.na(ind)] <- gs_targets[ind[!is.na(ind)]]
@@ -430,7 +430,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 		eTarget$evidence <- eTarget$evidence[ind,]
 	}
 	
-    pTarget <- list(ls_model = ls_model,
+    sTarget <- list(ls_model = ls_model,
     				priority = df_priority,
     				predictor = df_predictor_gs,
     				pred2fold = pred2fold,
@@ -443,7 +443,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
     				evidence = eTarget,
                   	Call     = match.call()
                  )
-    class(pTarget) <- "pTarget"
+    class(sTarget) <- "sTarget"
     
     ####################################################################################
     endT <- Sys.time()
@@ -454,7 +454,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
-    invisible(pTarget)
+    invisible(sTarget)
 }
 
 

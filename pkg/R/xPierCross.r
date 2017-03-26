@@ -2,7 +2,7 @@
 #'
 #' \code{xPierCross} is supposed to extract priority matrix from a list of dTarget objects. Also supported is the aggregation of priority matrix (similar to the meta-analysis) generating the priority results; we view this functionality as the cross mode of the prioritisation.
 #'
-#' @param list_dTarget a list of "dTarget" objects or a "dTarget" object
+#' @param list_xTarget a list of "dTarget" objects or a "dTarget" object
 #' @param displayBy which priority will be extracted. It can be "priority" for priority score (by default), "rank" for priority rank, "pvalue" for priority p-value, "fdr" for priority fdr
 #' @param combineBy how to resolve nodes/targets from a list of "dTarget" objects. It can be "intersect" for intersecting nodes (by default), "union" for unionising nodes
 #' @param aggregateBy the aggregate method used. It can be either "none" for no aggregation, or "orderStatistic" for the method based on the order statistics of p-values, "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'fishers' and 'logistic' are preferred here
@@ -27,30 +27,30 @@
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
-#' df_score <- xPierCross(ls_dTarget)
+#' df_score <- xPierCross(ls_xTarget)
 #' }
 
-xPierCross <- function(list_dTarget, displayBy=c("priority","rank","pvalue","fdr"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierCross <- function(list_xTarget, displayBy=c("priority","rank","pvalue","fdr"), combineBy=c('intersect','union'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     displayBy <- match.arg(displayBy)
     combineBy <- match.arg(combineBy)
     aggregateBy <- match.arg(aggregateBy) 
     
-   	if(any(class(list_dTarget) %in% c("dTarget","pTarget"))){
-		list_dTarget <- list(list_dTarget)
-	}else if(class(list_dTarget)=="list"){
+   	if(any(class(list_xTarget) %in% c("dTarget","sTarget"))){
+		list_xTarget <- list(list_xTarget)
+	}else if(class(list_xTarget)=="list"){
 		## Remove null elements in a list
-		list_dTarget <- base::Filter(base::Negate(is.null), list_dTarget)
-		if(length(list_dTarget)==0){
+		list_xTarget <- base::Filter(base::Negate(is.null), list_xTarget)
+		if(length(list_xTarget)==0){
 			return(NULL)
 		}
 	}else{
-		stop("The function must apply to 'list' of 'dTarget' objects or a 'pTarget' object.\n")
+		stop("The function must apply to 'list' of 'dTarget' objects or a 'sTarget' object.\n")
 	}
 	
 	## get nodes involved
-	ls_nodes <- lapply(list_dTarget, function(x){
+	ls_nodes <- lapply(list_xTarget, function(x){
 		x$priority$name
 	})
 	if(combineBy=='intersect'){
@@ -61,12 +61,12 @@ xPierCross <- function(list_dTarget, displayBy=c("priority","rank","pvalue","fdr
 	nodes <- sort(nodes)
 	
 	## Combine into a data frame called 'df_disease'
-	list_names <- names(list_dTarget)
+	list_names <- names(list_xTarget)
 	if(is.null(list_names)){
-		list_names <- paste('Disease', 1:length(list_dTarget), sep=' ')
-		names(list_dTarget) <- list_names
+		list_names <- paste('Disease', 1:length(list_xTarget), sep=' ')
+		names(list_xTarget) <- list_names
 	}
-	ls_priority <- lapply(list_dTarget, function(dTarget){
+	ls_priority <- lapply(list_xTarget, function(dTarget){
 		p <- dTarget$priority
 		ind <- match(nodes, rownames(p))
 		res <- p[ind, displayBy]
@@ -128,7 +128,7 @@ xPierCross <- function(list_dTarget, displayBy=c("priority","rank","pvalue","fdr
 	if(verbose){
 		
 		if(displayBy=="pvalue" & aggregateBy!="none"){
-			message(sprintf("A total of %d genes are prioritised, combined by '%s' and aggregated by '%s' from %d predictors", nrow(df_disease$priority), combineBy, aggregateBy, length(list_dTarget)), appendLF=TRUE)
+			message(sprintf("A total of %d genes are prioritised, combined by '%s' and aggregated by '%s' from %d predictors", nrow(df_disease$priority), combineBy, aggregateBy, length(list_xTarget)), appendLF=TRUE)
 		}else{
 			message(sprintf("A matrix of %d genes x %d predictors are generated, displayed by '%s' and combined by '%s'", nrow(df_disease), ncol(df_disease), displayBy, combineBy), appendLF=TRUE)
 		}

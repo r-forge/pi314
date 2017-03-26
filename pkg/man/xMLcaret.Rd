@@ -4,16 +4,18 @@
 \alias{xMLcaret}
 \title{Function to integrate predictor matrix in a supervised manner via machine learning algorithms using caret.}
 \usage{
-xMLcaret(df_predictor, GSP, GSN, method = c("gbm", "svmRadial", "rda",
-"knn",
-"pls", "nnet", "rf", "myrf", "cforest", "glmnet", "glm", "bayesglm",
-"LogitBoost", "xgbLinear", "xgbTree"), nfold = 3, nrepeat = 10,
-seed = 825, aggregateBy = c("none", "logistic", "Ztransform",
-"fishers",
-"orderStatistic"), verbose = TRUE,
+xMLcaret(list_pNode = NULL, df_predictor = NULL, GSP, GSN,
+method = c("gbm", "svmRadial", "rda", "knn", "pls", "nnet", "rf",
+"myrf",
+"cforest", "glmnet", "glm", "bayesglm", "LogitBoost", "xgbLinear",
+"xgbTree"),
+nfold = 3, nrepeat = 10, seed = 825, aggregateBy = c("none",
+"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
+\item{list_pNode}{a list of "pNode" objects or a "pNode" object}
+
 \item{df_predictor}{a data frame containing genes (in rows) and
 predictors (in columns), with their predictive scores inside it. This
 data frame must has gene symbols as row names}
@@ -68,7 +70,7 @@ displayed in the screen. By default, it sets to TRUE for display}
 RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
-an object of class "pTarget", a list with following components:
+an object of class "sTarget", a list with following components:
 \itemize{
 \item{\code{model}: an object of class "train" as a best model}
 \item{\code{ls_model}: a list of best models from repeated
@@ -94,6 +96,8 @@ predictor importance info}
 \item{\code{gp}: a ggplot object for the ROC curve}
 \item{\code{gp_cv}: a ggplot object for the ROC curves from repeated
 cross-validation}
+\item{\code{evidence}: an object of the class "eTarget", a list with
+following components "evidence" and "metag"}
 \item{\code{call}: the call that produced this result}
 }
 }
@@ -104,7 +108,7 @@ caret package streamlines model building and performance evaluation. It
 requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold
 Standard Negative (GSN) targets; 3) a predictor matrix containing genes
 in rows and predictors in columns, with their predictive scores inside
-it. It returns an object of class 'pTarget'.
+it. It returns an object of class 'sTarget'.
 }
 \note{
 It will depend on whether a package "caret" and its suggested packages
@@ -120,6 +124,6 @@ library(Pi)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
-pTarget <- xMLcaret(df_prediction, GSP, GSN, method="myrf")
+sTarget <- xMLcaret(df_prediction, GSP, GSN, method="myrf")
 }
 }

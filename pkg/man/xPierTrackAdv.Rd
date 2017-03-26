@@ -13,7 +13,7 @@ GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
 \arguments{
-\item{pNode}{an object of class "pNode" (or "pTarget" or "dTarget")}
+\item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
 
 \item{priority.top}{the number of the top targets used for track plot.
 By default, it is NULL meaning all targets are used}

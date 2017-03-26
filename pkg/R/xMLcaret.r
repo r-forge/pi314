@@ -1,7 +1,8 @@
 #' Function to integrate predictor matrix in a supervised manner via machine learning algorithms using caret.
 #'
-#' \code{xMLcaret} is supposed to integrate predictor matrix in a supervised manner via machine learning algorithms using caret. The caret package streamlines model building and performance evaluation. It requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative (GSN) targets; 3) a predictor matrix containing genes in rows and predictors in columns, with their predictive scores inside it. It returns an object of class 'pTarget'.
+#' \code{xMLcaret} is supposed to integrate predictor matrix in a supervised manner via machine learning algorithms using caret. The caret package streamlines model building and performance evaluation. It requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold Standard Negative (GSN) targets; 3) a predictor matrix containing genes in rows and predictors in columns, with their predictive scores inside it. It returns an object of class 'sTarget'.
 #'
+#' @param list_pNode a list of "pNode" objects or a "pNode" object
 #' @param df_predictor a data frame containing genes (in rows) and predictors (in columns), with their predictive scores inside it. This data frame must has gene symbols as row names
 #' @param GSP a vector containing Gold Standard Positive (GSP)
 #' @param GSN a vector containing Gold Standard Negative (GSN)
@@ -13,7 +14,7 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return 
-#' an object of class "pTarget", a list with following components:
+#' an object of class "sTarget", a list with following components:
 #' \itemize{
 #'  \item{\code{model}: an object of class "train" as a best model}
 #'  \item{\code{ls_model}: a list of best models from repeated cross-validation}
@@ -24,6 +25,7 @@
 #'  \item{\code{importance}: a data frame of nPredictor X 1 containing the predictor importance info}
 #'  \item{\code{gp}: a ggplot object for the ROC curve}
 #'  \item{\code{gp_cv}: a ggplot object for the ROC curves from repeated cross-validation}
+#'  \item{\code{evidence}: an object of the class "eTarget", a list with following components "evidence" and "metag"}
 #'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note It will depend on whether a package "caret" and its suggested packages have been installed. It can be installed via: \code{source("http://bioconductor.org/biocLite.R"); biocLite(c("caret","e1071","gbm","kernlab","klaR","pls","nnet","randomForest","party","glmnet","arm","caTools","xgboost"), siteRepos=c("http://cran.r-project.org")))}.
@@ -36,10 +38,10 @@
 #' }
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
-#' pTarget <- xMLcaret(df_prediction, GSP, GSN, method="myrf")
+#' sTarget <- xMLcaret(df_prediction, GSP, GSN, method="myrf")
 #' }
 
-xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","knn","pls","nnet","rf","myrf","cforest","glmnet","glm","bayesglm","LogitBoost","xgbLinear","xgbTree"), nfold=3, nrepeat=10, seed=825, aggregateBy=c("none","logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm","svmRadial","rda","knn","pls","nnet","rf","myrf","cforest","glmnet","glm","bayesglm","LogitBoost","xgbLinear","xgbTree"), nfold=3, nrepeat=10, seed=825, aggregateBy=c("none","logistic","Ztransform","fishers","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
     startT <- Sys.time()
@@ -52,6 +54,26 @@ xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","k
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
     method <- match.arg(method)
     aggregateBy <- match.arg(aggregateBy)
+	
+	if(class(list_pNode)=="list" & is.null(df_predictor)){
+		df_predictor <- xPierMatrix(list_pNode, displayBy="score", combineBy="union", aggregateBy="none", RData.location=RData.location)
+		
+		###########
+		## evidence
+		eTarget <- xPierMatrix(list_pNode, displayBy="evidence", combineBy="union", aggregateBy="none", verbose=FALSE, RData.location=RData.location)
+		###########
+				
+	}else if(!is.null(df_predictor)){
+		df_predictor <- df_predictor
+		
+		###########
+		## evidence
+		eTarget <- NULL
+		###########
+		
+	}else{
+		stop("The function must apply to 'list' of 'pNode' objects or a 'data.frame'.\n")
+	}
 	
 	## pre-process GSP and GSN
 	gsp <- unique(GSP)
@@ -874,7 +896,12 @@ xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","k
 	overall.importance <- caret::varImp(fit_target)$importance
 	#####################
 	
-    pTarget <- list(model = fit_target, 
+	if(!is.null(eTarget)){
+		ind <- match(df_priority$name, rownames(eTarget$evidence))
+		eTarget$evidence <- eTarget$evidence[ind,]
+	}
+	
+    sTarget <- list(model = fit_target, 
     				ls_model = ls_model,
     				priority = df_priority,
     				predictor = df_predictor_gs,
@@ -883,9 +910,10 @@ xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","k
     				performance_cv = df_ROC_Fmax,
     				gp_cv = gp_cv,
     				importance = overall.importance,
+    				evidence = eTarget,
                   	Call = match.call()
                  )
-    class(pTarget) <- "pTarget"
+    class(sTarget) <- "sTarget"
     
     ####################################################################################
     endT <- Sys.time()
@@ -896,7 +924,7 @@ xMLcaret <- function(df_predictor, GSP, GSN, method=c("gbm","svmRadial","rda","k
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
     message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
     
-    invisible(pTarget)
+    invisible(sTarget)
 }
 
 

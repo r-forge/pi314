@@ -19,7 +19,7 @@ this functionality as the cross mode of the prioritisation.
 <h3>Usage</h3>
 
 <pre>
-xPierCross(list_dTarget, displayBy = c("priority", "rank", "pvalue",
+xPierCross(list_xTarget, displayBy = c("priority", "rank", "pvalue",
 "fdr"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 "logistic", "Ztransform", "orderStatistic"), verbose = TRUE,
@@ -30,7 +30,7 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>list_dTarget</code></td>
+<tr valign="top"><td><code>list_xTarget</code></td>
 <td>
 <p>a list of &quot;dTarget&quot; objects or a &quot;dTarget&quot; object</p>
 </td></tr>
@@ -127,7 +127,7 @@ library(Pi)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
-df_score &lt;- xPierCross(ls_dTarget)
+df_score &lt;- xPierCross(ls_xTarget)
 
 ## End(Not run)
 </pre>

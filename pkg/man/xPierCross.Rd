@@ -4,14 +4,14 @@
 \alias{xPierCross}
 \title{Function to extract priority matrix from a list of dTarget objects}
 \usage{
-xPierCross(list_dTarget, displayBy = c("priority", "rank", "pvalue",
+xPierCross(list_xTarget, displayBy = c("priority", "rank", "pvalue",
 "fdr"),
 combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 "logistic", "Ztransform", "orderStatistic"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{list_dTarget}{a list of "dTarget" objects or a "dTarget" object}
+\item{list_xTarget}{a list of "dTarget" objects or a "dTarget" object}
 
 \item{displayBy}{which priority will be extracted. It can be "priority"
 for priority score (by default), "rank" for priority rank, "pvalue" for
@@ -77,7 +77,7 @@ library(Pi)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
-df_score <- xPierCross(ls_dTarget)
+df_score <- xPierCross(ls_xTarget)
 }
 }
 \seealso{

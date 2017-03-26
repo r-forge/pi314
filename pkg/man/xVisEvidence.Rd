@@ -4,21 +4,22 @@
 \alias{xVisEvidence}
 \title{Function to visualise evidence for prioritised genes in a gene network}
 \usage{
-xVisEvidence(xObject, g = NA, nodes = NULL, node.info = c("smart",
+xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
-colormap = "ggplot2", legend.position = "topleft", verbose = TRUE, ...)
+colormap = "ggplot2", legend.position = "bottom", legend.horiz = FALSE,
+verbose = TRUE, ...)
 }
 \arguments{
-\item{xObject}{an object of class "xObject"}
+\item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
 
 \item{g}{an object of class "igraph". If NA, the 'metag' will be used,
-which is part of the object of class "xObject"}
+which is part of the input object "xTarget"}
 
 \item{nodes}{which node genes are in query. If NULL, the top gene will
 be queried}
 
 \item{node.info}{tells the additional information used to label nodes.
-It can be one of "none" (only gene labeling), "smark" for (by default)
+It can be one of "none" (only gene labeling), "smart" for (by default)
 using three pieces of information (if any): genes, 5-star ratings, and
 associated ranks (marked by an @ icon)}
 
@@ -46,6 +47,9 @@ standard color names can be found in
 \item{legend.position}{the legend position. If NA, the legend will be
 hiden}
 
+\item{legend.horiz}{logical specifying the legend horizon. If TRUE, set
+the legend horizontally rather than vertically}
+
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
 
@@ -67,15 +71,15 @@ library(Pi)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
 ## TNFRSF1A
-xVisEvidence(pTarget, nodes="TNFRSF1A", neighbor.order=1,
+xVisEvidence(xTarget, nodes="TNFRSF1A", neighbor.order=1,
 neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black",
 vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4,
-legend.position="bottomleft", newpage=FALSE)
+legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 ## UBA52
-xVisEvidence(pTarget, nodes="UBA52", neighbor.order=1,
+xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1,
 neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black",
 vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4,
-legend.position="bottomleft", newpage=FALSE)
+legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 }
 }
 \seealso{

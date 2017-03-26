@@ -66,7 +66,7 @@ RData files. See \code{\link{xRDataLoader}} for details}
 'randomForest::randomForest' for the complete list.}
 }
 \value{
-an object of class "pTarget", a list with following components:
+an object of class "sTarget", a list with following components:
 \itemize{
 \item{\code{model}: a list of models, results from per-fold train set}
 \item{\code{priority}: a data frame of nGene X 7 containing gene
@@ -136,7 +136,7 @@ supervised manner via machine learning algorithm random forest. It
 requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold
 Standard Negative (GSN) targets; 3) a predictor matrix containing genes
 in rows and predictors in columns, with their predictive scores inside
-it. It returns an object of class 'pTarget'.
+it. It returns an object of class 'sTarget'.
 }
 \note{
 none
@@ -148,6 +148,6 @@ library(Pi)
 }
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 \dontrun{
-pTarget <- xMLrandomforest(df_prediction, GSP, GSN)
+sTarget <- xMLrandomforest(df_prediction, GSP, GSN)
 }
 }

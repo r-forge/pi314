@@ -2,7 +2,7 @@
 #'
 #' \code{xPierGSEA} is supposed to prioritise pathways given prioritised genes and the ontology in query. It is done via gene set enrichment analysis (GSEA). It returns an object of class "eGSEA". 
 #
-#' @param pNode an object of class "pNode" (or "pTarget" or "dTarget")
+#' @param pNode an object of class "pNode" (or "sTarget" or "dTarget")
 #' @param priority.top the number of the top targets used for GSEA. By default, it is NULL meaning all targets are used
 #' @param ontology the ontology supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PS" for phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for Experimental Factor Ontology (used to annotate GWAS Catalog genes), Drug-Gene Interaction database ("DGIdb") for drugable categories, tissue-specific eQTL-containing genes from GTEx ("GTExV4" and "GTExV6"), crowd extracted expression of differential signatures from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP" and "CreedsGeneDN"), and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
 #' @param customised.genesets a list each containing gene symbols. By default, it is NULL. If the list provided, it will overtake the previous parameter "ontology"
@@ -65,10 +65,10 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
     
     if(class(pNode) == "pNode"){
         df_priority <- pNode$priority[, c("seed","weight","priority","rank")]
-    }else if(class(pNode) == "pTarget" | class(pNode) == "dTarget"){
+    }else if(class(pNode) == "sTarget" | class(pNode) == "dTarget"){
     	df_priority <- pNode$priority[, c("pvalue","fdr","priority","rank")]
     }else{
-    	stop("The function must apply to a 'pNode' or 'pTarget' or 'dTarget' object.\n")
+    	stop("The function must apply to a 'pNode' or 'sTarget' or 'dTarget' object.\n")
     }
     
     ###############

@@ -14,7 +14,7 @@ supervised manner via machine learning algorithm random forest. It
 requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold
 Standard Negative (GSN) targets; 3) a predictor matrix containing genes
 in rows and predictors in columns, with their predictive scores inside
-it. It returns an object of class 'pTarget'.
+it. It returns an object of class 'sTarget'.
 </p>
 
 
@@ -117,7 +117,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>an object of class &quot;pTarget&quot;, a list with following components:
+<p>an object of class &quot;sTarget&quot;, a list with following components:
 </p>
 
 <ul>
@@ -224,7 +224,7 @@ library(Pi)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
-pTarget &lt;- xMLrandomforest(df_prediction, GSP, GSN)
+sTarget &lt;- xMLrandomforest(df_prediction, GSP, GSN)
 
 ## End(Not run)
 </pre>

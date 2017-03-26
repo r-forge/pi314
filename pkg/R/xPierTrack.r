@@ -2,7 +2,7 @@
 #'
 #' \code{xPierTrack} is supposed to visualise a prioritised gene using track plot. Priority for the gene in query is displayed on the data track and nearby genes on the annotation track. Genomic locations on the X-axis are indicated on the X-axis, and the gene in query is highlighted. If SNPs are also provided, SNP annotation track will be also displayed at the bottom.
 #'
-#' @param pNode an object of class "pNode" (or "pTarget" or "dTarget")
+#' @param pNode an object of class "pNode" (or "sTarget" or "dTarget")
 #' @param priority.top the number of the top targets used for track plot. By default, it is NULL meaning all targets are used
 #' @param target.query which gene in query will be visualised. If NULL, the target gene with the top priority will be displayed
 #' @param window the maximum distance defining nearby genes around the target gene in query. By default it is 1e6
@@ -55,12 +55,12 @@ xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, 
 
     if(class(pNode) == "pNode"){
         df_priority <- pNode$priority[, c("seed","weight","priority")]
-    }else if(class(pNode) == "pTarget"){
+    }else if(class(pNode) == "sTarget"){
     	df_priority <- pNode$priority[, c("pvalue","fdr","priority")]
     }else if(class(pNode) == "dTarget"){
     	df_priority <- pNode$priority[, c("pvalue","fdr","priority")]	
     }else{
-    	stop("The function must apply to a 'pNode' or 'pTarget' or 'dTarget' object.\n")
+    	stop("The function must apply to a 'pNode' or 'sTarget' or 'dTarget' object.\n")
     }
 
    ###############

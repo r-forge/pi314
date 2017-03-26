@@ -2,7 +2,7 @@
 #'
 #' \code{xPierTrackAdv} is supposed to visualise prioritised genes using advanced track plot. Internally, it calls the function 'xPierTrack' per gene.
 #'
-#' @param pNode an object of class "pNode" (or "pTarget" or "dTarget")
+#' @param pNode an object of class "pNode" (or "sTarget" or "dTarget")
 #' @param priority.top the number of the top targets used for track plot. By default, it is NULL meaning all targets are used
 #' @param targets.query which genes in query will be visualised. If NULL, the target gene with the top priority will be displayed
 #' @param window the maximum distance defining nearby genes around the target gene in query. By default it is 1e6
@@ -55,12 +55,12 @@ xPierTrackAdv <- function(pNode, priority.top=NULL, targets.query=NULL, window=1
 
     if(class(pNode) == "pNode"){
         df_priority <- pNode$priority[, c("seed","weight","priority")]
-    }else if(class(pNode) == "pTarget"){
+    }else if(class(pNode) == "sTarget"){
     	df_priority <- pNode$priority[, c("pvalue","fdr","priority")]
     }else if(class(pNode) == "dTarget"){
     	df_priority <- pNode$priority[, c("pvalue","fdr","priority")]	
     }else{
-    	stop("The function must apply to a 'pNode' or 'pTarget' or 'dTarget' object.\n")
+    	stop("The function must apply to a 'pNode' or 'sTarget' or 'dTarget' object.\n")
     }
 
    ###############

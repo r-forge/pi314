@@ -15,20 +15,20 @@ caret package streamlines model building and performance evaluation. It
 requires three inputs: 1) Gold Standard Positive (GSP) targets; 2) Gold
 Standard Negative (GSN) targets; 3) a predictor matrix containing genes
 in rows and predictors in columns, with their predictive scores inside
-it. It returns an object of class 'pTarget'.
+it. It returns an object of class 'sTarget'.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xMLcaret(df_predictor, GSP, GSN, method = c("gbm", "svmRadial", "rda",
-"knn",
-"pls", "nnet", "rf", "myrf", "cforest", "glmnet", "glm", "bayesglm",
-"LogitBoost", "xgbLinear", "xgbTree"), nfold = 3, nrepeat = 10,
-seed = 825, aggregateBy = c("none", "logistic", "Ztransform",
-"fishers",
-"orderStatistic"), verbose = TRUE,
+xMLcaret(list_pNode = NULL, df_predictor = NULL, GSP, GSN,
+method = c("gbm", "svmRadial", "rda", "knn", "pls", "nnet", "rf",
+"myrf",
+"cforest", "glmnet", "glm", "bayesglm", "LogitBoost", "xgbLinear",
+"xgbTree"),
+nfold = 3, nrepeat = 10, seed = 825, aggregateBy = c("none",
+"logistic", "Ztransform", "fishers", "orderStatistic"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
@@ -36,6 +36,10 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <h3>Arguments</h3>
 
 <table summary="R argblock">
+<tr valign="top"><td><code>list_pNode</code></td>
+<td>
+<p>a list of &quot;pNode&quot; objects or a &quot;pNode&quot; object</p>
+</td></tr>
 <tr valign="top"><td><code>df_predictor</code></td>
 <td>
 <p>a data frame containing genes (in rows) and
@@ -114,7 +118,7 @@ RData files. See <code>xRDataLoader</code> for details</p>
 
 <h3>Value</h3>
 
-<p>an object of class &quot;pTarget&quot;, a list with following components:
+<p>an object of class &quot;sTarget&quot;, a list with following components:
 </p>
 
 <ul>
@@ -160,6 +164,10 @@ predictor importance info
 cross-validation
 </p>
 </li>
+<li><p><code>evidence</code>: an object of the class &quot;eTarget&quot;, a list with
+following components &quot;evidence&quot; and &quot;metag&quot;
+</p>
+</li>
 <li><p><code>call</code>: the call that produced this result
 </p>
 </li></ul>
@@ -186,7 +194,7 @@ library(Pi)
 ## End(Not run)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
-pTarget &lt;- xMLcaret(df_prediction, GSP, GSN, method="myrf")
+sTarget &lt;- xMLcaret(df_prediction, GSP, GSN, method="myrf")
 
 ## End(Not run)
 </pre>

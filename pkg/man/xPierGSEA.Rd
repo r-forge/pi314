@@ -20,7 +20,7 @@ weight = 1, nperm = 2000, fast = TRUE, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{pNode}{an object of class "pNode" (or "pTarget" or "dTarget")}
+\item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
 
 \item{priority.top}{the number of the top targets used for GSEA. By
 default, it is NULL meaning all targets are used}

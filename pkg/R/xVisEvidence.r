@@ -2,15 +2,16 @@
 #'
 #' \code{xVisEvidence} is supposed to visualise evidence for prioritised genes in a gene network. It returns an object of class "igraph". 
 #'
-#' @param xObject an object of class "xObject"
-#' @param g an object of class "igraph". If NA, the 'metag' will be used, which is part of the object of class "xObject"
+#' @param xTarget an object of class "dTarget", "sTarget" or "eTarget"
+#' @param g an object of class "igraph". If NA, the 'metag' will be used, which is part of the input object "xTarget"
 #' @param nodes which node genes are in query. If NULL, the top gene will be queried
-#' @param node.info tells the additional information used to label nodes. It can be one of "none" (only gene labeling), "smark" for (by default) using three pieces of information (if any): genes, 5-star ratings, and associated ranks (marked by an @ icon)
+#' @param node.info tells the additional information used to label nodes. It can be one of "none" (only gene labeling), "smart" for (by default) using three pieces of information (if any): genes, 5-star ratings, and associated ranks (marked by an @ icon)
 #' @param neighbor.order an integer giving the order of the neighborhood. By default, it is 1-order neighborhood
 #' @param neighbor.seed logical to indicate whether neighbors are seeds only. By default, it sets to true
 #' @param neighbor.top the top number of the neighbors with the highest priority. By default, it sets to NULL to disable this parameter
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param legend.position the legend position. If NA, the legend will be hiden
+#' @param legend.horiz logical specifying the legend horizon. If TRUE, set the legend horizontally rather than vertically
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param ... additional graphic parameters. See \url{http://igraph.org/r/doc/plot.common.html} for the complete list.
 #' @return
@@ -26,52 +27,41 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
 #' ## TNFRSF1A
-#' xVisEvidence(pTarget, nodes="TNFRSF1A", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", newpage=FALSE)
+#' xVisEvidence(xTarget, nodes="TNFRSF1A", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' ## UBA52
-#' xVisEvidence(pTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", newpage=FALSE)
+#' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' }
 
-xVisEvidence <- function(xObject, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="topleft", verbose=TRUE, ...)
+xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="bottom", legend.horiz=FALSE, verbose=TRUE, ...)
 {
 
     node.info <- match.arg(node.info)
 
-    if(class(xObject) == "dTarget"){
-        df_evidence <- xObject$priority[, 7:ncol(xObject$priority)]
-        df_priority <- xObject$priority[, c("rank","priority")]
-        
-		if(!is.na(g)){
-			g <- match.arg(g)
-		}else{
-			g <- xObject$metag
-		}
+    if(class(xTarget) == "dTarget"){
+        df_evidence <- xTarget$priority[, 7:ncol(xTarget$priority)]
+        df_priority <- xTarget$priority[, c("rank","priority")]
 		
-    }else if(class(xObject) == "pTarget"){
-        df_evidence <- xObject$evidence$evidence
-        df_priority <- xObject$priority[, c("rank","priority")]
-        
-		if(!is.na(g)){
-			g <- match.arg(g)
-		}else{
-			g <- xObject$evidence$metag
-		}
+    }else if(class(xTarget) == "sTarget"){
+        df_evidence <- xTarget$evidence$evidence
+        df_priority <- xTarget$priority[, c("rank","priority")]
 		
-    }else if(class(xObject) == "eTarget"){
-        df_evidence <- xObject$evidence
-        df_priority <- NULL
-        
-		if(!is.na(g)){
-			g <- match.arg(g)
-		}else{
-			g <- xObject$metag
-		}
+    }else if(class(xTarget) == "eTarget"){
+        df_evidence <- xTarget$evidence
+        # here, sorted by the number of seed gene types
+        df_priority <- df_evidence[order(df_evidence[,1],decreasing=TRUE),]
 		
-		neighbor.top <- NULL
+		#neighbor.top <- NULL
 		
     }else{
-    	stop("The function must apply to a 'dTarget' or 'pTarget' or 'eTarget' object.\n")
+    	stop("The function must apply to a 'dTarget' or 'sTarget' or 'eTarget' object.\n")
     }
 	
+	
+	if(!is.na(g)){
+		g <- match.arg(g)
+	}else{
+		g <- xTarget$metag
+	}
 	if(class(g)!='igraph'){
 		stop("The input 'g' must be provided!\n")
 	}
@@ -126,7 +116,7 @@ xVisEvidence <- function(xObject, g=NA, nodes=NULL, node.info=c("smart","none"),
 	
 	## vertex.label
 	vertex.label <- V(subg)$name
-	if(!is.null(df_priority)){
+	if(class(xTarget) != "eTarget"){
 		ind <- match(vertex.label, rownames(df_priority))
 		df_nodes <- df_priority[ind, ]
 		if(node.info=='smart'){
@@ -141,12 +131,12 @@ xVisEvidence <- function(xObject, g=NA, nodes=NULL, node.info=c("smart","none"),
 	pie.color <- xColormap(colormap)(ncol(df_val)-1)
 	## legend text
 	legend.text <- colnames(df_val)[-1]
-	legend.text[legend.text=="OMIM"] <- "dGene"
-	legend.text[legend.text=="Phenotype"] <- "pGene"
-	legend.text[legend.text=="Function"] <- "fGene"
-	legend.text[legend.text=="nearbyGenes"] <- "nGene"
-	legend.text[legend.text=="eQTL"] <- "eGene"
-	legend.text[legend.text=="HiC"] <- "hGene"
+	legend.text[grep('OMIM|disease',legend.text,ignore.case=FALSE)] <- "dGene"
+	legend.text[grep('phenotype',legend.text,ignore.case=FALSE)] <- "pGene"
+	legend.text[grep('function',legend.text,ignore.case=FALSE)] <- "fGene"
+	legend.text[grep('nearbyGenes',legend.text,ignore.case=FALSE)] <- "nGene"
+	legend.text[grep('eQTL',legend.text,ignore.case=FALSE)] <- "eGene"
+	legend.text[grep('HiC|Hi-C',legend.text,ignore.case=FALSE)] <- "hGene"
 	## vertex size
 	vertex.size <- igraph::degree(subg)
 	if(min(vertex.size) == max(vertex.size)){
@@ -157,7 +147,7 @@ xVisEvidence <- function(xObject, g=NA, nodes=NULL, node.info=c("smart","none"),
 	## draw graph
 	xVisNet(subg, vertex.shape=vertex.shape, vertex.pie=ls_val, vertex.pie.color=list(pie.color), vertex.pie.border="grey", vertex.label=vertex.label, vertex.color="grey", vertex.size=vertex.size, signature=FALSE, ...)
 	if(!is.na(legend.position)){
-		legend(legend.position, legend=legend.text, col=pie.color, pch=10, bty="n", pt.cex=1.2, cex=1, text.col="black", text.font=4, horiz=FALSE)
+		legend(legend.position, legend=legend.text, col=pie.color, pch=10, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
 	}
 	
     return(subg)

@@ -89,6 +89,10 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 		})
 		df <- do.call(rbind, ls_df)
 		mat_evidence <- as.matrix(xSparseMatrix(df, rows=nodes, columns=NULL, verbose=FALSE))
+		###
+		# sorted by the number of seed gene types, followed by the total number of seed genes
+        mat_evidence <- mat_evidence[order(mat_evidence[,1],apply(mat_evidence,1,sum),decreasing=TRUE),]
+		###
 		
 		############
 		## get edges involved

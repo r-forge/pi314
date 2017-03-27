@@ -71,7 +71,6 @@ for non-network seed genes), "seed" (1 for seeds, 0 for non-seeds),
 "weight" (weight values), "priority" (the priority scores that are
 rescaled to the range [0,1]), "rank" (ranks of the priority scores)}
 \item{\code{g}: an input "igraph" object}
-\item{\code{call}: the call that produced this result}
 }
 }
 \description{

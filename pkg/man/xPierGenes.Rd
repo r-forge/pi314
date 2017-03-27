@@ -124,7 +124,6 @@ for non-network seed genes), "seed" (1 for seeds, 0 for non-seeds),
 rescaled to the range [0,1]), "rank" (ranks of the priority scores),
 "description" (node description)}
 \item{\code{g}: an input "igraph" object}
-\item{\code{call}: the call that produced this result}
 }
 }
 \description{

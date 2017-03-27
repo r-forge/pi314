@@ -75,7 +75,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 	}else{
 		stop("The function must apply to 'list' of 'pNode' objects or a 'data.frame'.\n")
 	}
-	
+		
 	## pre-process GSP and GSN
 	gsp <- unique(GSP)
 	gsn <- unique(GSN)

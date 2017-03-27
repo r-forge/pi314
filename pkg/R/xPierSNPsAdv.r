@@ -40,7 +40,6 @@
 #'  \item{\code{nGenes}: if not NULL, it is a data frame containing nGene-SNP pair info}
 #'  \item{\code{eGenes}: if not NULL, it is a data frame containing eGene-SNP pair info per context}
 #'  \item{\code{cGenes}: if not NULL, it is a data frame containing cGene-SNP pair info per context}
-#'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note This function calls \code{\link{xPierSNPs}} in a loop way generating the distance predictor, the eQTL predictors (if required) and the HiC predictors (if required).
 #' Pre-built eQTL datasets are described below according to the data sources.\cr

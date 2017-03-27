@@ -11,15 +11,16 @@ combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{list_xTarget}{a list of "dTarget" objects or a "dTarget" object}
+\item{list_xTarget}{a list of "dTarget"/"sTarget" objects or a
+"dTarget"/"sTarget" object}
 
 \item{displayBy}{which priority will be extracted. It can be "priority"
 for priority score (by default), "rank" for priority rank, "pvalue" for
 priority p-value, "fdr" for priority fdr}
 
-\item{combineBy}{how to resolve nodes/targets from a list of "dTarget"
-objects. It can be "intersect" for intersecting nodes (by default),
-"union" for unionising nodes}
+\item{combineBy}{how to resolve nodes/targets from a list of
+"dTarget"/"sTarget" objects. It can be "intersect" for intersecting
+nodes (by default), "union" for unionising nodes}
 
 \item{aggregateBy}{the aggregate method used. It can be either "none"
 for no aggregation, or "orderStatistic" for the method based on the
@@ -58,7 +59,6 @@ empirical cumulative distribution of the probability of being GSP),
 \item{\code{disease}: a data frame containing disease matrix, with each
 column/disease for either priority score, or priorty rank or priority
 p-value}
-\item{\code{call}: the call that produced this result}
 }
 }
 \description{

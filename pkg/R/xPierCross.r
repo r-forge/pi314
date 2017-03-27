@@ -2,9 +2,9 @@
 #'
 #' \code{xPierCross} is supposed to extract priority matrix from a list of dTarget objects. Also supported is the aggregation of priority matrix (similar to the meta-analysis) generating the priority results; we view this functionality as the cross mode of the prioritisation.
 #'
-#' @param list_xTarget a list of "dTarget" objects or a "dTarget" object
+#' @param list_xTarget a list of "dTarget"/"sTarget" objects or a "dTarget"/"sTarget" object
 #' @param displayBy which priority will be extracted. It can be "priority" for priority score (by default), "rank" for priority rank, "pvalue" for priority p-value, "fdr" for priority fdr
-#' @param combineBy how to resolve nodes/targets from a list of "dTarget" objects. It can be "intersect" for intersecting nodes (by default), "union" for unionising nodes
+#' @param combineBy how to resolve nodes/targets from a list of "dTarget"/"sTarget" objects. It can be "intersect" for intersecting nodes (by default), "union" for unionising nodes
 #' @param aggregateBy the aggregate method used. It can be either "none" for no aggregation, or "orderStatistic" for the method based on the order statistics of p-values, "fishers" for Fisher's method, "Ztransform" for Z-transform method, "logistic" for the logistic method. Without loss of generality, the Z-transform method does well in problems where evidence against the combined null is spread widely (equal footings) or when the total evidence is weak; Fisher's method does best in problems where the evidence is concentrated in a relatively small fraction of the individual tests or when the evidence is at least moderately strong; the logistic method provides a compromise between these two. Notably, the aggregate methods 'fishers' and 'logistic' are preferred here
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -14,7 +14,6 @@
 #' \itemize{
 #'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority (aggregated) information, where nGene is the number of genes, and the 6 columns are "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the aggregated p-value, converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 5-star ratings), "description" (gene description)}
 #'  \item{\code{disease}: a data frame containing disease matrix, with each column/disease for either priority score, or priorty rank or priority p-value}
-#'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
 #' @export
@@ -66,8 +65,8 @@ xPierCross <- function(list_xTarget, displayBy=c("priority","rank","pvalue","fdr
 		list_names <- paste('Disease', 1:length(list_xTarget), sep=' ')
 		names(list_xTarget) <- list_names
 	}
-	ls_priority <- lapply(list_xTarget, function(dTarget){
-		p <- dTarget$priority
+	ls_priority <- lapply(list_xTarget, function(xTarget){
+		p <- xTarget$priority
 		ind <- match(nodes, rownames(p))
 		res <- p[ind, displayBy]
 	})
@@ -115,8 +114,7 @@ xPierCross <- function(list_xTarget, displayBy=c("priority","rank","pvalue","fdr
 			df_disease <- df_disease[ind,]
 			
 			cTarget <- list(priority = df_priority,
-							predictor = df_disease, 
-							Call     = match.call()
+							predictor = df_disease
 						 )
 			class(dTarget) <- "cTarget"
 			

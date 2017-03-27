@@ -279,7 +279,6 @@ nGene-SNP pair info}
 eGene-SNP pair info per context}
 \item{\code{cGenes}: if not NULL, it is a data frame containing
 cGene-SNP pair info per context}
-\item{\code{call}: the call that produced this result}
 }
 }
 \description{

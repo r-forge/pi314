@@ -32,7 +32,7 @@
 #' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' }
 
-xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="bottom", legend.horiz=FALSE, verbose=TRUE, ...)
+xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, verbose=TRUE, ...)
 {
 
     node.info <- match.arg(node.info)
@@ -131,12 +131,12 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	pie.color <- xColormap(colormap)(ncol(df_val)-1)
 	## legend text
 	legend.text <- colnames(df_val)[-1]
-	legend.text[grep('OMIM|disease',legend.text,ignore.case=FALSE)] <- "dGene"
-	legend.text[grep('phenotype',legend.text,ignore.case=FALSE)] <- "pGene"
-	legend.text[grep('function',legend.text,ignore.case=FALSE)] <- "fGene"
-	legend.text[grep('nearbyGenes',legend.text,ignore.case=FALSE)] <- "nGene"
-	legend.text[grep('eQTL',legend.text,ignore.case=FALSE)] <- "eGene"
-	legend.text[grep('HiC|Hi-C',legend.text,ignore.case=FALSE)] <- "hGene"
+	legend.text[grep('OMIM|disease',legend.text,ignore.case=TRUE)] <- "dGene"
+	legend.text[grep('Phenotype',legend.text,ignore.case=TRUE)] <- "pGene"
+	legend.text[grep('Function',legend.text,ignore.case=TRUE)] <- "fGene"
+	legend.text[grep('nearbyGenes',legend.text,ignore.case=TRUE)] <- "nGene"
+	legend.text[grep('eQTL',legend.text,ignore.case=TRUE)] <- "eGene"
+	legend.text[grep('HiC|Hi-C',legend.text,ignore.case=TRUE)] <- "hGene"
 	## vertex size
 	vertex.size <- igraph::degree(subg)
 	if(min(vertex.size) == max(vertex.size)){

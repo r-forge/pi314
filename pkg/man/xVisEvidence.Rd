@@ -6,7 +6,8 @@
 \usage{
 xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
-colormap = "ggplot2", legend.position = "bottom", legend.horiz = FALSE,
+colormap = "ggplot2", legend.position = "topleft", legend.horiz =
+FALSE,
 verbose = TRUE, ...)
 }
 \arguments{

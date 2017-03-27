@@ -40,7 +40,6 @@
 #'  \item{\code{nGenes}: if not NULL, it is a data frame containing nGene-SNP pair info}
 #'  \item{\code{eGenes}: if not NULL, it is a data frame containing eGene-SNP pair info per context}
 #'  \item{\code{cGenes}: if not NULL, it is a data frame containing cGene-SNP pair info per context}
-#'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note The prioritisation procedure (from SNPs to target genes) consists of following steps:
 #' \itemize{

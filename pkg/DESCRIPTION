@@ -12,6 +12,7 @@ Description: Priority index or Pi is developed as a genomic-led target prioritis
 URL: http://pi314.r-forge.r-project.org
 BugReports: https://github.com/hfang-bristol/Pi/issues
 Collate: 
+	'ClassMethod-Pi.r'
     'xRWR.r'
     'xPier.r'
     'xPierGenes.r'

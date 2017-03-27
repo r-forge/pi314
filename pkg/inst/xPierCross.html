@@ -32,7 +32,8 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 <table summary="R argblock">
 <tr valign="top"><td><code>list_xTarget</code></td>
 <td>
-<p>a list of &quot;dTarget&quot; objects or a &quot;dTarget&quot; object</p>
+<p>a list of &quot;dTarget&quot;/&quot;sTarget&quot; objects or a
+&quot;dTarget&quot;/&quot;sTarget&quot; object</p>
 </td></tr>
 <tr valign="top"><td><code>displayBy</code></td>
 <td>
@@ -42,9 +43,9 @@ priority p-value, &quot;fdr&quot; for priority fdr</p>
 </td></tr>
 <tr valign="top"><td><code>combineBy</code></td>
 <td>
-<p>how to resolve nodes/targets from a list of &quot;dTarget&quot;
-objects. It can be &quot;intersect&quot; for intersecting nodes (by default),
-&quot;union&quot; for unionising nodes</p>
+<p>how to resolve nodes/targets from a list of
+&quot;dTarget&quot;/&quot;sTarget&quot; objects. It can be &quot;intersect&quot; for intersecting
+nodes (by default), &quot;union&quot; for unionising nodes</p>
 </td></tr>
 <tr valign="top"><td><code>aggregateBy</code></td>
 <td>
@@ -97,9 +98,6 @@ empirical cumulative distribution of the probability of being GSP),
 <li><p><code>disease</code>: a data frame containing disease matrix, with each
 column/disease for either priority score, or priorty rank or priority
 p-value
-</p>
-</li>
-<li><p><code>call</code>: the call that produced this result
 </p>
 </li></ul>
 

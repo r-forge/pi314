@@ -74,7 +74,6 @@ seeds (that is, "OMIM", "Phenotype", "Function", "nearbyGenes", "eQTL",
 each column/predictor for either priority score, or priorty rank or
 priority p-value}
 \item{\code{metag}: an "igraph" object}
-\item{\code{call}: the call that produced this result}
 }
 }
 \description{

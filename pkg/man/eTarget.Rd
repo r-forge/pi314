@@ -22,7 +22,7 @@ eTarget(evidence, metag)
 an object of S3 class \code{eTarget}
 }
 \description{
-\code{eTarget} has two components: evidence and metag.
+\code{eTarget} has 2 components: evidence and metag.
 }
 \examples{
 \dontrun{

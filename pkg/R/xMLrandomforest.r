@@ -29,7 +29,6 @@
 #'  \item{\code{importance}: a data frame of nPredictor X 2 containing the predictor importance info, where nPredictor is the number of predictors, two columns for two types ("MeanDecreaseAccuracy" and "MeanDecreaseGini") of predictor importance measures. "MeanDecreaseAccuracy" sees how worse the model performs without each predictor (a high decrease in accuracy would be expected for very informative predictors), while "MeanDecreaseGini" measures how pure the nodes are at the end of the tree (a high score means the predictor was important if each predictor is taken out)}
 #'  \item{\code{performance}: a data frame of 1+nPredictor X 2 containing the supervised/predictor performance info predictor performance info, where nPredictor is the number of predictors, two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
 #'  \item{\code{evidence}: an object of the class "eTarget", a list with following components "evidence" and "metag"}
-#'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
 #' @export
@@ -440,8 +439,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
     				fmax2fold = df_Fmax,
     				importance = rf.model.overall.importance,
     				performance = df_evaluation,
-    				evidence = eTarget,
-                  	Call     = match.call()
+    				evidence = eTarget
                  )
     class(sTarget) <- "sTarget"
     

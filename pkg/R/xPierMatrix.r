@@ -19,7 +19,6 @@
 #'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority (aggregated) information, where nGene is the number of genes, and the 6 columns are "name" (gene names), "rank" (ranks of the priority scores), "pvalue" (the aggregated p-value, converted from empirical cumulative distribution of the probability of being GSP), "fdr" (fdr adjusted from the aggregated p-value), "priority" (-log10(pvalue) but rescaled into the 5-star ratings), "description" (gene description) and seed info including "Overall" for the number of different types of seeds, followed by details on individual type of seeds (that is, "OMIM", "Phenotype", "Function", "nearbyGenes", "eQTL", "HiC")}
 #'  \item{\code{predictor}: a data frame containing predictor matrix, with each column/predictor for either priority score, or priorty rank or priority p-value}
 #'  \item{\code{metag}: an "igraph" object}
-#'  \item{\code{call}: the call that produced this result}
 #' }
 #' @note none
 #' @export
@@ -181,8 +180,7 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 			## return dTarget
 			dTarget <- list(priority  = cbind(df_priority,Overall=overall, mat_evidence),
 							predictor = df_predictor,
-							metag	  = metag, 
-							Call      = match.call()
+							metag	  = metag
 						 )
 			class(dTarget) <- "dTarget"
 			

@@ -220,5 +220,15 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2
 		}
 	}
 	
+	####################################
+	# only keep those genes with GeneID
+	####################################
+	if(!is.null(df_eGenes)){
+		org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
+		ind <- match(df_eGenes$Gene, org.Hs.eg$gene_info$Symbol)
+		df_eGenes <- df_eGenes[!is.na(ind), ]
+	}
+	####################################
+	
     invisible(df_eGenes)
 }

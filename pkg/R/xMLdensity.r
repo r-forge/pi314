@@ -57,14 +57,14 @@ xMLdensity <- function(sTarget, displayBy=c("All","GS","GSN","GSP","Predictive")
 	gp <- ggplot(df, aes(Score, fill=GS, color=GS)) + geom_density(alpha=0.1,adjust=1)
 	gp <- gp + scale_color_manual(values=color) + scale_fill_manual(values=color)
 	gp <- gp + theme_bw() + theme(legend.position="right", legend.title=element_blank(), axis.title.y=element_text(size=14,color="black",face="bold"), axis.title.x=element_text(size=14,color="black",face="bold"), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
-	gp <- gp + xlab("Composite scores\n(quantifying separation of GSP against GSN)") + ylab("Density of target genes")
+	gp <- gp + xlab("Composite scores\n(5-star ratings quantifying separation between GSP and GSN)") + ylab("Density of target genes")
 	
 	## x scale
     if(x.scale=="sqrt"){
     	x <- NULL
-    	gp <- gp + scale_x_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10",function(x) 10^x, n=2), limits=c(0,10))
+    	gp <- gp + scale_x_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10",function(x) 10^x, n=2), limits=c(0,5))
     }else{
-    	gp <- gp + xlim(0,10)
+    	gp <- gp + xlim(0,5)
     }
 
 	## caption

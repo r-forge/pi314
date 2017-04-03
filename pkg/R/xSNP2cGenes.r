@@ -204,5 +204,15 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
 		}
 	}
 	
+	####################################
+	# only keep those genes with GeneID
+	####################################
+	if(!is.null(df_cGenes)){
+		org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
+		ind <- match(df_cGenes$Gene, org.Hs.eg$gene_info$Symbol)
+		df_cGenes <- df_cGenes[!is.na(ind), ]
+	}
+	####################################
+	
     invisible(df_cGenes)
 }

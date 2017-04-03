@@ -157,6 +157,7 @@ xGSsimulator <- function(GSP, population=NULL, network=c("STRING_medium","STRING
     			GSP = res_GSP,
                	g = ig
               )
-       
+    class(sGS) <- 'sGS'
+    
     invisible(sGS)
 }

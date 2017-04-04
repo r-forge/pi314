@@ -211,6 +211,9 @@ xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed",
 		org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
 		ind <- match(df_cGenes$Gene, org.Hs.eg$gene_info$Symbol)
 		df_cGenes <- df_cGenes[!is.na(ind), ]
+		if(nrow(df_cGenes)==0){
+			df_cGenes <- NULL
+		}
 	}
 	####################################
 	

@@ -4,8 +4,7 @@
 \alias{xMLdensity}
 \title{Function to visualise machine learning results using density plot}
 \usage{
-xMLdensity(sTarget, displayBy = c("All", "GS", "GSN", "GSP",
-"Predictive"),
+xMLdensity(sTarget, displayBy = c("All", "GS", "GSN", "GSP", "NEW"),
 x.scale = c("sqrt", "normal"), signature = TRUE)
 }
 \arguments{
@@ -13,7 +12,7 @@ x.scale = c("sqrt", "normal"), signature = TRUE)
 
 \item{displayBy}{which targets will be used for displaying. It can be
 one of "GS" for gold standard targets, "GSN" for gold standard
-negatives, "GSP" for gold standard positives, "Predictive" for putative
+negatives, "GSP" for gold standard positives, "NEW" for putative
 targets (non-GS), "All" for all targets (by default)}
 
 \item{x.scale}{how to transform the x scale. It can be "normal" for no

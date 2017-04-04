@@ -369,7 +369,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 	#########################################
 	## output
 	### df_priority
-	output_gs <- rep('Predictive', length(df_ap))
+	output_gs <- rep('NEW', length(df_ap))
 	names(output_gs) <- names(df_ap)
 	ind <- match(names(df_ap), names(gs_targets))
 	output_gs[!is.na(ind)] <- gs_targets[ind[!is.na(ind)]]

@@ -38,7 +38,7 @@ xMLzoom <- function(sTarget, top=20, top.label.type=c("box","text"), top.label.s
 	priority <- sTarget$priority
 	df <- data.frame(Symbol=rownames(priority), GS=priority$GS, Score=priority$priority, stringsAsFactors=FALSE)
     
-    df$GS <- factor(df$GS, levels=c("GSN","GSP","Predictive"))
+    df$GS <- factor(df$GS, levels=c("GSN","GSP","NEW"))
     color <- xColormap("ggplot2")(3)
     
 	df_highlight <- df[1:top, ]

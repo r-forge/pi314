@@ -227,6 +227,9 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2
 		org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
 		ind <- match(df_eGenes$Gene, org.Hs.eg$gene_info$Symbol)
 		df_eGenes <- df_eGenes[!is.na(ind), ]
+		if(nrow(df_eGenes)==0){
+			df_eGenes <- NULL
+		}
 	}
 	####################################
 	

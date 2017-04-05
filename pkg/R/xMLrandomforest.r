@@ -216,7 +216,13 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 	vec_mad <- apply(df_res, 1, stats::mad)
 	vec_min <- apply(df_res, 1, base::min)
 	vec_max <- apply(df_res, 1, base::max)
-    df_importance <- cbind(median=vec_median, mad=vec_mad, min=vec_min, max=vec_max, df_res)
+	#####
+	res_x <- apply(df_res, 1, stats::t.test)
+	vec_mean <- unlist(lapply(res_x, function(x) x$estimate))
+	vec_conf_lower <- unlist(lapply(res_x, function(x) x$conf.int[1]))
+	vec_conf_upper <- unlist(lapply(res_x, function(x) x$conf.int[2]))
+	#####
+    df_importance <- cbind(median=vec_median, mad=vec_mad, min=vec_min, max=vec_max, mean=vec_mean, conf_lower=vec_conf_lower, conf_upper=vec_conf_upper, df_res)
 
 	######################
 	## overall importance
@@ -298,7 +304,13 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 		vec_mad <- apply(df_res, 1, stats::mad)
 		vec_min <- apply(df_res, 1, base::min)
 		vec_max <- apply(df_res, 1, base::max)
-		df_ROC <- cbind(median=vec_median, mad=vec_mad, min=vec_min, max=vec_max, df_res)
+		#####
+		res_x <- apply(df_res, 1, stats::t.test)
+		vec_mean <- unlist(lapply(res_x, function(x) x$estimate))
+		vec_conf_lower <- unlist(lapply(res_x, function(x) x$conf.int[1]))
+		vec_conf_upper <- unlist(lapply(res_x, function(x) x$conf.int[2]))
+		#####
+		df_ROC <- cbind(median=vec_median, mad=vec_mad, min=vec_min, max=vec_max, mean=vec_mean, conf_lower=vec_conf_lower, conf_upper=vec_conf_upper, df_res)
 		
 		## df_Fmax
 		df_res <- do.call(rbind, ls_res)
@@ -314,7 +326,14 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 		vec_mad <- apply(df_res, 1, stats::mad)
 		vec_min <- apply(df_res, 1, base::min)
 		vec_max <- apply(df_res, 1, base::max)
-		df_Fmax <- cbind(median=vec_median, mad=vec_mad, min=vec_min, max=vec_max, df_res)
+		#####
+		res_x <- apply(df_res, 1, stats::t.test)
+		vec_mean <- unlist(lapply(res_x, function(x) x$estimate))
+		vec_conf_lower <- unlist(lapply(res_x, function(x) x$conf.int[1]))
+		vec_conf_upper <- unlist(lapply(res_x, function(x) x$conf.int[2]))
+		#####
+		df_Fmax <- cbind(median=vec_median, mad=vec_mad, min=vec_min, max=vec_max, mean=vec_mean, conf_lower=vec_conf_lower, conf_upper=vec_conf_upper, df_res)
+    
     
     }else{
     	df_ROC <- NULL

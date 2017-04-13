@@ -224,8 +224,7 @@ xSNP2eGenes <- function(data, include.eQTL=c(NA,"JKscience_CD14","JKscience_LPS2
 	# only keep those genes with GeneID
 	####################################
 	if(!is.null(df_eGenes)){
-		org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
-		ind <- match(df_eGenes$Gene, org.Hs.eg$gene_info$Symbol)
+		ind <- XGR::xSymbol2GeneID(df_eGenes$Gene, details=FALSE, verbose=verbose, RData.location=RData.location)
 		df_eGenes <- df_eGenes[!is.na(ind), ]
 		if(nrow(df_eGenes)==0){
 			df_eGenes <- NULL

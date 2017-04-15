@@ -8,7 +8,7 @@ xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
 colormap = "ggplot2", legend.position = "topleft", legend.horiz =
 FALSE,
-verbose = TRUE, ...)
+verbose = TRUE, edge.width = NULL, ...)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
@@ -53,6 +53,9 @@ the legend horizontally rather than vertically}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}
+
+\item{edge.width}{the width of the edge. If NULL, the width edge is
+proportional to the 'weight' edge attribute (if existed)}
 
 \item{...}{additional graphic parameters. See
 \url{http://igraph.org/r/doc/plot.common.html} for the complete list.}

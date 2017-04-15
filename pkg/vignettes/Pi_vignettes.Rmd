@@ -208,7 +208,7 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 - *[`xPredictCompare`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPredictCompare.html)*: compares the prediction/prioritisation performance.
 
-- *[`xGSsimulator`](http://rawgit.com/hfang-bristol/Pi/master/inst/xGSsimulator.html)*: simulates the gold standard negatives (GSN) from gold standard positives (GSP) considering the gene interaction evidence.
+- *[`xGSsimulator`](http://rawgit.com/hfang-bristol/Pi/master/inst/xGSsimulator.html)*: simulates the gold standard negatives (GSN) from gold standard positives (GSP) considering the gene interaction evidence and returns an object of class `sGS`.
 
 - *[`xPierROCR`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierROCR.html)*: assesses the dTarget performance via ROC and PR analysis.
 
@@ -216,17 +216,17 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 ## Integral functions
 
-- *[`xMLrandomforest`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLrandomforest.html)*: integrates predictor matrix via machine learning algorithm random forest and returns an object of class `pTarget`.
+- *[`xMLrandomforest`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLrandomforest.html)*: integrates predictor matrix via machine learning algorithm random forest and returns an object of class `sTarget`.
 
-- *[`xMLcaret`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLcaret.html)*: integrates predictor matrix in a supervised manner via machine learning algorithms using caret and returns an object of class `pTarget`.
+- *[`xMLcaret`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLcaret.html)*: integrates predictor matrix in a supervised manner via machine learning algorithms using caret and returns an object of class `sTarget`.
 
 - *[`xMLparameters`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLparameters.html)*: visualises cross-validation performance against tuning parameters.
 
-- *[`xMLdotplot`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLdotplot.html)*: visualise machine learning results (a `pTarget` object) using dot plot and returns an object of class `ggplot`.
+- *[`xMLdotplot`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLdotplot.html)*: visualise machine learning results (a `sTarget` object) using dot plot and returns an object of class `ggplot`.
 
-- *[`xMLdensity`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLdensity.html)*: visualise machine learning results (a `pTarget` or `dTarget` object) using density plot and returns an object of class `ggplot`.
+- *[`xMLdensity`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLdensity.html)*: visualise machine learning results (a `sTarget` or `dTarget` object) using density plot and returns an object of class `ggplot`.
 
-- *[`xMLzoom`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLzoom.html)*: visualise machine learning results (a `pTarget` or `dTarget` object) using zoom plot and returns an object of class `ggplot`.
+- *[`xMLzoom`](http://rawgit.com/hfang-bristol/Pi/master/inst/xMLzoom.html)*: visualise machine learning results (a `sTarget` or `dTarget` object) using zoom plot and returns an object of class `ggplot`.
 
 ## Elementary functions
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/xMLfeatureplot.r
 \name{xMLfeatureplot}
 \alias{xMLfeatureplot}
-\title{Function to visualise features used for machine learning}
+\title{Function to visualise/assess features used for machine learning}
 \usage{
 xMLfeatureplot(df_predictor, GSP, GSN, displayBy = c("boxplot", "ROC",
 "Fmax"), ...)
@@ -28,7 +28,7 @@ an object of class "ggplot" for AUC and F-max, and an object of class
 "trellis" for boxplot
 }
 \description{
-\code{xMLfeatureplot} is supposed to visualise features used for
+\code{xMLfeatureplot} is supposed to visualise/assess features used for
 machine learning. Visualisation can be made using either boxplot or dot
 plot for AUC and F-max. It returns an object of class "ggplot" for AUC
 and F-max, and an object of class "trellis" for boxplot.

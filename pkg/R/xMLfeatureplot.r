@@ -1,6 +1,6 @@
-#' Function to visualise features used for machine learning
+#' Function to visualise/assess features used for machine learning
 #'
-#' \code{xMLfeatureplot} is supposed to visualise features used for machine learning. Visualisation can be made using either boxplot or dot plot for AUC and F-max. It returns an object of class "ggplot" for AUC and F-max, and an object of class "trellis" for boxplot.
+#' \code{xMLfeatureplot} is supposed to visualise/assess features used for machine learning. Visualisation can be made using either boxplot or dot plot for AUC and F-max. It returns an object of class "ggplot" for AUC and F-max, and an object of class "trellis" for boxplot.
 #'
 #' @param df_predictor a data frame containing genes (in rows) and predictors (in columns), with their predictive scores inside it. This data frame must has gene symbols as row names
 #' @param GSP a vector containing Gold Standard Positive (GSP)

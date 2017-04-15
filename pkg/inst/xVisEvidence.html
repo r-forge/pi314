@@ -21,7 +21,7 @@ xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
 colormap = "ggplot2", legend.position = "topleft", legend.horiz =
 FALSE,
-verbose = TRUE, ...)
+verbose = TRUE, edge.width = NULL, ...)
 </pre>
 
 
@@ -92,6 +92,11 @@ the legend horizontally rather than vertically</p>
 <td>
 <p>logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display</p>
+</td></tr>
+<tr valign="top"><td><code>edge.width</code></td>
+<td>
+<p>the width of the edge. If NULL, the width edge is
+proportional to the 'weight' edge attribute (if existed)</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>

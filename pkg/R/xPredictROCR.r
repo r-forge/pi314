@@ -107,6 +107,10 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 		return(NULL)
 	}
 	#pred_obj <- ROCR::prediction(predictions=pred_label$pred, labels=pred_label$label)
+
+	## acc: Accuracy=(TP+TN)/(P+N)
+	res <- ROCR::performance(pred_obj, measure="acc")
+	acc <- unlist(res@y.values)
 	
 	## auc: Area under the ROC curve
 	res <- ROCR::performance(pred_obj, measure="auc")
@@ -123,10 +127,14 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
     fpr <- unlist(perf_roc@x.values)
     
     ## PR curves
-	perf_pr <- ROCR::performance(pred_obj, measure="prec", x.measure="rec")    
+	perf_pr <- ROCR::performance(pred_obj, measure="prec", x.measure="rec")
     prec <- unlist(perf_pr@y.values)
     rec <- unlist(perf_pr@x.values)
     
+    ## TPR vs pcfall (Prediction-conditioned fallout: FP/(TP+FP))
+	#perf_tprfdr <- ROCR::performance(pred_obj, measure="tpr", x.measure="pcfall")    
+    #tpr <- unlist(perf_tprfdr@y.values)
+    #fdr <- unlist(perf_tprfdr@x.values)
     ##############################################################################################
     
     if(verbose){

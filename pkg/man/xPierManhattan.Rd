@@ -7,7 +7,7 @@
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
 top.label.type = c("box", "text"), top.label.size = 2,
 top.label.col = "darkblue", top.label.query = NULL,
-label.query.only = FALSE, y.scale = c("normal", "sqrt"),
+label.query.only = FALSE, y.scale = c("normal", "sqrt"), y.lab = NULL,
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), signature = TRUE,
 verbose = TRUE, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata")
@@ -39,6 +39,9 @@ labels in query are enabled/found}
 
 \item{y.scale}{how to transform the y scale. It can be "normal" for no
 transformation, and "sqrt" for square root transformation}
+
+\item{y.lab}{the y labelling. If NULL (by default), it shows the column
+of input data}
 
 \item{GR.Gene}{the genomic regions of genes. By default, it is
 'UCSC_knownGene', that is, UCSC known genes (together with genomic

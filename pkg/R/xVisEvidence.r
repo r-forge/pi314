@@ -39,7 +39,11 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
     node.info <- match.arg(node.info)
 
     if(class(xTarget) == "dTarget"){
-        df_evidence <- xTarget$priority[, 7:ncol(xTarget$priority)]
+    	if(is.null(xTarget$pPerf)){
+    		df_evidence <- xTarget$priority[, 7:ncol(xTarget$priority)]
+    	}else{
+    		df_evidence <- xTarget$priority[, 8:ncol(xTarget$priority)]
+    	}
         df_priority <- xTarget$priority[, c("rank","priority")]
 		
     }else if(class(xTarget) == "sTarget"){
@@ -145,18 +149,20 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	## vertex size
 	vertex.size <- igraph::degree(subg)
 	if(min(vertex.size) == max(vertex.size)){
-		vertex.size <- 12
+		vertex.size <- 10
 	}else{
-		vertex.size <- 12 * (vertex.size - min(vertex.size))/(max(vertex.size) - min(vertex.size)) + 8
+		vertex.size <- 10 * (vertex.size - min(vertex.size))/(max(vertex.size) - min(vertex.size)) + 6
 	}
 	
 	## edge.width
 	if(is.null(edge.width) & !is.null(E(subg)$weight)){
 		## extract edge weight
 		x <- as.numeric(E(subg)$weight)
-		if(max(x)-min(x)>0){
-			## rescale into an interval [1,4] as edge width
-			edge.width <- 1 + (x-min(x))/(max(x)-min(x))*3
+		if(length(x)>0){
+			if(max(x)-min(x)>0){
+				## rescale into an interval [1,4] as edge width
+				edge.width <- 1 + (x-min(x))/(max(x)-min(x))*3
+			}
 		}
 	}
 	

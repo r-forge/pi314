@@ -11,6 +11,7 @@
 #' @param top.label.query which top genes in query will be labelled. By default, it sets to NULL meaning all top genes will be displayed. If labels in query can not be found, then all will be displayed
 #' @param label.query.only logical to indicate whether only genes in query will be displayed. By default, it sets to FALSE. It only works when labels in query are enabled/found
 #' @param y.scale how to transform the y scale. It can be "normal" for no transformation, and "sqrt" for square root transformation
+#' @param y.lab the y labelling. If NULL (by default), it shows the column of input data
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
@@ -61,7 +62,7 @@
 #' }
 
 
-xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.label.type=c("box","text"), top.label.size=2, top.label.col="darkblue", top.label.query=NULL, label.query.only=FALSE, y.scale=c("normal","sqrt"), GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), signature=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.label.type=c("box","text"), top.label.size=2, top.label.col="darkblue", top.label.query=NULL, label.query.only=FALSE, y.scale=c("normal","sqrt"), y.lab=NULL, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), signature=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -217,6 +218,10 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
     	x <- NULL
     	bp <- bp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2))
     }
+	
+	if(!is.null(y.lab)){
+		bp <- bp + ylab(y.lab)
+	}
 	
 	bp <- bp + theme(axis.title.y=element_text(size=14), axis.text.x=element_text(angle=45, hjust=1,color="black",size=12), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
 	

@@ -25,8 +25,22 @@ xPierEvidence <- function(list_pNode, target.query=NULL, verbose=TRUE)
 {
     
    	if(any(class(list_pNode) %in% c("pNode"))){
-		list_pNode <- list(list_pNode)
+		if(is.null(list_pNode$Gene2SNP)){
+			return(NULL)
+		}else{
+			list_pNode <- list(list_pNode)
+		}
 	}else if(class(list_pNode)=="list"){
+		######
+		## check pNode has a componenet called 'Gene2SNP'
+		list_pNode <- lapply(list_pNode, function(pNode){
+			if(is.null(pNode$Gene2SNP)){
+				return(NULL)
+			}else{
+				pNode
+			}
+		})
+		######
 		## Remove null elements in a list
 		list_pNode <- base::Filter(base::Negate(is.null), list_pNode)
 		if(length(list_pNode)==0){

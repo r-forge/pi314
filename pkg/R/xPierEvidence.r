@@ -6,7 +6,7 @@
 #' @param target.query which gene is in query. If NULL, all genes will be queried
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @return
-#' a data frame of nPair X 5 containing Gene-SNP pair info per context, where the 5 columns are "Gene" (seed genes), "SNP" (dbSNP), "Score" (an SNP's genetic influential score on a seed gene), "Context" (predictors), "Flag" (indicative of Lead SNPs or LD SNPs)
+#' a data frame of nPair X 5 containing Gene-SNP pair info per context, where the 6 columns are "Gene" (seed genes), "SNP" (dbSNP), "Score" (an SNP's genetic influential score on a seed gene), "Context" (predictors), "Flag" (indicative of Lead SNPs or LD SNPs), and "Pval" (the SNP p-value)
 #' @note none
 #' @export
 #' @seealso \code{\link{xPierSNPsAdv}}
@@ -48,9 +48,10 @@ xPierEvidence <- function(list_pNode, target.query=NULL, verbose=TRUE)
 	})
 	df_Gene2SNP <- do.call(rbind, ls_Gene2SNP)
 	
-	df_SNP <- list_pNode[[1]]$SNP[,c("SNP","Flag")]
+	df_SNP <- list_pNode[[1]]$SNP[,c("SNP","Flag","Pval")]
 	ind <- match(df_Gene2SNP$SNP, df_SNP$SNP)
 	df_Gene2SNP$Flag <- df_SNP$Flag[ind]
+	df_Gene2SNP$Pval <- df_SNP$Pval[ind]
 	
 	if(!is.null(target.query)){
 		ind <- match(df_Gene2SNP$Gene, target.query)

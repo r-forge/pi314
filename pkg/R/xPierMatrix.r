@@ -194,7 +194,7 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 		overall <- apply(mat_evidence!=0, 1, sum)
 
 		## return eTarget
-		eTarget <- list(evidence  = cbind(Overall=overall, mat_evidence),
+		eTarget <- list(evidence  = data.frame(Overall=overall, mat_evidence),
 						metag	  = metag
 						)
 		class(eTarget) <- "eTarget"

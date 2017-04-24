@@ -13,7 +13,8 @@
 #' @param name.datatrack the name for the data track. By default, it is "Priority index"
 #' @param name.annotrack the name for the annotation track. By default, it is "Genes". If NULL, the title for annotation track will be hided
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
-#' @param SNPs a input vector containing SNPs. SNPs should be provided as dbSNP ID (ie starting with rs). Alternatively, they can be in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic positional number; for example, 'chr16:28525386'. By default, it is NLL meaning the SNP annotation track will be not displayed
+#' @param SNPs a input vector containing SNPs. SNPs should be provided as dbSNP ID (ie starting with rs). Alternatively, they can be in the format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic positional number; for example, 'chr16:28525386'. By default, it is NULL meaning the SNP annotation track will be not displayed
+#' @param max.num.SNPs the maximum number (50 by default) of SNPs to be shown. If NULL, no such restriction. Also this parameter only works when the SNP annotation track is enabled 
 #' @param GR.SNP the genomic regions of SNPs. By default, it is 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS SNPs and their LD SNPs (hg19). It can be 'dbSNP_Common', that is, Common SNPs from dbSNP (version 146) plus GWAS SNPs and their LD SNPs (hg19). Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to dbSNP IDs. Then, tell "GR.SNP" with your RData file name (with or without extension), plus specify your file RData path in "RData.location". Note: you can also load your customised GR object directly
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -50,7 +51,7 @@
 #' xPierTrack(pNode, priority.top=1000, nearby=20, RData.location=RData.location)
 #' }
 
-xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, nearby=NULL, query.highlight=TRUE, track.ideogram=TRUE, track.genomeaxis=TRUE, name.datatrack="Priority index", name.annotrack="Genes", GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), SNPs=NULL, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, nearby=NULL, query.highlight=TRUE, track.ideogram=TRUE, track.genomeaxis=TRUE, name.datatrack="5-star rating\n(Priority index)", name.annotrack="Targets", GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), SNPs=NULL, max.num.SNPs=50, GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
 
     if(class(pNode) == "pNode"){
@@ -153,7 +154,7 @@ xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, 
 	#Gviz::availableDisplayPars(dtrack)
 	
 	## for SNP annotation track
-	gr_SNP <- xSNPlocations(data=SNPs, GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
+	gr_SNP <- xSNPlocations(data=unique(SNPs), GR.SNP=GR.SNP, verbose=verbose, RData.location=RData.location)
 	if(!is.null(gr_SNP)){
 		## for genes
 		df_gr_sub <- GenomicRanges::as.data.frame(gr_sub, row.names=NULL)
@@ -166,6 +167,12 @@ xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, 
 		if(length(gr_SNP_sub)==0){
 			atrack_SNP <- NULL
 		}else{
+			if(!is.null(max.num.SNPs)){
+				if(length(gr_SNP_sub)>max.num.SNPs){
+					gr_SNP_sub <- gr_SNP_sub[1:max.num.SNPs]
+				}
+			}
+		
 			gr_SNP_sub$group <- names(gr_SNP_sub)
 			atrack_SNP <- Gviz::AnnotationTrack(gr_SNP_sub, name="", shape="box", col="transparent", background.title="transparent")
 		}

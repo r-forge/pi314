@@ -7,8 +7,9 @@
 xPierTrack(pNode, priority.top = NULL, target.query = NULL,
 window = 1e+06, nearby = NULL, query.highlight = TRUE,
 track.ideogram = TRUE, track.genomeaxis = TRUE,
-name.datatrack = "Priority index", name.annotrack = "Genes",
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), SNPs = NULL,
+name.datatrack = "5-star rating\\n(Priority index)",
+name.annotrack = "Targets", GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), SNPs = NULL, max.num.SNPs = 50,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
@@ -58,8 +59,12 @@ without extension), plus specify your file RData path in
 \item{SNPs}{a input vector containing SNPs. SNPs should be provided as
 dbSNP ID (ie starting with rs). Alternatively, they can be in the
 format of 'chrN:xxx', where N is either 1-22 or X, xxx is genomic
-positional number; for example, 'chr16:28525386'. By default, it is NLL
-meaning the SNP annotation track will be not displayed}
+positional number; for example, 'chr16:28525386'. By default, it is
+NULL meaning the SNP annotation track will be not displayed}
+
+\item{max.num.SNPs}{the maximum number (50 by default) of SNPs to be
+shown. If NULL, no such restriction. Also this parameter only works
+when the SNP annotation track is enabled}
 
 \item{GR.SNP}{the genomic regions of SNPs. By default, it is
 'dbSNP_GWAS', that is, SNPs from dbSNP (version 146) restricted to GWAS

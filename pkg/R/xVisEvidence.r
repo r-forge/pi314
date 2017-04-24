@@ -47,11 +47,11 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
         df_priority <- xTarget$priority[, c("rank","priority")]
 		
     }else if(class(xTarget) == "sTarget"){
-        df_evidence <- xTarget$evidence$evidence
+        df_evidence <- as.data.frame(xTarget$evidence$evidence)
         df_priority <- xTarget$priority[, c("rank","priority")]
 		
     }else if(class(xTarget) == "eTarget"){
-        df_evidence <- xTarget$evidence
+        df_evidence <- as.data.frame(xTarget$evidence)
         # here, sorted by the number of seed gene types
         df_priority <- df_evidence[order(df_evidence[,1],decreasing=TRUE),]
 		
@@ -60,7 +60,6 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
     }else{
     	stop("The function must apply to a 'dTarget' or 'sTarget' or 'eTarget' object.\n")
     }
-	
 	
 	if(class(g) == "igraph"){
 		g <- g
@@ -129,7 +128,7 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 		ind <- match(vertex.label, rownames(df_priority))
 		df_nodes <- df_priority[ind, ]
 		if(node.info=='smart'){
-			vertex.label <- paste0(vertex.label, '\n[', signif(df_nodes$priority,digits=2), '@', df_nodes$rank, ']')
+			vertex.label <- paste0(vertex.label, '\n[', signif(df_nodes$priority,digits=3), '@', df_nodes$rank, ']')
 		}
 	}
 	
@@ -169,7 +168,7 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	## draw graph
 	xVisNet(subg, vertex.shape=vertex.shape, vertex.pie=ls_val, vertex.pie.color=list(pie.color), vertex.pie.border="grey", vertex.label=vertex.label, vertex.color="grey", vertex.size=vertex.size, signature=FALSE, edge.width=edge.width, ...)
 	if(!is.na(legend.position)){
-		legend(legend.position, legend=legend.text, col=pie.color, pch=10, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
+		legend(legend.position, legend=legend.text, col=pie.color, pch=13, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
 	}
 
     return(subg)

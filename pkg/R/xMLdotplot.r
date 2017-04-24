@@ -81,7 +81,7 @@ xMLdotplot <- function(sTarget, displayBy=c("importance2fold","roc2fold","fmax2f
 	tmp <- paste(tmp,')',sep='')
 	df <- data.frame(name=tmp, df, stringsAsFactors=FALSE)
 	Predictor <- gsub('\n.*', '', as.character(df$name), perl=TRUE)
-	Method <- gsub('.*\n\\(|\\)', '', as.character(df$name), perl=TRUE)
+	Method <- gsub('.*\n\\(|\\)$', '', as.character(df$name), perl=TRUE)
 	df$Predictor <- Predictor
 	df$Method <- Method
 	

@@ -144,7 +144,7 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	legend.text[grep('Function',legend.text,ignore.case=TRUE)] <- "fGene"
 	legend.text[grep('nearbyGenes',legend.text,ignore.case=TRUE)] <- "nGene"
 	legend.text[grep('eQTL',legend.text,ignore.case=TRUE)] <- "eGene"
-	legend.text[grep('HiC|Hi-C',legend.text,ignore.case=TRUE)] <- "hGene"
+	legend.text[grep('HiC|Hi-C',legend.text,ignore.case=TRUE)] <- "cGene"
 	## vertex size
 	vertex.size <- igraph::degree(subg)
 	if(min(vertex.size) == max(vertex.size)){

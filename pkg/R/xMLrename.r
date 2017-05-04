@@ -28,6 +28,7 @@ xMLrename <- function(sTarget, old_names, new_names)
     if(class(sTarget) != "sTarget"){
     	stop("The function must apply to a 'sTarget' object.\n")
     }
+    sTarget_renamed <- sTarget
     
     ## predictor
 	if(!is.null(sTarget_renamed$predictor)){

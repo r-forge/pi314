@@ -171,6 +171,9 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
             if(is.null(names(customised.genesets))){
                 names(customised.genesets) <- paste("C", 1:length(customised.genesets), sep="")
             }
+            #######
+            customised.genesets <- customised.genesets[lapply(customised.genesets,length)>0]
+            #######
 			anno <- lapply(customised.genesets, function(x){
 				GeneID <- xSymbol2GeneID(x, check.symbol.identity=FALSE, verbose=verbose, RData.location=RData.location)
 				GeneID <- GeneID[!is.na(GeneID)]

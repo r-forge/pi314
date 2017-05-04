@@ -7,10 +7,10 @@
 xPierManhattan(pNode, color = c("darkred", "darkgreen"), top = 50,
 top.label.type = c("box", "text"), top.label.size = 2,
 top.label.col = "darkblue", top.label.query = NULL,
-label.query.only = FALSE, y.scale = c("normal", "sqrt"), y.lab = NULL,
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), signature = TRUE,
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+label.query.only = FALSE, chromosome.only = TRUE, y.scale = c("normal",
+"sqrt"), y.lab = NULL, GR.Gene = c("UCSC_knownGene",
+"UCSC_knownCanonical"), signature = TRUE, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
@@ -36,6 +36,9 @@ labels in query can not be found, then all will be displayed}
 \item{label.query.only}{logical to indicate whether only genes in query
 will be displayed. By default, it sets to FALSE. It only works when
 labels in query are enabled/found}
+
+\item{chromosome.only}{logical to indicate whether only genes from
+input data will be displayed. By default, it sets to TRUE}
 
 \item{y.scale}{how to transform the y scale. It can be "normal" for no
 transformation, and "sqrt" for square root transformation}

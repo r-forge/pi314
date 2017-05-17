@@ -93,7 +93,13 @@ xMLfeatureplot <- function(df_predictor, GSP, GSN, displayBy=c("boxplot","ROC","
 		df <- unique(bp$data[,c('Method','auroc','fmax')])
 		df_performance <- cbind(ROC=df$auroc, Fmax=df$fmax)
 		rownames(df_performance) <- df$Method
-
+		
+		#############
+		if(is.null(df_performance)){
+			return(NULL)
+		}
+		#############
+		
 		if(displayBy=='ROC'){
 			df <- data.frame(Val=df_performance[,1], stringsAsFactors=FALSE)
 			rownames(df) <- rownames(df_performance)

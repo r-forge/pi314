@@ -84,8 +84,9 @@ xMLcompare <-function(list_ML, metric=c("ROC","Sens","Spec"), xlab=NA, xlimits=c
 	conf_upper <- conf_lower <- ''
 	bp <- ggplot(df, aes(mean, ML))
 	bp <- bp + geom_point() + geom_errorbarh(aes(xmax=conf_upper, xmin=conf_lower, height=.2))
-	bp <- bp + scale_color_manual(values=xColormap("ggplot2")(length(levels(df$method))))
+	bp <- bp + scale_color_manual(values=xColormap("ggplot2")(length(levels(df$ML))))
 	bp <- bp  + theme_bw() + theme(legend.position="right", legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=14,color="black"), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
+	bp <- bp + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank())
 	bp <- bp + xlab(xlab)
 	## put arrows on x-axis
 	bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))

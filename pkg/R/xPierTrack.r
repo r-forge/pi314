@@ -105,7 +105,7 @@ xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, 
 	if(!is.null(target.query)){
 		ind <- match(target.query, names(gr))
 		if(length(ind) == 0 | is.na(ind)){
-			warning("The top target gene will be displayed instead!")
+			warning(sprintf("\tNo found! %s will be used instead of %s", names(gr[1]), target.query), appendLF=TRUE)
 			target.query <- names(gr[1])
 		}
 	}else{

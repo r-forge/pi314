@@ -41,7 +41,8 @@ labels in query are enabled/found}
 input data will be displayed. By default, it sets to TRUE}
 
 \item{y.scale}{how to transform the y scale. It can be "normal" for no
-transformation, and "sqrt" for square root transformation}
+transformation, "sqrt" for square root transformation, and "log" for
+log-based transformation}
 
 \item{y.lab}{the y labelling. If NULL (by default), it shows the column
 of input data}

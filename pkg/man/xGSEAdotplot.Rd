@@ -4,9 +4,13 @@
 \alias{xGSEAdotplot}
 \title{Function to visualise GSEA results using dot plot}
 \usage{
-xGSEAdotplot(eGSEA, top = 1, priority.color = c("lightyellow",
-"orange"),
-peak = TRUE, compact = FALSE, signature = TRUE)
+xGSEAdotplot(eGSEA, top = 1, priority.color = c("lightblue",
+"darkblue"),
+xlab = NULL, title = NULL, subtitle = c("leading", "enrichment",
+"both"), clab = "5-star\\nratings", x.scale = c("normal", "sqrt",
+"log"),
+peak = TRUE, leading = FALSE, leading.size = 2, compact = FALSE,
+signature = TRUE)
 }
 \arguments{
 \item{eGSEA}{an object of class "eGSEA"}
@@ -16,8 +20,27 @@ Alternatively, the gene set names can be queried}
 
 \item{priority.color}{a character vector for coloring priority scores}
 
-\item{peak}{logical to indicate whether the peak info of leading genes
-is labelled}
+\item{xlab}{the label for x-axis. If NULL, it is 'Target ranks'}
+
+\item{title}{the title. If NULL, it is term name followed by the number
+of its annotations}
+
+\item{subtitle}{the subtitle. It can be used to show 'leading' info,
+'enrichment' info or 'both'}
+
+\item{clab}{the label for colorbar. By default, it is '5-star ratings'}
+
+\item{x.scale}{how to transform the x scale. It can be "normal" for no
+transformation, "sqrt" for square root transformation, and "log" for
+log-based transformation}
+
+\item{peak}{logical to indicate whether the peak location is shown}
+
+\item{leading}{logical to indicate whether the leading targets are
+texted}
+
+\item{leading.size}{the size of leading targets' texts. It only works
+when the parameter 'leading' is enabled}
 
 \item{compact}{logical to indicate whether the compact/void theme is
 used. If TRUE, axes and legend info will be hidden}

@@ -8,7 +8,7 @@ xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
 colormap = "ggplot2", legend.position = "topleft", legend.horiz =
 FALSE,
-verbose = TRUE, edge.width = NULL, ...)
+mtext.side = 3, verbose = TRUE, edge.width = NULL, ...)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
@@ -45,11 +45,13 @@ names, e.g. "lightyellow-orange" (by default), "blue-black-yellow",
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}}
 
-\item{legend.position}{the legend position. If NA, the legend will be
-hiden}
+\item{legend.position}{the legend position. If NA, the legend is not
+shown}
 
 \item{legend.horiz}{logical specifying the legend horizon. If TRUE, set
 the legend horizontally rather than vertically}
+
+\item{mtext.side}{the side of marginal text. If NA, it is not shown}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true for display}

@@ -256,15 +256,19 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 		}
 	
 		eTerm <- dGSEA(data=data, identity="entrez", check.symbol.identity=FALSE, ontology="Customised", customised.genesets=anno, sizeRange=size.range, which_distance=NULL, weight=weight, nperm=nperm, fast=TRUE, sigTail="one-tail", p.adjust.method="BH", verbose=verbose, RData.location=RData.location)
-	
-		res <- dGSEAview(eTerm, which_sample=1, top_num=NULL, sortBy="pvalue", decreasing=TRUE, details=TRUE)
-		if(nrow(res)>0){
-			res <- res[,c("setID","ES","nES","pvalue","adjp","setSize")]
-			rownames(res) <- NULL
+		
+		if(!is.null(eTerm)){
+			res <- dGSEAview(eTerm, which_sample=1, top_num=NULL, sortBy="pvalue", decreasing=TRUE, details=TRUE)
+			if(nrow(res)>0){
+				res <- res[,c("setID","ES","nES","pvalue","adjp","setSize")]
+				rownames(res) <- NULL
+			}else{
+				return(NULL)
+			}
 		}else{
 			return(NULL)
 		}
-			
+		
 		if(verbose){
 			now <- Sys.time()
 			message(sprintf("#######################################################", appendLF=TRUE))

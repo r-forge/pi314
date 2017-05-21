@@ -10,8 +10,9 @@
 #' @param neighbor.seed logical to indicate whether neighbors are seeds only. By default, it sets to true
 #' @param neighbor.top the top number of the neighbors with the highest priority. By default, it sets to NULL to disable this parameter
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
-#' @param legend.position the legend position. If NA, the legend will be hiden
+#' @param legend.position the legend position. If NA, the legend is not shown
 #' @param legend.horiz logical specifying the legend horizon. If TRUE, set the legend horizontally rather than vertically
+#' @param mtext.side the side of marginal text. If NA, it is not shown
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param edge.width the width of the edge. If NULL, the width edge is proportional to the 'weight' edge attribute (if existed)
 #' @param ... additional graphic parameters. See \url{http://igraph.org/r/doc/plot.common.html} for the complete list.
@@ -33,7 +34,7 @@
 #' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' }
 
-xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, verbose=TRUE, edge.width=NULL, ...)
+xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, mtext.side=3, verbose=TRUE, edge.width=NULL, ...)
 {
 
     node.info <- match.arg(node.info)
@@ -82,7 +83,9 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 		if(length(ind)>=1){
 			nodes <- nodes[ind]
 		}else{
-			nodes <- rownames(df_evidence)[1]
+			#nodes <- rownames(df_evidence)[1]
+			warning(sprintf("\tNo found for queried %s", nodes), appendLF=TRUE)
+			return(NULL)
 		}
 	}
     
@@ -170,6 +173,9 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	if(!is.na(legend.position)){
 		legend(legend.position, legend=legend.text, col=pie.color, pch=13, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
 	}
-
+	if(!is.na(mtext.side)){
+		graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4)
+	}
+	
     return(subg)
 }

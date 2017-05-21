@@ -21,7 +21,7 @@ xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
 colormap = "ggplot2", legend.position = "topleft", legend.horiz =
 FALSE,
-verbose = TRUE, edge.width = NULL, ...)
+mtext.side = 3, verbose = TRUE, edge.width = NULL, ...)
 </pre>
 
 
@@ -80,13 +80,17 @@ standard color names can be found in
 </td></tr>
 <tr valign="top"><td><code>legend.position</code></td>
 <td>
-<p>the legend position. If NA, the legend will be
-hiden</p>
+<p>the legend position. If NA, the legend is not
+shown</p>
 </td></tr>
 <tr valign="top"><td><code>legend.horiz</code></td>
 <td>
 <p>logical specifying the legend horizon. If TRUE, set
 the legend horizontally rather than vertically</p>
+</td></tr>
+<tr valign="top"><td><code>mtext.side</code></td>
+<td>
+<p>the side of marginal text. If NA, it is not shown</p>
 </td></tr>
 <tr valign="top"><td><code>verbose</code></td>
 <td>

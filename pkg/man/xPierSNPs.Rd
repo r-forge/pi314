@@ -8,7 +8,9 @@ xPierSNPs(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, score.cap = 10, distance.max = 2000,
 decay.kernel = c("slow", "constant", "linear", "rapid"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.eQTL =
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.TAD =
+c(NA,
+"GM12878", "IMR90", "MSC", "TRO", "H1", "MES", "NPC"), include.eQTL =
 c(NA,
 "JKscience_CD14", "JKscience_LPS2", "JKscience_LPS24", "JKscience_IFN",
 "JKscience_TS2A", "JKscience_TS2A_CD14", "JKscience_TS2A_LPS2",
@@ -138,6 +140,15 @@ Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
 "RData.location". Note: you can also load your customised GR object
 directly}
+
+\item{include.TAD}{TAD boundary regions are also included. By default,
+it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
+region will be kept). TAD datasets can be one of "GM12878"
+(lymphoblast), "IMR90" (fibroblast), "MSC" (mesenchymal stem cell)
+,"TRO" (trophoblasts-like cell), "H1" (embryonic stem cell), "MES"
+(mesendoderm) and "NPC" (neural progenitor cell). Explanations can be
+found at \url{http://dx.doi.org/10.1016/j.celrep.2016.10.061}}
 
 \item{include.eQTL}{genes modulated by eQTL (also Lead SNPs or in LD
 with Lead SNPs) are also included. By default, it is 'NA' to disable
@@ -498,8 +509,9 @@ AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-pNode <- xPierSNPs(data=AS, include.eQTL="JKng_mono",
-include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
+pNode <- xPierSNPs(data=AS, include.TAD='GM12878',
+include.eQTL="JKng_mono", include.HiC='Monocytes',
+network="PCommonsUN_medium", restart=0.7,
 RData.location=RData.location)
 
 # c) save to the file called 'SNPs_priority.txt'

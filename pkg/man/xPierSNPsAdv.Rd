@@ -8,7 +8,9 @@ xPierSNPsAdv(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, score.cap = 10, distance.max = 2000,
 decay.kernel = c("slow", "constant", "linear", "rapid"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.eQTL =
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.TAD =
+c(NA,
+"GM12878", "IMR90", "MSC", "TRO", "H1", "MES", "NPC"), include.eQTL =
 c(NA,
 "JKscience_CD14", "JKscience_LPS2", "JKscience_LPS24", "JKscience_IFN",
 "JKscience_TS2A", "JKscience_TS2A_CD14", "JKscience_TS2A_LPS2",
@@ -475,8 +477,9 @@ AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
 \dontrun{
 # b) perform priority analysis
-ls_pNode <- xPierSNPsAdv(data=AS, include.eQTL="JKng_mono",
-include.HiC='Monocytes', network="PCommonsUN_medium", restart=0.7,
+ls_pNode <- xPierSNPsAdv(data=AS, include.TAD='GM12878',
+include.eQTL="JKng_mono", include.HiC='Monocytes',
+network="PCommonsUN_medium", restart=0.7,
 RData.location=RData.location)
 }
 }

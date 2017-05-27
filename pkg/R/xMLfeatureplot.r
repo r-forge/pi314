@@ -6,6 +6,7 @@
 #' @param GSP a vector containing Gold Standard Positive (GSP)
 #' @param GSN a vector containing Gold Standard Negative (GSN)
 #' @param displayBy which statistics will be used for displaying. It can be either "boxplot" for features themselves, "ROC" for AUC in ROC, "Fmax" for F-max in Precision-Recall curve)
+#' @param font.family the font family for texts
 #' @param ... additional parameters. Please refer to 'lattice::bwplot' for the complete list.
 #' @return an object of class "ggplot" for AUC and F-max, and an object of class "trellis" for boxplot
 #' @note none
@@ -21,7 +22,7 @@
 #' gp <- xMLfeatureplot(df_predictor, GSP, GSN, displayBy="ROC")
 #' }
 
-xMLfeatureplot <- function(df_predictor, GSP, GSN, displayBy=c("boxplot","ROC","Fmax"), ...)
+xMLfeatureplot <- function(df_predictor, GSP, GSN, displayBy=c("boxplot","ROC","Fmax"), font.family="sans", ...)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -147,6 +148,9 @@ xMLfeatureplot <- function(df_predictor, GSP, GSN, displayBy=c("boxplot","ROC","
 		}else{
 			bp <- bp + scale_x_continuous(position="top")
 		}
+		
+		## change font family to 'Arial'
+		bp <- bp + theme(text=element_text(family=font.family))
 		
 		res <- bp
     

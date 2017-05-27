@@ -5,7 +5,7 @@
 \title{Function to visualise/assess features used for machine learning}
 \usage{
 xMLfeatureplot(df_predictor, GSP, GSN, displayBy = c("boxplot", "ROC",
-"Fmax"), ...)
+"Fmax"), font.family = "sans", ...)
 }
 \arguments{
 \item{df_predictor}{a data frame containing genes (in rows) and
@@ -19,6 +19,8 @@ data frame must has gene symbols as row names}
 \item{displayBy}{which statistics will be used for displaying. It can
 be either "boxplot" for features themselves, "ROC" for AUC in ROC,
 "Fmax" for F-max in Precision-Recall curve)}
+
+\item{font.family}{the font family for texts}
 
 \item{...}{additional parameters. Please refer to 'lattice::bwplot' for
 the complete list.}

@@ -10,7 +10,7 @@ xlab = NULL, title = NULL, subtitle = c("leading", "enrichment",
 "both"), clab = "5-star\\nratings", x.scale = c("normal", "sqrt",
 "log"),
 peak = TRUE, leading = FALSE, leading.size = 2, compact = FALSE,
-signature = TRUE)
+font.family = "sans", signature = TRUE)
 }
 \arguments{
 \item{eGSEA}{an object of class "eGSEA"}
@@ -44,6 +44,8 @@ when the parameter 'leading' is enabled}
 
 \item{compact}{logical to indicate whether the compact/void theme is
 used. If TRUE, axes and legend info will be hidden}
+
+\item{font.family}{the font family for texts}
 
 \item{signature}{logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE showing which function is

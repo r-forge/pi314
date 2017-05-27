@@ -9,8 +9,9 @@ top.label.type = c("box", "text"), top.label.size = 2,
 top.label.col = "darkblue", top.label.query = NULL,
 label.query.only = FALSE, chromosome.only = TRUE, y.scale = c("normal",
 "sqrt", "log"), y.lab = NULL, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), signature = TRUE, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"UCSC_knownCanonical"), font.family = "sans", signature = TRUE,
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
@@ -58,6 +59,8 @@ computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell "GR.Gene" with your RData file name (with or
 without extension), plus specify your file RData path in
 "RData.location"}
+
+\item{font.family}{the font family for texts}
 
 \item{signature}{logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE}

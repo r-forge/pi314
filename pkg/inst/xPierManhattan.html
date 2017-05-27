@@ -23,8 +23,9 @@ top.label.type = c("box", "text"), top.label.size = 2,
 top.label.col = "darkblue", top.label.query = NULL,
 label.query.only = FALSE, chromosome.only = TRUE, y.scale = c("normal",
 "sqrt", "log"), y.lab = NULL, GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), signature = TRUE, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"UCSC_knownCanonical"), font.family = "sans", signature = TRUE,
+verbose = TRUE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -100,6 +101,10 @@ computer, and make sure the GR object content names refer to Gene
 Symbols. Then, tell &quot;GR.Gene&quot; with your RData file name (with or
 without extension), plus specify your file RData path in
 &quot;RData.location&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>font.family</code></td>
+<td>
+<p>the font family for texts</p>
 </td></tr>
 <tr valign="top"><td><code>signature</code></td>
 <td>

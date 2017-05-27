@@ -6,6 +6,7 @@
 #' @param metric the performance metric to plot. It can be one of 'ROC', 'Sens' (Sensitivity) and 'Spec' (Specificity)
 #' @param xlab a title for the x axis
 #' @param xlimits the limit for the x axis
+#' @param font.family the font family for texts
 #' @return an object of class "ggplot"
 #' @note none
 #' @export
@@ -22,7 +23,7 @@
 #' gp <- xMLcompare(ls_ML, xlimits=c(0.5,1))
 #' }
 
-xMLcompare <-function(list_ML, metric=c("ROC","Sens","Spec"), xlab=NA, xlimits=c(0.5,1))
+xMLcompare <-function(list_ML, metric=c("ROC","Sens","Spec"), xlab=NA, xlimits=c(0.5,1), font.family="sans")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -91,6 +92,9 @@ xMLcompare <-function(list_ML, metric=c("ROC","Sens","Spec"), xlab=NA, xlimits=c
 	## put arrows on x-axis
 	bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	gp <- bp + scale_x_continuous(position="top", limits=xlimits)
+	
+	## change font family to 'Arial'
+	gp <- gp + theme(text=element_text(family=font.family))
 	
 	## append 'CI' and 'Para'
 	### CI

@@ -29,9 +29,9 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
 #' ## TNFRSF1A
-#' xVisEvidence(xTarget, nodes="TNFRSF1A", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
+#' xVisEvidence(xTarget, nodes="TNFRSF1A", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=1, vertex.label.family="Arial", legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' ## UBA52
-#' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=4, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
+#' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=1, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' }
 
 xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, mtext.side=3, verbose=TRUE, edge.width=NULL, ...)
@@ -174,7 +174,7 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 		legend(legend.position, legend=legend.text, col=pie.color, pch=13, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
 	}
 	if(!is.na(mtext.side)){
-		graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4)
+		graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4, family="Arial Black")
 	}
 	
     return(subg)

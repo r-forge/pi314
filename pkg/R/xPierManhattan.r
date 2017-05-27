@@ -14,6 +14,7 @@
 #' @param y.scale how to transform the y scale. It can be "normal" for no transformation, "sqrt" for square root transformation, and "log" for log-based transformation
 #' @param y.lab the y labelling. If NULL (by default), it shows the column of input data
 #' @param GR.Gene the genomic regions of genes. By default, it is 'UCSC_knownGene', that is, UCSC known genes (together with genomic locations) based on human genome assembly hg19. It can be 'UCSC_knownCanonical', that is, UCSC known canonical genes (together with genomic locations) based on human genome assembly hg19. Alternatively, the user can specify the customised input. To do so, first save your RData file (containing an GR object) into your local computer, and make sure the GR object content names refer to Gene Symbols. Then, tell "GR.Gene" with your RData file name (with or without extension), plus specify your file RData path in "RData.location"
+#' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
@@ -63,7 +64,7 @@
 #' }
 
 
-xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.label.type=c("box","text"), top.label.size=2, top.label.col="darkblue", top.label.query=NULL, label.query.only=FALSE, chromosome.only=TRUE, y.scale=c("normal","sqrt","log"), y.lab=NULL, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), signature=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.label.type=c("box","text"), top.label.size=2, top.label.col="darkblue", top.label.query=NULL, label.query.only=FALSE, chromosome.only=TRUE, y.scale=c("normal","sqrt","log"), y.lab=NULL, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), font.family="sans", signature=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -240,6 +241,8 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
 	## put arrows on y-axis and x-axis
 	bp <- bp + theme(axis.line.y=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")), axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
+	## change font family to 'Arial'
+	bp <- bp + theme(text=element_text(family=font.family))
 	
     mp <- bp
     mp$gr <- gr

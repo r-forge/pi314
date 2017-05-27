@@ -14,6 +14,7 @@
 #' @param leading logical to indicate whether the leading targets are texted
 #' @param leading.size the size of leading targets' texts. It only works when the parameter 'leading' is enabled
 #' @param compact logical to indicate whether the compact/void theme is used. If TRUE, axes and legend info will be hidden
+#' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return an object of class "ggplot" or a list of "ggplot" objects.
 #' @note none
@@ -36,7 +37,7 @@
 #' grid.arrange(grobs=ls_gp, ncol=2)
 #' }
 
-xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"), xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, compact=FALSE, signature=TRUE)
+xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"), xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, compact=FALSE, font.family="sans", signature=TRUE)
 {
 	
 	x.scale <- match.arg(x.scale)
@@ -73,7 +74,7 @@ xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"),
     	return(NULL)
     }
     
-    Hits <- Rank <- RES <- Score <- x <- NULL
+    Hits <- Rank <- RES <- Score <- x <- Symbol <- NULL
     ls_gp <- lapply(which.terms, function(which.term){
 
 		df_full <- eGSEA$full[[which.term]]
@@ -161,6 +162,9 @@ xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"),
 		if(compact){
 			gp <- gp + theme_void() + theme(legend.position="none")
 		}
+		
+		## change font family to 'Arial'
+		gp <- gp + theme(text=element_text(family=font.family))
 		
 		invisible(gp)
     })

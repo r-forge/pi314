@@ -9,6 +9,7 @@
 #' @param bar.label logical to indicate whether to label each bar with FDR. By default, it sets to true for bar labelling
 #' @param bar.label.size an integer specifying the bar labelling text size. By default, it sets to 3
 #' @param wrap.width a positive integer specifying wrap width of name
+#' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return an object of class "ggplot"
 #' @note none
@@ -28,7 +29,7 @@
 #' #dev.off()
 #' }
 
-xGSEAbarplot <- function(eGSEA, top_num=10, displayBy=c("nes","adjp","fdr","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, signature=TRUE) 
+xGSEAbarplot <- function(eGSEA, top_num=10, displayBy=c("nes","adjp","fdr","pvalue"), FDR.cutoff=0.05, bar.label=TRUE, bar.label.size=3, wrap.width=NULL, font.family="sans", signature=TRUE) 
 {
     
     displayBy <- match.arg(displayBy)
@@ -113,6 +114,9 @@ xGSEAbarplot <- function(eGSEA, top_num=10, displayBy=c("nes","adjp","fdr","pval
 	
 	## x-axis (actually y-axis) position
 	bp <- bp + scale_y_continuous(position="top")
+	
+	## change font family to 'Arial'
+	bp <- bp + theme(text=element_text(family=font.family))
 	
 	invisible(bp)
 }

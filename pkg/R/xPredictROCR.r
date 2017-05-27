@@ -8,6 +8,7 @@
 #' @param rescale logical to indicate whether to linearly rescale predictive scores for GSP/GSN targets to the range [0,1]. By default, it sets to TRUE
 #' @param plot the way to plot performance curve. It can be 'none' for no curve returned, 'ROC' for ROC curve, and 'PR' for PR curve. 
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to TRUE for display
+#' @param font.family the font family for texts
 #' @param signature a logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
 #' @return 
 #' If plot is 'none' (by default), an object of class "pPerf", a list with following components:
@@ -36,7 +37,7 @@
 #' pPerf <- xPredictROCR(prediction, GSP, GSN)
 #' }
 
-xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC","PR"), verbose=TRUE, signature=TRUE)
+xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC","PR"), verbose=TRUE, font.family="sans", signature=TRUE)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -179,6 +180,9 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 		#p <- p + geom_text_repel(data=df_PRS[i,], family="Times New Roman", aes(x=Recall, y=Precision, label=paste0('Fmax = ',signif(fmax,digits=3))))
 		p <- p + geom_text(data=df_PRS[i,], family="Times New Roman", aes(x=Recall, y=Precision, label=paste0('Fmax = ',signif(fmax,digits=3))))
 		
+		## change font family to 'Arial'
+		p <- p + theme(text=element_text(family=font.family))
+		
 		p$PRS <- df_PRS
 		p$AUROC <- auroc
 		p$Fmax <- fmax
@@ -202,6 +206,9 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
 		}
 		## put arrows on both axes
 		p <- p + theme(axis.line=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
+		
+		## change font family to 'Arial'
+		p <- p + theme(text=element_text(family=font.family))
 		
 		p$PRS <- df_PRS
 		p$AUROC <- auroc

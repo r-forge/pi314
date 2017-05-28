@@ -139,6 +139,9 @@ xMLfeatureplot <- function(df_predictor, GSP, GSN, displayBy=c("boxplot","ROC","
 		bp <- bp + theme_bw() + theme(legend.position="right", legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=14,color="black"), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
 		bp <- bp + xlab(xlab)
 	
+		## change font family to 'Arial'
+		bp <- bp + theme(text=element_text(family=font.family))
+	
 		## put arrows on x-axis
 		bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
@@ -148,9 +151,6 @@ xMLfeatureplot <- function(df_predictor, GSP, GSN, displayBy=c("boxplot","ROC","
 		}else{
 			bp <- bp + scale_x_continuous(position="top")
 		}
-		
-		## change font family to 'Arial'
-		bp <- bp + theme(text=element_text(family=font.family))
 		
 		res <- bp
     

@@ -89,12 +89,13 @@ xMLcompare <-function(list_ML, metric=c("ROC","Sens","Spec"), xlab=NA, xlimits=c
 	bp <- bp  + theme_bw() + theme(legend.position="right", legend.title=element_blank(), axis.title.y=element_blank(), axis.text.y=element_text(size=10,color="black"), axis.title.x=element_text(size=14,color="black"), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
 	bp <- bp + theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank())
 	bp <- bp + xlab(xlab)
+	
+	## change font family to 'Arial'
+	bp <- bp + theme(text=element_text(family=font.family))
+	
 	## put arrows on x-axis
 	bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	gp <- bp + scale_x_continuous(position="top", limits=xlimits)
-	
-	## change font family to 'Arial'
-	gp <- gp + theme(text=element_text(family=font.family))
 	
 	## append 'CI' and 'Para'
 	### CI

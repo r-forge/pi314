@@ -89,12 +89,12 @@ xMLzoom <- function(xTarget, top=20, top.label.type=c("box","text"), top.label.s
     	caption <- paste("Created by xMLzoom from Pi version", utils ::packageVersion("Pi"))
     	gp <- gp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
-	
-	## put arrows on x-axis
-	gp <- gp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
     
 	## change font family to 'Arial'
 	gp <- gp + theme(text=element_text(family=font.family))
+	
+	## put arrows on x-axis
+	gp <- gp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
     
     invisible(gp)
 }

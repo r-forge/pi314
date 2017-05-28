@@ -112,6 +112,9 @@ xMLdotplot <- function(sTarget, displayBy=c("importance2fold","roc2fold","fmax2f
     	bp <- bp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
 	
+	## change font family to 'Arial'
+	bp <- bp + theme(text=element_text(family=font.family))
+	
 	## put arrows on x-axis
 	bp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
@@ -121,9 +124,6 @@ xMLdotplot <- function(sTarget, displayBy=c("importance2fold","roc2fold","fmax2f
     }else{
 		bp <- bp + scale_x_continuous(position="top")
 	}
-	
-	## change font family to 'Arial'
-	bp <- bp + theme(text=element_text(family=font.family))
 	
 	invisible(bp)
 }

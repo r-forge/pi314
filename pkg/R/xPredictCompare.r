@@ -199,11 +199,13 @@ xPredictCompare <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("curve",
 		caption <- paste("Created by xPredictROCR from Pi version", utils ::packageVersion("XGR"))
 		p <- p + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
 	}
-	## put arrows on both axes
-	p <- p + theme(axis.line=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 	
 	## change font family to 'Arial'
 	p <- p + theme(text=element_text(family=font.family))
+	
+	## put arrows on both axes
+	p <- p + theme(axis.line=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
+
 	
 	invisible(p)
 }

@@ -238,12 +238,12 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
     	bp <- bp + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
     }
 	
-	## put arrows on y-axis and x-axis
-	bp <- bp + theme(axis.line.y=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")), axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
-	
 	## change font family to 'Arial'
 	bp <- bp + theme(text=element_text(family=font.family))
 	
+	## put arrows on y-axis and x-axis
+	bp <- bp + theme(axis.line.y=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")), axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
+
     mp <- bp
     mp$gr <- gr
     

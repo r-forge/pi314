@@ -178,6 +178,17 @@ without extension), plus specify your file RData path in
 &quot;RData.location&quot;. Note: you can also load your customised GR object
 directly</p>
 </td></tr>
+<tr valign="top"><td><code>include.TAD</code></td>
+<td>
+<p>TAD boundary regions are also included. By default,
+it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
+region will be kept). TAD datasets can be one of &quot;GM12878&quot;
+(lymphoblast), &quot;IMR90&quot; (fibroblast), &quot;MSC&quot; (mesenchymal stem cell)
+,&quot;TRO&quot; (trophoblasts-like cell), &quot;H1&quot; (embryonic stem cell), &quot;MES&quot;
+(mesendoderm) and &quot;NPC&quot; (neural progenitor cell). Explanations can be
+found at <a href="http://dx.doi.org/10.1016/j.celrep.2016.10.061">http://dx.doi.org/10.1016/j.celrep.2016.10.061</a></p>
+</td></tr>
 <tr valign="top"><td><code>include.eQTL</code></td>
 <td>
 <p>genes modulated by eQTL (also Lead SNPs or in LD

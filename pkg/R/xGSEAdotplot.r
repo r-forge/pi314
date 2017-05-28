@@ -154,7 +154,10 @@ xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"),
 			x <- NULL
 			bp <- bp + scale_x_continuous(trans=scales::log_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=4))
 		}
-	
+
+		## change font family to 'Arial'
+		bp <- bp + theme(text=element_text(family=font.family))
+
 		## put arrows on x- and y-axis
 		gp <- bp + theme(axis.line.x=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")), axis.line.y=element_line(arrow=arrow(angle=30,length=unit(0.25,"cm"), type="open")))
 		
@@ -162,9 +165,6 @@ xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"),
 		if(compact){
 			gp <- gp + theme_void() + theme(legend.position="none")
 		}
-		
-		## change font family to 'Arial'
-		gp <- gp + theme(text=element_text(family=font.family))
 		
 		invisible(gp)
     })

@@ -89,6 +89,7 @@ xGSEAbarplot <- function(eGSEA, top_num=10, displayBy=c("nes","adjp","fdr","pval
 	}
 	
 	bp <- p + geom_col(aes(fill=height)) + scale_fill_gradient(low="lightyellow",high="orange") + theme_bw() + theme(legend.position="none",axis.title.y=element_blank(), axis.text.y=element_text(size=12,color="black"), axis.title.x=element_text(size=14,color="black")) + coord_flip()
+	bp <- bp + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 	
 	if(bar.label){
 		## get text label

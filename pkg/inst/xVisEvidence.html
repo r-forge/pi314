@@ -19,9 +19,9 @@ genes in a gene network. It returns an object of class &quot;igraph&quot;.
 <pre>
 xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
-colormap = "ggplot2", legend.position = "topleft", legend.horiz =
-FALSE,
-mtext.side = 3, verbose = TRUE, edge.width = NULL, ...)
+largest.comp = TRUE, colormap = "ggplot2", legend.position = "topleft",
+legend.horiz = FALSE, mtext.side = 3, verbose = TRUE,
+edge.width = NULL, vertex.size = NULL, ...)
 </pre>
 
 
@@ -64,6 +64,12 @@ only. By default, it sets to true</p>
 <p>the top number of the neighbors with the highest
 priority. By default, it sets to NULL to disable this parameter</p>
 </td></tr>
+<tr valign="top"><td><code>largest.comp</code></td>
+<td>
+<p>logical to indicate whether the largest component
+is only retained. By default, it sets to true for the largest component
+being left</p>
+</td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
 <p>short name for the colormap. It can be one of &quot;jet&quot;
@@ -101,6 +107,11 @@ displayed in the screen. By default, it sets to true for display</p>
 <td>
 <p>the width of the edge. If NULL, the width edge is
 proportional to the 'weight' edge attribute (if existed)</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.size</code></td>
+<td>
+<p>the size of each vertex. If null, each vertex has
+the size proportional to the degree of nodes</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>

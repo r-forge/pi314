@@ -14,9 +14,11 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
 "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
-"CreedsGeneDN", "KEGG"), customised.genesets = NULL, size.range = c(10,
-500), path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"),
+"CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
+"KEGGenvironmental",
+"KEGGcellular", "KEGGorganismal", "KEGGdisease"),
+customised.genesets = NULL, size.range = c(10, 500),
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 weight = 1, nperm = 2000, fast = TRUE, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
@@ -42,12 +44,17 @@ tissue-specific eQTL-containing genes from GTEx ("GTExV4" and
 "GTExV6"), crowd extracted expression of differential signatures from
 CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
 "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
-"CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways ("KEGG"), and the
-molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1",
-"MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
-"MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
-"MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC",
-"MsigdbC6", "MsigdbC7")}
+"CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for
+all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for
+'Genetic Information Processing' pathways, 'KEGGenvironmental' for
+'Environmental Information Processing' pathways, 'KEGGcellular' for
+'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal
+Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways),
+and the molecular signatures database (Msigdb, including "MsigdbH",
+"MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
+"MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
+"MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
+"MsigdbC5CC", "MsigdbC6", "MsigdbC7")}
 
 \item{customised.genesets}{a list each containing gene symbols. By
 default, it is NULL. If the list provided, it will overtake the

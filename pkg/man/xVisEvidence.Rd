@@ -6,9 +6,9 @@
 \usage{
 xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
-colormap = "ggplot2", legend.position = "topleft", legend.horiz =
-FALSE,
-mtext.side = 3, verbose = TRUE, edge.width = NULL, ...)
+largest.comp = TRUE, colormap = "ggplot2", legend.position = "topleft",
+legend.horiz = FALSE, mtext.side = 3, verbose = TRUE,
+edge.width = NULL, vertex.size = NULL, ...)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
@@ -32,6 +32,10 @@ only. By default, it sets to true}
 
 \item{neighbor.top}{the top number of the neighbors with the highest
 priority. By default, it sets to NULL to disable this parameter}
+
+\item{largest.comp}{logical to indicate whether the largest component
+is only retained. By default, it sets to true for the largest component
+being left}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
@@ -58,6 +62,9 @@ displayed in the screen. By default, it sets to true for display}
 
 \item{edge.width}{the width of the edge. If NULL, the width edge is
 proportional to the 'weight' edge attribute (if existed)}
+
+\item{vertex.size}{the size of each vertex. If null, each vertex has
+the size proportional to the degree of nodes}
 
 \item{...}{additional graphic parameters. See
 \url{http://igraph.org/r/doc/plot.common.html} for the complete list.}

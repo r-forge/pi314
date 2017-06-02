@@ -19,7 +19,7 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease"),
 customised.genesets = NULL, size.range = c(10, 500),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
-weight = 1, nperm = 2000, fast = TRUE, verbose = TRUE,
+weight = 1, seed = 825, nperm = 2000, fast = TRUE, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
@@ -74,6 +74,8 @@ for each node, find all shortest paths with the equal lengths)}
 unweighted (an equivalent to Kolmogorov-Smirnov, only considering the
 rank), "1" for weighted by input gene score (by default), and "2" for
 over-weighted, and so on}
+
+\item{seed}{an integer specifying the seed}
 
 \item{nperm}{the number of random permutations. For each permutation,
 gene-score associations will be permutated so that permutation of

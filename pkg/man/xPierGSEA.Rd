@@ -89,7 +89,7 @@ biocLite(c("fgsea"))}. If not yet installed, this option will be
 disabled}
 
 \item{verbose}{logical to indicate whether the messages will be
-displayed in the screen. By default, it sets to false for no display}
+displayed in the screen. By default, it sets to true}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}

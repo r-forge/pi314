@@ -8,7 +8,8 @@ xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
 largest.comp = TRUE, colormap = "ggplot2", legend.position = "topleft",
 legend.horiz = FALSE, mtext.side = 3, verbose = TRUE,
-edge.width = NULL, vertex.size = NULL, ...)
+edge.width = NULL, vertex.size = NULL, vertex.size.nonseed = NULL,
+vertex.label.color = "blue", vertex.label.color.nonseed = NULL, ...)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
@@ -65,6 +66,13 @@ proportional to the 'weight' edge attribute (if existed)}
 
 \item{vertex.size}{the size of each vertex. If null, each vertex has
 the size proportional to the degree of nodes}
+
+\item{vertex.size.nonseed}{the size of each nonseed vertex. If null,
+each vertex has the size proportional to the degree of nodes}
+
+\item{vertex.label.color}{the color of vertex labels}
+
+\item{vertex.label.color.nonseed}{the color of nonseed vertex labels}
 
 \item{...}{additional graphic parameters. See
 \url{http://igraph.org/r/doc/plot.common.html} for the complete list.}

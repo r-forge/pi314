@@ -94,7 +94,9 @@ xPierSubnet <- function(pNode, priority.quantile=0.1, network=c(NA,"STRING_highe
 		if(!is.na(network)){
 			network <- match.arg(network)
 		}else{
-			stop("The network must be provided given a 'sTarget' or 'dTarget' object.\n")
+			if(is.null(network.customised)){
+				network.customised <- pNode$metag
+			}
 		}
 		
 		priority <- df_priority$priority

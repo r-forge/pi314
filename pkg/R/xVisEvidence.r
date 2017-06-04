@@ -17,6 +17,9 @@
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param edge.width the width of the edge. If NULL, the width edge is proportional to the 'weight' edge attribute (if existed)
 #' @param vertex.size the size of each vertex. If null, each vertex has the size proportional to the degree of nodes
+#' @param vertex.size.nonseed the size of each nonseed vertex. If null, each vertex has the size proportional to the degree of nodes
+#' @param vertex.label.color the color of vertex labels
+#' @param vertex.label.color.nonseed the color of nonseed vertex labels
 #' @param ... additional graphic parameters. See \url{http://igraph.org/r/doc/plot.common.html} for the complete list.
 #' @return
 #' a subgraph, an object of class "igraph".
@@ -36,7 +39,7 @@
 #' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=1, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' }
 
-xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, largest.comp=TRUE, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, mtext.side=3, verbose=TRUE, edge.width=NULL, vertex.size=NULL, ...)
+xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, largest.comp=TRUE, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, mtext.side=3, verbose=TRUE, edge.width=NULL, vertex.size=NULL, vertex.size.nonseed=NULL, vertex.label.color="blue", vertex.label.color.nonseed=NULL, ...)
 {
 
     node.info <- match.arg(node.info)
@@ -158,6 +161,24 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 		}else{
 			vertex.size <- 5 * (vertex.size - min(vertex.size))/(max(vertex.size) - min(vertex.size)) + 8
 		}
+		
+		if(!is.null(vertex.size.nonseed)){
+			vertex.size[sapply(ls_val, is.null)] <- vertex.size.nonseed
+		}
+		
+	}else{
+		if(!is.null(vertex.size.nonseed)){
+			vertex.size <- rep(vertex.size, length(ls_val))
+			vertex.size[sapply(ls_val, is.null)] <- vertex.size.nonseed
+		}
+	}
+	
+	## vertex.label.color
+	if(!is.null(vertex.label.color)){
+		if(!is.null(vertex.label.color.nonseed)){
+			vertex.label.color <- rep(vertex.label.color, length(ls_val))
+			vertex.label.color[sapply(ls_val, is.null)] <- vertex.label.color.nonseed
+		}
 	}
 	
 	## edge.width
@@ -173,12 +194,12 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	}
 	
 	## draw graph
-	xVisNet(subg, vertex.shape=vertex.shape, vertex.pie=ls_val, vertex.pie.color=list(pie.color), vertex.pie.border="grey", vertex.label=vertex.label, vertex.color="grey", vertex.size=vertex.size, signature=FALSE, edge.width=edge.width, ...)
+	xVisNet(subg, vertex.shape=vertex.shape, vertex.pie=ls_val, vertex.pie.color=list(pie.color), vertex.pie.border="grey", vertex.label=vertex.label, vertex.color="grey", vertex.size=vertex.size, signature=FALSE, edge.width=edge.width, vertex.label.color=vertex.label.color, ...)
 	if(!is.na(legend.position)){
 		legend(legend.position, legend=legend.text, col=pie.color, pch=13, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
 	}
 	if(!is.na(mtext.side)){
-		graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4, family="Arial Black")
+		graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4, family="sans")
 	}
 	
     return(subg)

@@ -12,7 +12,7 @@
 #' @param seed an integer specifying the seed
 #' @param nperm the number of random permutations. For each permutation, gene-score associations will be permutated so that permutation of gene-term associations is realised
 #' @param fast logical to indicate whether to fast calculate GSEA resulting. By default, it sets to true, but not necessarily does so. It will depend on whether the package "fgsea" has been installed. It can be installed via: \code{source("http://bioconductor.org/biocLite.R"); biocLite(c("fgsea"))}. If not yet installed, this option will be disabled
-#' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
+#' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an object of class "eGSEA", a list with following components:

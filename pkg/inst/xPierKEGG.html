@@ -21,7 +21,7 @@ xPierKEGG(xTarget, vis = c("net", "evidence", "pathview"), hsa =
 "hsa04621",
 priority.top = NULL, incoming.neighbor.order = 1, nodes_query = NULL,
 largest.comp = TRUE, pathview.filename = NULL,
-pathview.filetype = c("png", "pdf"),
+pathview.filetype = c("png", "pdf"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 </pre>
 
@@ -80,6 +80,11 @@ being left</p>
 <p>the file format saved using the package
 &quot;pathview&quot;. It can be &quot;png&quot; or &quot;pdf&quot;</p>
 </td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical to indicate whether the messages will be
+displayed in the screen. By default, it sets to true</p>
+</td></tr>
 <tr valign="top"><td><code>RData.location</code></td>
 <td>
 <p>the characters to tell the location of built-in
@@ -126,10 +131,10 @@ library(Pi)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
 ## Not run: 
 ## evidence
-xPierKEGG(xTarget, hsa="hsa04621", vis="net",
+xPierKEGG(xTarget, hsa="hsa04621", vis="evidence",
 RData.location=RData.location)
 ## network
-xPierKEGG(xTarget, hsa="hsa04621", vis="evidence",
+xPierKEGG(xTarget, hsa="hsa04621", vis="net",
 RData.location=RData.location)
 ## using pathview
 pv.out &lt;- xPierKEGG(xTarget, hsa="hsa04621", vis="pathview",

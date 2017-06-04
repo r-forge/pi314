@@ -11,6 +11,7 @@
 #' @param largest.comp logical to indicate whether the largest component is only retained. By default, it sets to true for the largest component being left
 #' @param pathview.filename the file name saved using the package "pathview". By default, it is NULL meaning "hsa.Pi"
 #' @param pathview.filetype the file format saved using the package "pathview". It can be "png" or "pdf"
+#' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @param ... additional graphic parameters. If the type of visualisation is 'net', see \code{\link{xVisNet}}; if the visualisation type is 'evidence', see \code{\link{xVisEvidence}}
 #' @return
@@ -27,14 +28,14 @@
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
 #' \dontrun{
 #' ## evidence
-#' xPierKEGG(xTarget, hsa="hsa04621", vis="net", RData.location=RData.location)
-#' ## network
 #' xPierKEGG(xTarget, hsa="hsa04621", vis="evidence", RData.location=RData.location)
+#' ## network
+#' xPierKEGG(xTarget, hsa="hsa04621", vis="net", RData.location=RData.location)
 #' ## using pathview
 #' pv.out <- xPierKEGG(xTarget, hsa="hsa04621", vis="pathview", pathview.filetype=c("png","pdf")[2], RData.location=RData.location)
 #' }
 
-xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621", priority.top=NULL, incoming.neighbor.order=1, nodes_query=NULL, largest.comp=TRUE, pathview.filename=NULL, pathview.filetype=c("png","pdf"), RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621", priority.top=NULL, incoming.neighbor.order=1, nodes_query=NULL, largest.comp=TRUE, pathview.filename=NULL, pathview.filetype=c("png","pdf"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
 
     vis <- match.arg(vis)
@@ -51,6 +52,7 @@ xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621
 	ls_ig <- xRDataLoader(RData.customised="ig.KEGG.list", RData.location=RData.location)
 	kegg <- sapply(ls_ig, function(x) x$path)
 	kegg <- gsub('^path:', '', kegg)
+	hsa <- gsub('^path:', '', hsa)
 	ind <- match(hsa, kegg)
 	if(is.na(ind)){
 		ind <- grep(hsa, names(kegg))
@@ -93,7 +95,7 @@ xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621
 		tfile <- paste0(pathway.id, ".", out.suffix, ".", pathview.filetype)
 		if(file.exists(tfile)){
 			file.copy(from=tfile, to=outputfile, overwrite=TRUE, recursive=FALSE, copy.mode=TRUE)
-            message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=T)
+            message(sprintf("Congratulations! A file '%s' (in the directory %s) has been created!", outputfile, getwd()), appendLF=TRUE)
 			
 			unlink(tfile, recursive=TRUE, force=TRUE)
 			unlink(paste0(pathway.id,'.xml'), recursive=TRUE, force=TRUE)
@@ -129,10 +131,12 @@ xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621
 			## including incoming neighbors
 			neighs.out <- igraph::neighborhood(ig, order=incoming.neighbor.order, nodes=nodes_query, mode="in")
 			neighbors <- unique(names(unlist(neighs.out)))
+			ind <- match(neighbors, rownames(df_priority))
+			neighbors <- neighbors[!is.na(ind)]
 			subg <- dnet::dNetInduce(ig, nodes_query=neighbors, knn=0, remove.loops=TRUE, largest.comp=largest.comp)
 		
 			if(verbose){
-				message(sprintf("Out of %d genes, %d in query, %d (inclusion of %d-order incoming neighbors), and %d (within the network) are visualised", vcount(ig), length(nodes_query), length(neighbors), incoming.neighbor.order, vcount(subg)), appendLF=TRUE)
+				message(sprintf("Out of %d genes, %d in the top %d, %d (inclusion of %d-order incoming neighbors), and %d (within the largest connected network) are visualised", vcount(ig), length(nodes_query), priority.top, length(neighbors), incoming.neighbor.order, vcount(subg)), appendLF=TRUE)
 			}
 		
 		}else{
@@ -141,7 +145,11 @@ xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621
 				message(sprintf("Out of %d genes, %d in query and %d (within the network) are visualised", vcount(ig), length(nodes_query), vcount(subg)), appendLF=TRUE)
 			}
 		}
-
+		
+		ind <- match(V(subg)$name, rownames(df_priority))
+		V(subg)$rank <- as.numeric(df_priority$rank)[ind]
+		V(subg)$priority <- as.numeric(df_priority$priority)[ind]
+		
 		if(vis=="net"){
 			ind <- match(V(subg)$name, rownames(df_priority))
 			pattern <- as.numeric(df_priority$priority)[ind[!is.na(ind)]]

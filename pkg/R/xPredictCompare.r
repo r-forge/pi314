@@ -200,6 +200,8 @@ xPredictCompare <- function(list_pPerf, displayBy=c("ROC","PR"), type=c("curve",
 		p <- p + labs(caption=caption) + theme(plot.caption=element_text(hjust=1,face='bold.italic',size=8,colour='#002147'))
 	}
 	
+	p <- p + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+	
 	## change font family to 'Arial'
 	p <- p + theme(text=element_text(family=font.family))
 	

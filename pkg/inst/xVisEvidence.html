@@ -21,7 +21,8 @@ xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
 largest.comp = TRUE, colormap = "ggplot2", legend.position = "topleft",
 legend.horiz = FALSE, mtext.side = 3, verbose = TRUE,
-edge.width = NULL, vertex.size = NULL, ...)
+edge.width = NULL, vertex.size = NULL, vertex.size.nonseed = NULL,
+vertex.label.color = "blue", vertex.label.color.nonseed = NULL, ...)
 </pre>
 
 
@@ -112,6 +113,19 @@ proportional to the 'weight' edge attribute (if existed)</p>
 <td>
 <p>the size of each vertex. If null, each vertex has
 the size proportional to the degree of nodes</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.size.nonseed</code></td>
+<td>
+<p>the size of each nonseed vertex. If null,
+each vertex has the size proportional to the degree of nodes</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label.color</code></td>
+<td>
+<p>the color of vertex labels</p>
+</td></tr>
+<tr valign="top"><td><code>vertex.label.color.nonseed</code></td>
+<td>
+<p>the color of nonseed vertex labels</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>

@@ -4,7 +4,8 @@
 #'
 #' @param eGSEA an object of class "eGSEA"
 #' @param top the number of the top enrichments to be visualised. Alternatively, the gene set names can be queried
-#' @param priority.color a character vector for coloring priority scores
+#' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param ncolors the number of colors specified over the colormap
 #' @param xlab the label for x-axis. If NULL, it is 'Target ranks'
 #' @param title the title. If NULL, it is term name followed by the number of its annotations
 #' @param subtitle the subtitle. It can be used to show 'leading' info, 'enrichment' info or 'both'
@@ -37,7 +38,7 @@
 #' grid.arrange(grobs=ls_gp, ncol=2)
 #' }
 
-xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"), xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, compact=FALSE, font.family="sans", signature=TRUE)
+xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, compact=FALSE, font.family="sans", signature=TRUE)
 {
 	
 	x.scale <- match.arg(x.scale)
@@ -92,10 +93,11 @@ xGSEAdotplot <- function(eGSEA, top=1, priority.color=c("lightblue","darkblue"),
 						 ", P=", pvalue,
 						 ", FDR=", adjp,")",
 						 sep="",collapse="")
-	
+		
 		bp <- ggplot(df_full, aes(x=Rank, y=RES, colour=Score))
 		bp <- bp + geom_point(size=0.1)
-		bp <- bp + geom_segment(data=subset(df_full,Hits>=1), aes(xend=Rank, yend=0), size=0.2) + scale_colour_gradient(low=priority.color[1],high=priority.color[2], limits=c(min(df_full$Score),max(df_full$Score)), guide=guide_colorbar(title=clab,barwidth=0.5,nbin=5))
+		bp <- bp + geom_segment(data=subset(df_full,Hits>=1), aes(xend=Rank, yend=0), size=0.2)
+		bp <- bp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(min(df_full$Score),max(df_full$Score)), guide=guide_colorbar(title=clab,title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
 		
 		if(leading){
 			df_genes <- subset(df_full,Hits>=1)

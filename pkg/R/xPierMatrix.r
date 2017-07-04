@@ -38,6 +38,7 @@
 #' # get target priority in a discovery mode
 #' dTarget <- xPierMatrix(ls_pNode, displayBy="pvalue", aggregateBy="fishers")
 #' }
+
 xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue","evidence"), combineBy=c('union','intersect'), aggregateBy=c("none","fishers","logistic","Ztransform","orderStatistic"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 

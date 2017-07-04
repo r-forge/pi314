@@ -4,8 +4,8 @@
 \alias{xGSEAdotplot}
 \title{Function to visualise GSEA results using dot plot}
 \usage{
-xGSEAdotplot(eGSEA, top = 1, priority.color = c("lightblue",
-"darkblue"),
+xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue", ncolors =
+5,
 xlab = NULL, title = NULL, subtitle = c("leading", "enrichment",
 "both"), clab = "5-star\\nratings", x.scale = c("normal", "sqrt",
 "log"),
@@ -18,7 +18,18 @@ font.family = "sans", signature = TRUE)
 \item{top}{the number of the top enrichments to be visualised.
 Alternatively, the gene set names can be queried}
 
-\item{priority.color}{a character vector for coloring priority scores}
+\item{colormap}{short name for the colormap. It can be one of "jet"
+(jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
+colormap), "wyr" (white-yellow-red colormap), "br" (black-red
+colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and
+"rainbow" (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. "blue-black-yellow",
+"royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
+standard color names can be found in
+\url{http://html-color-codes.info/color-names}}
+
+\item{ncolors}{the number of colors specified over the colormap}
 
 \item{xlab}{the label for x-axis. If NULL, it is 'Target ranks'}
 

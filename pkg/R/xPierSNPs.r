@@ -243,6 +243,7 @@ xPierSNPs <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, signif
     if(relative.importance[1] != 0){
 		df_nGenes <- xSNP2nGenes(data=df_SNP$SNP, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.TAD=include.TAD, verbose=verbose, RData.location=RData.location)
 		if(!is.na(include.TAD)){
+			TAD <- NULL
 			df_nGenes <- base::subset(df_nGenes, TAD!='Excluded')
 		}
 	}else{

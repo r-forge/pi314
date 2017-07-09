@@ -843,6 +843,9 @@ xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm
 	
 		## priority: first log10-transformed ap and then being rescaled into the [0,5] range
 		priority <- -log10(vec_ap)
+		####
+		priority <- sqrt(priority)
+		####
 		vec_priority <- 5 * (priority - min(priority))/(max(priority) - min(priority))
 
 	}

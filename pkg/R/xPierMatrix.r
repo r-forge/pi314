@@ -160,6 +160,9 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 			######
 			## priority: first log10-transformed ap and then being rescaled into the [0,5] range
 			priority <- -log10(df_ap)
+			####
+			priority <- sqrt(priority)
+			####
 			priority <- 5 * (priority - min(priority))/(max(priority) - min(priority))
 			
 			## df_priority

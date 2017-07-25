@@ -484,6 +484,7 @@ library(Pi)
 }
 
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+\dontrun{
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
@@ -493,7 +494,6 @@ RData.location=RData.location)
 gr <- ImmunoBase$AS$variants
 AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
-\dontrun{
 # b) perform priority analysis
 ls_pNode <- xPierSNPsAdv(data=AS, include.TAD='GM12878',
 include.eQTL="JKng_mono", include.HiC='Monocytes',

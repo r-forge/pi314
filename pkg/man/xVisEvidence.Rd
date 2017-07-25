@@ -6,10 +6,11 @@
 \usage{
 xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
-largest.comp = TRUE, colormap = "ggplot2", legend.position = "topleft",
-legend.horiz = FALSE, mtext.side = 3, verbose = TRUE,
-edge.width = NULL, vertex.size = NULL, vertex.size.nonseed = NULL,
-vertex.label.color = "blue", vertex.label.color.nonseed = NULL, ...)
+largest.comp = TRUE, show = TRUE, colormap = "ggplot2",
+legend.position = "topleft", legend.horiz = FALSE, mtext.side = 3,
+verbose = TRUE, edge.width = NULL, vertex.size = NULL,
+vertex.size.nonseed = NULL, vertex.label.color = "blue",
+vertex.label.color.nonseed = NULL, ...)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
@@ -37,6 +38,8 @@ priority. By default, it sets to NULL to disable this parameter}
 \item{largest.comp}{logical to indicate whether the largest component
 is only retained. By default, it sets to true for the largest component
 being left}
+
+\item{show}{logical to indicate whether to show the graph}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red

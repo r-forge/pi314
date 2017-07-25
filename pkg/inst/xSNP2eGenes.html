@@ -358,6 +358,7 @@ library(Pi)
 ## End(Not run)
 
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata_dev"
+## Not run: 
 # a) provide the SNPs with the significance info
 ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #data.file &lt;- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
@@ -367,7 +368,6 @@ RData.location=RData.location)
 gr &lt;- ImmunoBase$AS$variants
 AS &lt;- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 
-## Not run: 
 # b) define eQTL genes
 df_eGenes &lt;- xSNP2eGenes(data=AS[,1], include.eQTL="JKscience_TS2A",
 RData.location=RData.location)

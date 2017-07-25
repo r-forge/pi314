@@ -223,7 +223,7 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
     	bp <- bp + scale_y_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2))
     }else if(y.scale=="log"){
     	x <- NULL
-    	bp <- bp + scale_y_continuous(trans=scales::log_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2))
+    	bp <- bp + scale_y_continuous(trans=scales::log_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=2)) + annotation_logticks(sides='l')
     }
 	
 	if(!is.null(y.lab)){

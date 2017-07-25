@@ -9,8 +9,10 @@ xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue", ncolors =
 xlab = NULL, title = NULL, subtitle = c("leading", "enrichment",
 "both"), clab = "5-star\\nratings", x.scale = c("normal", "sqrt",
 "log"),
-peak = TRUE, leading = FALSE, leading.size = 2, compact = FALSE,
-font.family = "sans", signature = TRUE)
+peak = TRUE, leading = FALSE, leading.size = 2,
+leading.color = "black", leading.alpha = 0.6, leading.padding = 0.2,
+leading.arrow = 0.01, leading.force = 0.01, compact = FALSE,
+font.family = "sans", signature = TRUE, ...)
 }
 \arguments{
 \item{eGSEA}{an object of class "eGSEA"}
@@ -53,6 +55,18 @@ texted}
 \item{leading.size}{the size of leading targets' texts. It only works
 when the parameter 'leading' is enabled}
 
+\item{leading.color}{the label color of leading targets' texts}
+
+\item{leading.alpha}{the 0-1 value specifying transparency of leading
+targets' texts}
+
+\item{leading.padding}{the padding around the leading targets' texts}
+
+\item{leading.arrow}{the arrow pointing to the leading targets}
+
+\item{leading.force}{the repelling force between leading targets'
+texts}
+
 \item{compact}{logical to indicate whether the compact/void theme is
 used. If TRUE, axes and legend info will be hidden}
 
@@ -61,6 +75,9 @@ used. If TRUE, axes and legend info will be hidden}
 \item{signature}{logical to indicate whether the signature is assigned
 to the plot caption. By default, it sets TRUE showing which function is
 used to draw this graph}
+
+\item{...}{additional paramters associated with
+ggrepel::geom_text_repel}
 }
 \value{
 an object of class "ggplot" or a list of "ggplot" objects.

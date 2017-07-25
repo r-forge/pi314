@@ -10,6 +10,7 @@
 #' @param neighbor.seed logical to indicate whether neighbors are seeds only. By default, it sets to true
 #' @param neighbor.top the top number of the neighbors with the highest priority. By default, it sets to NULL to disable this parameter
 #' @param largest.comp logical to indicate whether the largest component is only retained. By default, it sets to true for the largest component being left
+#' @param show logical to indicate whether to show the graph
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta), and "ggplot2" (emulating ggplot2 default color palette). Alternatively, any hyphen-separated HTML color names, e.g. "lightyellow-orange" (by default), "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param legend.position the legend position. If NA, the legend is not shown
 #' @param legend.horiz logical specifying the legend horizon. If TRUE, set the legend horizontally rather than vertically
@@ -39,7 +40,7 @@
 #' xVisEvidence(xTarget, nodes="UBA52", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=20, vertex.label.color="black", vertex.label.cex=0.7, vertex.label.dist=0.6, vertex.label.font=1, legend.position="bottomleft", legend.horiz=TRUE, newpage=FALSE)
 #' }
 
-xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, largest.comp=TRUE, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, mtext.side=3, verbose=TRUE, edge.width=NULL, vertex.size=NULL, vertex.size.nonseed=NULL, vertex.label.color="blue", vertex.label.color.nonseed=NULL, ...)
+xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, largest.comp=TRUE, show=TRUE, colormap="ggplot2", legend.position="topleft", legend.horiz=FALSE, mtext.side=3, verbose=TRUE, edge.width=NULL, vertex.size=NULL, vertex.size.nonseed=NULL, vertex.label.color="blue", vertex.label.color.nonseed=NULL, ...)
 {
 
     node.info <- match.arg(node.info)
@@ -75,6 +76,8 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 		}else if(class(xTarget) == "sTarget"){
 			g <- xTarget$evidence$metag
 		}
+		
+		V(g)$priority <- df_priority[V(g)$name, 'priority']
 	}
 	if(class(g)!='igraph'){
 		stop("The input 'g' must be provided!\n")
@@ -193,14 +196,26 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 		}
 	}
 	
-	## draw graph
-	xVisNet(subg, vertex.shape=vertex.shape, vertex.pie=ls_val, vertex.pie.color=list(pie.color), vertex.pie.border="grey", vertex.label=vertex.label, vertex.color="grey", vertex.size=vertex.size, signature=FALSE, edge.width=edge.width, vertex.label.color=vertex.label.color, ...)
-	if(!is.na(legend.position)){
-		legend(legend.position, legend=legend.text, col=pie.color, pch=13, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
+	#############################################################
+	if(show){
+		## draw graph
+		xVisNet(subg, vertex.shape=vertex.shape, vertex.pie=ls_val, vertex.pie.color=list(pie.color), vertex.pie.border="grey", vertex.label=vertex.label, vertex.color="grey", vertex.size=vertex.size, signature=FALSE, edge.width=edge.width, vertex.label.color=vertex.label.color, ...)
+		if(!is.na(legend.position)){
+			legend(legend.position, legend=legend.text, col=pie.color, pch=13, bty="n", pt.cex=1.2, cex=1, text.col="darkgrey", text.font=4, horiz=legend.horiz)
+		}
+		if(!is.na(mtext.side)){
+			graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4, family="sans")
+		}
 	}
-	if(!is.na(mtext.side)){
-		graphics::mtext(paste0("Interacting partners for ", paste0(nodes,collapse=',')), side=mtext.side, adj=0, cex=0.8, font=4, family="sans")
+	#############################################################
+		
+	## append evidence node attributes
+	df_tmp <- df_val[,-1]
+	colnames(df_tmp) <- legend.text
+	for(i in 1:ncol(df_tmp)){
+		igraph::vertex_attr(subg, colnames(df_tmp)[i]) <- df_tmp[,i]
 	}
+	V(subg)$vertex.label <- vertex.label
 	
     return(subg)
 }

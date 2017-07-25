@@ -14,9 +14,15 @@
 #' @param peak logical to indicate whether the peak location is shown
 #' @param leading logical to indicate whether the leading targets are texted
 #' @param leading.size the size of leading targets' texts. It only works when the parameter 'leading' is enabled
+#' @param leading.color the label color of leading targets' texts
+#' @param leading.alpha the 0-1 value specifying transparency of leading targets' texts
+#' @param leading.padding the padding around the leading targets' texts
+#' @param leading.arrow the arrow pointing to the leading targets
+#' @param leading.force the repelling force between leading targets' texts
 #' @param compact logical to indicate whether the compact/void theme is used. If TRUE, axes and legend info will be hidden
 #' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
+#' @param ... additional paramters associated with ggrepel::geom_text_repel
 #' @return an object of class "ggplot" or a list of "ggplot" objects.
 #' @note none
 #' @export
@@ -38,7 +44,7 @@
 #' grid.arrange(grobs=ls_gp, ncol=2)
 #' }
 
-xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, compact=FALSE, font.family="sans", signature=TRUE)
+xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, leading.color='black', leading.alpha=0.6, leading.padding=0.2, leading.arrow=0.01, leading.force=0.01, compact=FALSE, font.family="sans", signature=TRUE, ...)
 {
 	
 	x.scale <- match.arg(x.scale)
@@ -106,7 +112,7 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5,
 			df_genes <- df_genes[ind,]
 			df_genes$Symbol <- names(vec)
 			
-			bp <- bp + ggrepel::geom_text_repel(data=df_genes, aes(x=Rank,y=RES,label=Symbol), size=leading.size, color='black', alpha=0.6, fontface='bold.italic', point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.3, arrow=arrow(length=unit(0.01,'npc')))
+			bp <- bp + ggrepel::geom_text_repel(data=df_genes, aes(x=Rank,y=RES,label=Symbol), lineheight=0.8, size=leading.size, color=leading.color, alpha=leading.alpha, fontface='bold.italic', box.padding=unit(0.5,"lines"), point.padding=unit(leading.padding,"lines"), segment.color='grey50', segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(leading.arrow,'npc')), force=leading.force, ...)
 		}
 		
 		if(peak){
@@ -153,8 +159,10 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5,
 			x <- NULL
 			bp <- bp + scale_x_continuous(trans=scales::sqrt_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=4))
 		}else if(x.scale=="log"){
-			x <- NULL
-			bp <- bp + scale_x_continuous(trans=scales::log_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=4))
+			x <- .x <- NULL
+			#bp <- bp + scale_x_continuous(trans=scales::log_trans(), breaks=scales::trans_breaks("log10", function(x) 10^x, n=4)) + annotation_logticks(sides='b')
+			bp <- bp + scale_x_log10(breaks=scales::trans_breaks("log10", function(x) 10^x, n=4), labels = scales::trans_format("log10", scales::math_format(10^.x))) + annotation_logticks(sides='b')
+			
 		}
 
 		## change font family to 'Arial'

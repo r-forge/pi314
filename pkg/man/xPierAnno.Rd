@@ -167,6 +167,7 @@ library(Pi)
 }
 
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+\dontrun{
 # a) provide the seed nodes/genes with the weight info
 ## load ImmunoBase
 ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
@@ -176,7 +177,6 @@ seeds.genes <- ImmunoBase$AS$genes_variants
 ## seeds weighted according to distance away from lead SNPs
 data <- 1- seeds.genes/500000
 
-\dontrun{
 # b) perform priority analysis
 pNode <- xPierGenes(data=data, network="PCommonsDN_medium",restart=0.7,
 RData.location=RData.location)

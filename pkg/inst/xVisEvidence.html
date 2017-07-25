@@ -19,10 +19,11 @@ genes in a gene network. It returns an object of class &quot;igraph&quot;.
 <pre>
 xVisEvidence(xTarget, g = NA, nodes = NULL, node.info = c("smart",
 "none"), neighbor.order = 1, neighbor.seed = TRUE, neighbor.top = NULL,
-largest.comp = TRUE, colormap = "ggplot2", legend.position = "topleft",
-legend.horiz = FALSE, mtext.side = 3, verbose = TRUE,
-edge.width = NULL, vertex.size = NULL, vertex.size.nonseed = NULL,
-vertex.label.color = "blue", vertex.label.color.nonseed = NULL, ...)
+largest.comp = TRUE, show = TRUE, colormap = "ggplot2",
+legend.position = "topleft", legend.horiz = FALSE, mtext.side = 3,
+verbose = TRUE, edge.width = NULL, vertex.size = NULL,
+vertex.size.nonseed = NULL, vertex.label.color = "blue",
+vertex.label.color.nonseed = NULL, ...)
 </pre>
 
 
@@ -70,6 +71,10 @@ priority. By default, it sets to NULL to disable this parameter</p>
 <p>logical to indicate whether the largest component
 is only retained. By default, it sets to true for the largest component
 being left</p>
+</td></tr>
+<tr valign="top"><td><code>show</code></td>
+<td>
+<p>logical to indicate whether to show the graph</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>

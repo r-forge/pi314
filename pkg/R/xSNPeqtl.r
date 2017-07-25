@@ -102,6 +102,7 @@
 #' }
 #'
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' \dontrun{
 #' # a) provide the SNPs with the significance info
 #' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
 #' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
@@ -110,7 +111,6 @@
 #' gr <- ImmunoBase$AS$variants
 #' AS <- as.data.frame(GenomicRanges::mcols(gr)[, c('Variant','Pvalue')])
 #'
-#' \dontrun{
 #' # b) define eQTL genes
 #' df_SGS <- xSNPeqtl(data=AS[,1], include.eQTL="JKscience_TS2A", RData.location=RData.location)
 #' }

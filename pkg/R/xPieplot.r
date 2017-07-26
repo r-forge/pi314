@@ -54,7 +54,12 @@ xPieplot <- function(df, columns, colormap=c("ggplot2", "bwr","jet","gbr","wyr",
 
 		if (!('r' %in% names(mapping))) {
 			xvar <- as.character(mapping)["x"]
-			size <- base::diff(range(data[, xvar]))/75
+			tmp <- base::diff(range(data[, xvar]))
+			## makde sure range difference is not zero (otherwise 1)
+			if(tmp==0){
+				tmp <- 1
+			}
+			size <- tmp/75
 			mapping <- utils::modifyList(mapping, aes_(r=size))
 		}
 

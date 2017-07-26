@@ -74,7 +74,10 @@ xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none
 	df <- gp$data_nodes
 	
 	columns <- c('dGene','pGene','fGene','nGene','eGene','cGene')
-	df_sub <- df[,c('x','y',columns)]
+	df_sub <- as.data.frame(matrix(0, nrow=nrow(df), ncol=length(columns)+2))
+	colnames(df_sub) <- c('x','y',columns)
+	ind <- match(colnames(df_sub), colnames(df))
+	df_sub[,!is.na(ind)] <- df[,ind[!is.na(ind)]]
 	ind <- which(apply(df_sub[,c(-1,-2)],1,sum)!=0)
 	if(length(ind)>0){
 		df_sub <- df_sub[ind, ]

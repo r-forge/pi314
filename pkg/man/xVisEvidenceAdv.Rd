@@ -13,7 +13,7 @@ node.color.title = "5-star\\nrating", colormap = "white-yellow-red",
 ncolors = 64, zlim = c(0, 5), node.size.range = 5, title = "",
 edge.color = "orange", edge.color.alpha = 0.5, edge.curve = 0,
 edge.arrow.gap = 0.025, pie.radius = NULL, pie.color = "black",
-pie.color.alpha = 1, pie.thick = 0.1)
+pie.color.alpha = 1, pie.thick = 0.1, ...)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget", "sTarget" or "eTarget"}
@@ -100,6 +100,8 @@ straight line}
 border colors}
 
 \item{pie.thick}{the pie border thickness}
+
+\item{...}{additional graphic parameters for xA2Net}
 }
 \value{
 a ggplot object.

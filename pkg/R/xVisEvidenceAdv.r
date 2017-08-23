@@ -31,6 +31,7 @@
 #' @param pie.color the border color of a pie
 #' @param pie.color.alpha the 0-1 value specifying transparency of pie border colors
 #' @param pie.thick the pie border thickness
+#' @param ... additional graphic parameters for xA2Net
 #' @return
 #' a ggplot object.
 #' @export
@@ -47,7 +48,7 @@
 #' xVisEvidenceAdv(xTarget, nodes="TNFRSF1A", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL)
 #' }
 
-xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, largest.comp=TRUE, node.label.size=2, node.label.color='black', node.label.alpha=0.9, node.label.padding=0.5, node.label.arrow=0, node.label.force=0.1, node.shape=19, node.color.title='5-star\nrating', colormap='white-yellow-red', ncolors=64, zlim=c(0,5), node.size.range=5, title='', edge.color="orange", edge.color.alpha=0.5, edge.curve=0, edge.arrow.gap=0.025, pie.radius=NULL, pie.color='black', pie.color.alpha=1, pie.thick=0.1)
+xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"), neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL, largest.comp=TRUE, node.label.size=2, node.label.color='black', node.label.alpha=0.9, node.label.padding=0.5, node.label.arrow=0, node.label.force=0.1, node.shape=19, node.color.title='5-star\nrating', colormap='white-yellow-red', ncolors=64, zlim=c(0,5), node.size.range=5, title='', edge.color="orange", edge.color.alpha=0.5, edge.curve=0, edge.arrow.gap=0.025, pie.radius=NULL, pie.color='black', pie.color.alpha=1, pie.thick=0.1,...)
 {
 
     node.info <- match.arg(node.info)
@@ -68,7 +69,7 @@ xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none
 	V(subg)$ycoord <- glayout[,2]
 	
 	#################
-	gp <- xA2Net(g=subg, node.label='vertex.label', label.wrap.width=NULL, node.label.size=node.label.size, node.label.color=node.label.color, node.label.alpha=node.label.alpha, node.label.padding=node.label.padding, node.label.arrow=node.label.arrow, node.label.force=node.label.force, node.shape=node.shape, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title=node.color.title, colormap=colormap, ncolors=ncolors, zlim=zlim, node.size.range=node.size.range, title=title, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow.gap=edge.arrow.gap)
+	gp <- xA2Net(g=subg, node.label='vertex.label', node.label.size=node.label.size, node.label.color=node.label.color, node.label.alpha=node.label.alpha, node.label.padding=node.label.padding, node.label.arrow=node.label.arrow, node.label.force=node.label.force, node.shape=node.shape, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title=node.color.title, colormap=colormap, ncolors=ncolors, zlim=zlim, node.size.range=node.size.range, title=title, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow.gap=edge.arrow.gap,...)
     #################
 
 	df <- gp$data_nodes

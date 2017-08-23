@@ -18,15 +18,14 @@ objects.
 <h3>Usage</h3>
 
 <pre>
-xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue", ncolors =
-5,
-xlab = NULL, title = NULL, subtitle = c("leading", "enrichment",
-"both"), clab = "5-star\nratings", x.scale = c("normal", "sqrt",
-"log"),
-peak = TRUE, leading = FALSE, leading.size = 2,
-leading.color = "black", leading.alpha = 0.6, leading.padding = 0.2,
-leading.arrow = 0.01, leading.force = 0.01, compact = FALSE,
-font.family = "sans", signature = TRUE, ...)
+xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue",
+ncolors = 64, xlab = NULL, title = NULL, subtitle = c("leading",
+"enrichment", "both", "none"), clab = "5-star\nratings",
+x.scale = c("normal", "sqrt", "log"), peak = TRUE, peak.color = "red",
+leading = FALSE, leading.size = 2, leading.color = "black",
+leading.alpha = 0.6, leading.padding = 0.2, leading.arrow = 0.01,
+leading.force = 0.01, compact = FALSE, font.family = "sans",
+signature = TRUE, ...)
 </pre>
 
 
@@ -87,10 +86,15 @@ log-based transformation</p>
 <td>
 <p>logical to indicate whether the peak location is shown</p>
 </td></tr>
+<tr valign="top"><td><code>peak.color</code></td>
+<td>
+<p>the peak color</p>
+</td></tr>
 <tr valign="top"><td><code>leading</code></td>
 <td>
 <p>logical to indicate whether the leading targets are
-texted</p>
+texted. Alterntively, leading can be numeric to restict the top targets
+displayed</p>
 </td></tr>
 <tr valign="top"><td><code>leading.size</code></td>
 <td>

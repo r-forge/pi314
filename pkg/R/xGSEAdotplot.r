@@ -12,7 +12,8 @@
 #' @param clab the label for colorbar. By default, it is '5-star ratings'
 #' @param x.scale how to transform the x scale. It can be "normal" for no transformation, "sqrt" for square root transformation, and "log" for log-based transformation
 #' @param peak logical to indicate whether the peak location is shown
-#' @param leading logical to indicate whether the leading targets are texted
+#' @param peak.color the peak color
+#' @param leading logical to indicate whether the leading targets are texted. Alterntively, leading can be numeric to restict the top targets displayed
 #' @param leading.size the size of leading targets' texts. It only works when the parameter 'leading' is enabled
 #' @param leading.color the label color of leading targets' texts
 #' @param leading.alpha the 0-1 value specifying transparency of leading targets' texts
@@ -44,7 +45,7 @@
 #' grid.arrange(grobs=ls_gp, ncol=2)
 #' }
 
-xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, leading=FALSE, leading.size=2, leading.color='black', leading.alpha=0.6, leading.padding=0.2, leading.arrow=0.01, leading.force=0.01, compact=FALSE, font.family="sans", signature=TRUE, ...)
+xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=64, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both','none'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, peak.color='red', leading=FALSE, leading.size=2, leading.color='black', leading.alpha=0.6, leading.padding=0.2, leading.arrow=0.01, leading.force=0.01, compact=FALSE, font.family="sans", signature=TRUE, ...)
 {
 	
 	x.scale <- match.arg(x.scale)
@@ -105,8 +106,12 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5,
 		bp <- bp + geom_segment(data=subset(df_full,Hits>=1), aes(xend=Rank, yend=0), size=0.2)
 		bp <- bp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(min(df_full$Score),max(df_full$Score)), guide=guide_colorbar(title=clab,title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
 		
-		if(leading){
-			df_genes <- subset(df_full,Hits>=1)
+		if(leading | leading>0){
+			if(leading>=1){
+				df_genes <- subset(df_full,Hits>=1 & Rank<=leading)
+			}else{
+				df_genes <- subset(df_full,Hits>=1)
+			}
 			vec <- eGSEA$leading[[which.term]]
 			ind <- match(vec, df_genes$Rank)
 			df_genes <- df_genes[ind,]
@@ -116,7 +121,7 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5,
 		}
 		
 		if(peak){
-			bp <- bp + geom_point(data=df_leading, aes(x=Rank, y=RES), colour="red", alpha=0.5) + geom_segment(data=df_leading, aes(xend=Rank,yend=0), size=0.2, colour="red", linetype="dashed") 
+			bp <- bp + geom_point(data=df_leading, aes(x=Rank, y=RES), colour=peak.color, alpha=0.5) + geom_segment(data=df_leading, aes(xend=Rank,yend=0), size=0.2, colour=peak.color, linetype="dashed") 
 			#bp <- bp + ggrepel::geom_text_repel(data=df_leading, aes(x=Rank,y=RES,label=leading_info), size=2, color='blue', alpha=0.8, fontface='bold.italic')
 		}
 		
@@ -141,13 +146,21 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5,
 			subtitle <- paste("Peak (rank=", df_leading$Rank, "), ",
 							 "Leading targets (n=", nLead, " out of ", nAnno,")",
 							 sep="",collapse="")
-		}else{
+		}else if(subtitle=='enrichment'){
 			subtitle <- paste("Enrichment (NES=", nes,
 							 ", P-value=", pvalue,
 							 ", FDR=", adjp,")",
 							 sep="",collapse="")
+		}else{
+			subtitle <- ''
 		}
-		bp <- bp + labs(title=title, subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5,size=12), plot.subtitle=element_text(hjust=0.5,,size=8))
+		if(subtitle!=''){
+			bp <- bp + labs(title=title, subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5,size=12), plot.subtitle=element_text(hjust=0.5,,size=8))
+		}else{
+			if(!is.na(title)){
+				bp <- bp + labs(title=title) + theme(plot.title=element_text(hjust=0.5,size=12))
+			}
+		}
 		## caption
 		if(signature){
 			caption <- paste("Created by xGSEAdotplot from Pi version", utils ::packageVersion("Pi"))
@@ -174,6 +187,9 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=5,
 		# whether is compact
 		if(compact){
 			gp <- gp + theme_void() + theme(legend.position="none")
+			if(!is.na(title)){
+				gp <- gp + labs(title=title) + theme(plot.title=element_text(hjust=0.5,size=8),plot.margin=unit(rep(0,4),rep("lines",4)))
+			}
 		}
 		
 		invisible(gp)

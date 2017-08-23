@@ -7,7 +7,7 @@
 xPieplot(df, columns, colormap = c("ggplot2", "bwr", "jet", "gbr",
 "wyr",
 "br", "yr", "rainbow", "wb", "heat", "terrain", "topo", "cm"),
-pie.radius = NULL, pie.color = "black", pie.color.alpha = 1,
+pie.radius = NULL, pie.color = "transparent", pie.color.alpha = 1,
 pie.thick = 0.1, legend.title = "", gp = NULL)
 }
 \arguments{

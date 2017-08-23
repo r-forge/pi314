@@ -26,7 +26,7 @@
 #' gp <- xPieplot(df, columns=c('dGene','pGene','fGene','nGene','eGene','cGene'), legend.title='Seeds')
 #' }
 
-xPieplot <- function(df, columns, colormap=c("ggplot2", "bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm"), pie.radius=NULL, pie.color='black', pie.color.alpha=1, pie.thick=0.1, legend.title='', gp=NULL)
+xPieplot <- function(df, columns, colormap=c("ggplot2", "bwr","jet","gbr","wyr","br","yr","rainbow","wb","heat","terrain","topo","cm"), pie.radius=NULL, pie.color='transparent', pie.color.alpha=1, pie.thick=0.1, legend.title='', gp=NULL)
 {
 	
 	if(class(df) != "data.frame" ){
@@ -82,10 +82,12 @@ xPieplot <- function(df, columns, colormap=c("ggplot2", "bwr","jet","gbr","wyr",
 	if(is.null(pie.radius)){
 		gp <- gp + geom_pie(data=df_sub, aes(x=x, y=y), columns=columns, show.legend=TRUE, color=pie.color, alpha=pie.color.alpha, size=pie.thick)
 	}else{
+		df_sub$pie.radius <- rep(pie.radius, nrow(df_sub))
 		gp <- gp + geom_pie(data=df_sub, aes(x=x, y=y, r=pie.radius), columns=columns, show.legend=TRUE, color=pie.color, alpha=pie.color.alpha, size=pie.thick)
 	}
 	
-	gp <- gp + coord_equal() + guides(fill=guide_legend(title=legend.title, title.position="top", keywidth=0.6, keyheight=0.6))
+	gp <- gp + coord_equal() + guides(fill=guide_legend(title=legend.title, title.position="top", keywidth=0.6, keyheight=0.6, override.aes=list(shape=19)))
+	
 	
 	## ggplot2: Fix colors to factor levels
 	my_colors <- XGR::xColormap(colormap)(length(columns))

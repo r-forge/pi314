@@ -4,15 +4,14 @@
 \alias{xGSEAdotplot}
 \title{Function to visualise GSEA results using dot plot}
 \usage{
-xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue", ncolors =
-5,
-xlab = NULL, title = NULL, subtitle = c("leading", "enrichment",
-"both"), clab = "5-star\\nratings", x.scale = c("normal", "sqrt",
-"log"),
-peak = TRUE, leading = FALSE, leading.size = 2,
-leading.color = "black", leading.alpha = 0.6, leading.padding = 0.2,
-leading.arrow = 0.01, leading.force = 0.01, compact = FALSE,
-font.family = "sans", signature = TRUE, ...)
+xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue",
+ncolors = 64, xlab = NULL, title = NULL, subtitle = c("leading",
+"enrichment", "both", "none"), clab = "5-star\\nratings",
+x.scale = c("normal", "sqrt", "log"), peak = TRUE, peak.color = "red",
+leading = FALSE, leading.size = 2, leading.color = "black",
+leading.alpha = 0.6, leading.padding = 0.2, leading.arrow = 0.01,
+leading.force = 0.01, compact = FALSE, font.family = "sans",
+signature = TRUE, ...)
 }
 \arguments{
 \item{eGSEA}{an object of class "eGSEA"}
@@ -49,8 +48,11 @@ log-based transformation}
 
 \item{peak}{logical to indicate whether the peak location is shown}
 
+\item{peak.color}{the peak color}
+
 \item{leading}{logical to indicate whether the leading targets are
-texted}
+texted. Alterntively, leading can be numeric to restict the top targets
+displayed}
 
 \item{leading.size}{the size of leading targets' texts. It only works
 when the parameter 'leading' is enabled}

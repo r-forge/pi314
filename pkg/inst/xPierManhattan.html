@@ -25,7 +25,8 @@ label.query.only = FALSE, chromosome.only = TRUE, y.scale = c("normal",
 "sqrt", "log"), y.lab = NULL, GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"), font.family = "sans", signature = TRUE,
 verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"http://galahad.well.ox.ac.uk/bigdata",
+...)
 </pre>
 
 
@@ -120,6 +121,11 @@ displayed in the screen. By default, it sets to false for no display</p>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional paramters associated with
+ggrepel::geom_text_repel</p>
 </td></tr>
 </table>
 

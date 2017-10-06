@@ -18,13 +18,15 @@ objects.
 <h3>Usage</h3>
 
 <pre>
-xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue",
+xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue", zlim =
+NULL,
 ncolors = 64, xlab = NULL, title = NULL, subtitle = c("leading",
-"enrichment", "both", "none"), clab = "5-star\nratings",
+"enrichment", "both", "none"), clab = "5-star\nrating",
 x.scale = c("normal", "sqrt", "log"), peak = TRUE, peak.color = "red",
 leading = FALSE, leading.size = 2, leading.color = "black",
 leading.alpha = 0.6, leading.padding = 0.2, leading.arrow = 0.01,
-leading.force = 0.01, compact = FALSE, font.family = "sans",
+leading.force = 0.01, leading.query = NULL, leading.query.only = FALSE,
+leading.edge.only = FALSE, compact = FALSE, font.family = "sans",
 signature = TRUE, ...)
 </pre>
 
@@ -53,6 +55,11 @@ hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
 &quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
 standard color names can be found in
 <a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted</p>
 </td></tr>
 <tr valign="top"><td><code>ncolors</code></td>
 <td>
@@ -123,6 +130,23 @@ targets' texts</p>
 <p>the repelling force between leading targets'
 texts</p>
 </td></tr>
+<tr valign="top"><td><code>leading.query</code></td>
+<td>
+<p>which genes in query will be labelled. By default,
+it sets to NULL meaning all genes will be displayed. If labels in query
+can not be found, then all will be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>leading.query.only</code></td>
+<td>
+<p>logical to indicate whether only genes in
+query will be displayed. By default, it sets to FALSE. It only works
+when labels in query are enabled/found</p>
+</td></tr>
+<tr valign="top"><td><code>leading.edge.only</code></td>
+<td>
+<p>logical to indicate whether only the leading
+edge will be shown. By default, it sets to FALSE</p>
+</td></tr>
 <tr valign="top"><td><code>compact</code></td>
 <td>
 <p>logical to indicate whether the compact/void theme is
@@ -141,7 +165,8 @@ used to draw this graph</p>
 <tr valign="top"><td><code>...</code></td>
 <td>
 <p>additional paramters associated with
-ggrepel::geom_text_repel</p>
+ggrepel::geom_text_repel. If queried, it has high priority (eg,
+color='darkred',size=2,alpha=0.6,fontface='bold')</p>
 </td></tr>
 </table>
 

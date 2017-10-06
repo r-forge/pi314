@@ -8,25 +8,23 @@ xPierSNPs(data, include.LD = NA, LD.customised = NULL, LD.r2 = 0.8,
 significance.threshold = 5e-05, score.cap = 10, distance.max = 2000,
 decay.kernel = c("slow", "constant", "linear", "rapid"),
 decay.exponent = 2, GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"), include.TAD =
-c(NA,
-"GM12878", "IMR90", "MSC", "TRO", "H1", "MES", "NPC"), include.eQTL =
-c(NA,
-"JKscience_CD14", "JKscience_LPS2", "JKscience_LPS24", "JKscience_IFN",
-"JKscience_TS2A", "JKscience_TS2A_CD14", "JKscience_TS2A_LPS2",
-"JKscience_TS2A_LPS24", "JKscience_TS2A_IFN", "JKscience_TS2B",
-"JKscience_TS2B_CD14", "JKscience_TS2B_LPS2", "JKscience_TS2B_LPS24",
-"JKscience_TS2B_IFN", "JKscience_TS3A", "JKng_bcell", "JKng_bcell_cis",
-"JKng_bcell_trans", "JKng_mono", "JKng_mono_cis", "JKng_mono_trans",
-"JKpg_CD4", "JKpg_CD4_cis", "JKpg_CD4_trans", "JKpg_CD8",
-"JKpg_CD8_cis",
-"JKpg_CD8_trans", "JKnc_neutro", "JKnc_neutro_cis",
-"JKnc_neutro_trans",
-"WESTRAng_blood", "WESTRAng_blood_cis", "WESTRAng_blood_trans",
-"JK_nk",
-"JK_nk_cis", "JK_nk_trans", "GTEx_V4_Adipose_Subcutaneous",
-"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
-"GTEx_V4_Esophagus_Mucosa",
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+include.TAD = c("none", "GM12878", "IMR90", "MSC", "TRO", "H1", "MES",
+"NPC"), include.eQTL = c(NA, "JKscience_CD14", "JKscience_LPS2",
+"JKscience_LPS24", "JKscience_IFN", "JKscience_TS2A",
+"JKscience_TS2A_CD14",
+"JKscience_TS2A_LPS2", "JKscience_TS2A_LPS24", "JKscience_TS2A_IFN",
+"JKscience_TS2B", "JKscience_TS2B_CD14", "JKscience_TS2B_LPS2",
+"JKscience_TS2B_LPS24", "JKscience_TS2B_IFN", "JKscience_TS3A",
+"JKng_bcell",
+"JKng_bcell_cis", "JKng_bcell_trans", "JKng_mono", "JKng_mono_cis",
+"JKng_mono_trans", "JKpg_CD4", "JKpg_CD4_cis", "JKpg_CD4_trans",
+"JKpg_CD8",
+"JKpg_CD8_cis", "JKpg_CD8_trans", "JKnc_neutro", "JKnc_neutro_cis",
+"JKnc_neutro_trans", "WESTRAng_blood", "WESTRAng_blood_cis",
+"WESTRAng_blood_trans", "JK_nk", "JK_nk_cis", "JK_nk_trans",
+"GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
+"GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
 "GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
@@ -144,7 +142,7 @@ without extension), plus specify your file RData path in
 directly}
 
 \item{include.TAD}{TAD boundary regions are also included. By default,
-it is 'NA' to disable this option. Otherwise, inclusion of a TAD
+it is 'none' to disable this option. Otherwise, inclusion of a TAD
 dataset to pre-filter SNP-nGene pairs (i.e. only those within a TAD
 region will be kept). TAD datasets can be one of "GM12878"
 (lymphoblast), "IMR90" (fibroblast), "MSC" (mesenchymal stem cell)
@@ -157,11 +155,13 @@ with Lead SNPs) are also included. By default, it is 'NA' to disable
 this option. Otherwise, those genes modulated by eQTL will be included.
 Pre-built eQTL datasets are detailed in the section 'Note'}
 
-\item{eQTL.customised}{a user-input matrix or data frame with 3
-columns: 1st column for SNPs/eQTLs, 2nd column for Genes, and 3rd for
-eQTL mapping significance level (p-values or FDR). It is designed to
-allow the user analysing their eQTL data. This customisation (if
-provided) has the high priority over built-in eQTL data}
+\item{eQTL.customised}{a user-input matrix or data frame with 4
+columns: 1st column for SNPs/eQTLs, 2nd column for Genes, 3rd for eQTL
+mapping significance level (p-values or FDR), and 4th for contexts
+(required even though only one context is input). Alternatively, it can
+be a file containing these 4 columns. It is designed to allow the user
+analysing their eQTL data. This customisation (if provided) will
+populate built-in eQTL data}
 
 \item{include.HiC}{genes linked to input SNPs are also included. By
 default, it is 'NA' to disable this option. Otherwise, those genes
@@ -444,6 +444,85 @@ Skeletal'.}
 \item{\code{WESTRAng_blood}: cis- and trans-eQTLs.}
 \item{\code{WESTRAng_blood_cis}: cis-eQTLs only.}
 \item{\code{WESTRAng_blood_trans}: trans-eQTLs only.}
+}
+10. Tissue-specific eQTLs from GTEx (version 6p; including 44 tissues).
+Sourced from http://www.biorxiv.org/content/early/2016/09/09/074450
+\itemize{
+\item{\code{GTEx_V6p_Adipose_Subcutaneous}: cis-eQTLs in tissue
+"Adipose Subcutaneous".}
+\item{\code{GTEx_V6p_Adipose_Visceral_Omentum}: cis-eQTLs in tissue
+"Adipose Visceral (Omentum)".}
+\item{\code{GTEx_V6p_Adrenal_Gland}: cis-eQTLs in tissue "Adrenal
+Gland".}
+\item{\code{GTEx_V6p_Artery_Aorta}: cis-eQTLs in tissue "Artery
+Aorta".}
+\item{\code{GTEx_V6p_Artery_Coronary}: cis-eQTLs in tissue "Artery
+Coronary".}
+\item{\code{GTEx_V6p_Artery_Tibial}: cis-eQTLs in tissue "Artery
+Tibial".}
+\item{\code{GTEx_V6p_Brain_Anterior_cingulate_cortex_BA24}: cis-eQTLs
+in tissue "Brain Anterior cingulate cortex (BA24)".}
+\item{\code{GTEx_V6p_Brain_Caudate_basal_ganglia}: cis-eQTLs in tissue
+"Brain Caudate (basal ganglia)".}
+\item{\code{GTEx_V6p_Brain_Cerebellar_Hemisphere}: cis-eQTLs in tissue
+"Brain Cerebellar Hemisphere".}
+\item{\code{GTEx_V6p_Brain_Cerebellum}: cis-eQTLs in tissue "Brain
+Cerebellum".}
+\item{\code{GTEx_V6p_Brain_Cortex}: cis-eQTLs in tissue "Brain
+Cortex".}
+\item{\code{GTEx_V6p_Brain_Frontal_Cortex_BA9}: cis-eQTLs in tissue
+"Brain Frontal Cortex (BA9)".}
+\item{\code{GTEx_V6p_Brain_Hippocampus}: cis-eQTLs in tissue "Brain
+Hippocampus".}
+\item{\code{GTEx_V6p_Brain_Hypothalamus}: cis-eQTLs in tissue "Brain
+Hypothalamus".}
+\item{\code{GTEx_V6p_Brain_Nucleus_accumbens_basal_ganglia}: cis-eQTLs
+in tissue "Brain Nucleus accumbens (basal ganglia)".}
+\item{\code{GTEx_V6p_Brain_Putamen_basal_ganglia}: cis-eQTLs in tissue
+"Brain Putamen (basal ganglia)".}
+\item{\code{GTEx_V6p_Breast_Mammary_Tissue}: cis-eQTLs in tissue
+"Breast Mammary Tissue".}
+\item{\code{GTEx_V6p_Cells_EBVtransformed_lymphocytes}: cis-eQTLs in
+tissue "Cells EBV-transformed lymphocytes".}
+\item{\code{GTEx_V6p_Cells_Transformed_fibroblasts}: cis-eQTLs in
+tissue "Cells Transformed fibroblasts".}
+\item{\code{GTEx_V6p_Colon_Sigmoid}: cis-eQTLs in tissue "Colon
+Sigmoid".}
+\item{\code{GTEx_V6p_Colon_Transverse}: cis-eQTLs in tissue "Colon
+Transverse".}
+\item{\code{GTEx_V6p_Esophagus_Gastroesophageal_Junction}: cis-eQTLs in
+tissue "Esophagus Gastroesophageal Junction".}
+\item{\code{GTEx_V6p_Esophagus_Mucosa}: cis-eQTLs in tissue "Esophagus
+Mucosa".}
+\item{\code{GTEx_V6p_Esophagus_Muscularis}: cis-eQTLs in tissue
+"Esophagus Muscularis".}
+\item{\code{GTEx_V6p_Heart_Atrial_Appendage}: cis-eQTLs in tissue
+"Heart Atrial Appendage".}
+\item{\code{GTEx_V6p_Heart_Left_Ventricle}: cis-eQTLs in tissue "Heart
+Left Ventricle".}
+\item{\code{GTEx_V6p_Liver}: cis-eQTLs in tissue "Liver".}
+\item{\code{GTEx_V6p_Lung}: cis-eQTLs in tissue "Lung".}
+\item{\code{GTEx_V6p_Muscle_Skeletal}: cis-eQTLs in tissue "Muscle
+Skeletal".}
+\item{\code{GTEx_V6p_Nerve_Tibial}: cis-eQTLs in tissue "Nerve
+Tibial".}
+\item{\code{GTEx_V6p_Ovary}: cis-eQTLs in tissue "Ovary".}
+\item{\code{GTEx_V6p_Pancreas}: cis-eQTLs in tissue "Pancreas".}
+\item{\code{GTEx_V6p_Pituitary}: cis-eQTLs in tissue "Pituitary".}
+\item{\code{GTEx_V6p_Prostate}: cis-eQTLs in tissue "Prostate".}
+\item{\code{GTEx_V6p_Skin_Not_Sun_Exposed_Suprapubic}: cis-eQTLs in
+tissue "Skin Not Sun Exposed (Suprapubic)".}
+\item{\code{GTEx_V6p_Skin_Sun_Exposed_Lower_leg}: cis-eQTLs in tissue
+"Skin Sun Exposed (Lower leg)".}
+\item{\code{GTEx_V6p_Small_Intestine_Terminal_Ileum}: cis-eQTLs in
+tissue "Small Intestine Terminal Ileum".}
+\item{\code{GTEx_V6p_Spleen}: cis-eQTLs in tissue "Spleen".}
+\item{\code{GTEx_V6p_Stomach}: cis-eQTLs in tissue "Stomach".}
+\item{\code{GTEx_V6p_Testis}: cis-eQTLs in tissue "Testis".}
+\item{\code{GTEx_V6p_Thyroid}: cis-eQTLs in tissue "Thyroid".}
+\item{\code{GTEx_V6p_Uterus}: cis-eQTLs in tissue "Uterus".}
+\item{\code{GTEx_V6p_Vagina}: cis-eQTLs in tissue "Vagina".}
+\item{\code{GTEx_V6p_Whole_Blood}: cis-eQTLs in tissue "Whole Blood".}
 }
 Pre-built HiC datasets are described below according to the data
 sources.\cr

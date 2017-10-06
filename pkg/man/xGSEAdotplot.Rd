@@ -4,13 +4,15 @@
 \alias{xGSEAdotplot}
 \title{Function to visualise GSEA results using dot plot}
 \usage{
-xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue",
+xGSEAdotplot(eGSEA, top = 1, colormap = "lightblue-darkblue", zlim =
+NULL,
 ncolors = 64, xlab = NULL, title = NULL, subtitle = c("leading",
-"enrichment", "both", "none"), clab = "5-star\\nratings",
+"enrichment", "both", "none"), clab = "5-star\\nrating",
 x.scale = c("normal", "sqrt", "log"), peak = TRUE, peak.color = "red",
 leading = FALSE, leading.size = 2, leading.color = "black",
 leading.alpha = 0.6, leading.padding = 0.2, leading.arrow = 0.01,
-leading.force = 0.01, compact = FALSE, font.family = "sans",
+leading.force = 0.01, leading.query = NULL, leading.query.only = FALSE,
+leading.edge.only = FALSE, compact = FALSE, font.family = "sans",
 signature = TRUE, ...)
 }
 \arguments{
@@ -29,6 +31,9 @@ hyphen-separated HTML color names, e.g. "blue-black-yellow",
 "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of
 standard color names can be found in
 \url{http://html-color-codes.info/color-names}}
+
+\item{zlim}{the minimum and maximum z values for which colors should be
+plotted}
 
 \item{ncolors}{the number of colors specified over the colormap}
 
@@ -69,6 +74,17 @@ targets' texts}
 \item{leading.force}{the repelling force between leading targets'
 texts}
 
+\item{leading.query}{which genes in query will be labelled. By default,
+it sets to NULL meaning all genes will be displayed. If labels in query
+can not be found, then all will be displayed}
+
+\item{leading.query.only}{logical to indicate whether only genes in
+query will be displayed. By default, it sets to FALSE. It only works
+when labels in query are enabled/found}
+
+\item{leading.edge.only}{logical to indicate whether only the leading
+edge will be shown. By default, it sets to FALSE}
+
 \item{compact}{logical to indicate whether the compact/void theme is
 used. If TRUE, axes and legend info will be hidden}
 
@@ -79,7 +95,8 @@ to the plot caption. By default, it sets TRUE showing which function is
 used to draw this graph}
 
 \item{...}{additional paramters associated with
-ggrepel::geom_text_repel}
+ggrepel::geom_text_repel. If queried, it has high priority (eg,
+color='darkred',size=2,alpha=0.6,fontface='bold')}
 }
 \value{
 an object of class "ggplot" or a list of "ggplot" objects.

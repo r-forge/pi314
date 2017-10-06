@@ -5,6 +5,7 @@
 #' @param eGSEA an object of class "eGSEA"
 #' @param top the number of the top enrichments to be visualised. Alternatively, the gene set names can be queried
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
+#' @param zlim the minimum and maximum z values for which colors should be plotted
 #' @param ncolors the number of colors specified over the colormap
 #' @param xlab the label for x-axis. If NULL, it is 'Target ranks'
 #' @param title the title. If NULL, it is term name followed by the number of its annotations
@@ -20,10 +21,13 @@
 #' @param leading.padding the padding around the leading targets' texts
 #' @param leading.arrow the arrow pointing to the leading targets
 #' @param leading.force the repelling force between leading targets' texts
+#' @param leading.query which genes in query will be labelled. By default, it sets to NULL meaning all genes will be displayed. If labels in query can not be found, then all will be displayed
+#' @param leading.query.only logical to indicate whether only genes in query will be displayed. By default, it sets to FALSE. It only works when labels in query are enabled/found
+#' @param leading.edge.only logical to indicate whether only the leading edge will be shown. By default, it sets to FALSE
 #' @param compact logical to indicate whether the compact/void theme is used. If TRUE, axes and legend info will be hidden
 #' @param font.family the font family for texts
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE showing which function is used to draw this graph
-#' @param ... additional paramters associated with ggrepel::geom_text_repel
+#' @param ... additional paramters associated with ggrepel::geom_text_repel. If queried, it has high priority (eg, color='darkred',size=2,alpha=0.6,fontface='bold')
 #' @return an object of class "ggplot" or a list of "ggplot" objects.
 #' @note none
 #' @export
@@ -45,7 +49,7 @@
 #' grid.arrange(grobs=ls_gp, ncol=2)
 #' }
 
-xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=64, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both','none'), clab='5-star\nratings', x.scale=c("normal","sqrt","log"), peak=TRUE, peak.color='red', leading=FALSE, leading.size=2, leading.color='black', leading.alpha=0.6, leading.padding=0.2, leading.arrow=0.01, leading.force=0.01, compact=FALSE, font.family="sans", signature=TRUE, ...)
+xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", zlim=NULL, ncolors=64, xlab=NULL, title=NULL, subtitle=c('leading','enrichment','both','none'), clab='5-star\nrating', x.scale=c("normal","sqrt","log"), peak=TRUE, peak.color='red', leading=FALSE, leading.size=2, leading.color='black', leading.alpha=0.6, leading.padding=0.2, leading.arrow=0.01, leading.force=0.01, leading.query=NULL, leading.query.only=FALSE, leading.edge.only=FALSE, compact=FALSE, font.family="sans", signature=TRUE, ...)
 {
 	
 	x.scale <- match.arg(x.scale)
@@ -101,33 +105,77 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=64
 						 ", FDR=", adjp,")",
 						 sep="",collapse="")
 		
+		###############
+		if(leading.edge.only){
+			df_full <- subset(df_full,Rank<=df_leading$Rank)
+		}
+		###############
+				
 		bp <- ggplot(df_full, aes(x=Rank, y=RES, colour=Score))
-		bp <- bp + geom_point(size=0.1)
-		bp <- bp + geom_segment(data=subset(df_full,Hits>=1), aes(xend=Rank, yend=0), size=0.2)
-		bp <- bp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=c(min(df_full$Score),max(df_full$Score)), guide=guide_colorbar(title=clab,title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
+		bp <- bp + geom_point(size=0.5)
+		bp <- bp + geom_segment(data=subset(df_full,Hits>=1), aes(xend=Rank, yend=0), size=0.4)
+		if(is.null(zlim)){
+			zlim[1] <- min(df_full$Score)
+			zlim[2] <- max(df_full$Score)
+		}
+		bp <- bp + scale_colour_gradientn(colors=xColormap(colormap)(ncolors), limits=zlim, guide=guide_colorbar(title=clab,title.position="top",barwidth=0.5,nbin=5,draw.ulim=FALSE,draw.llim=FALSE))
 		
 		if(leading | leading>0){
-			if(leading>=1){
+			if(leading>1){
 				df_genes <- subset(df_full,Hits>=1 & Rank<=leading)
 			}else{
 				df_genes <- subset(df_full,Hits>=1)
 			}
+			
 			vec <- eGSEA$leading[[which.term]]
 			ind <- match(vec, df_genes$Rank)
 			df_genes <- df_genes[ind,]
 			df_genes$Symbol <- names(vec)
 			
-			bp <- bp + ggrepel::geom_text_repel(data=df_genes, aes(x=Rank,y=RES,label=Symbol), lineheight=0.8, size=leading.size, color=leading.color, alpha=leading.alpha, fontface='bold.italic', box.padding=unit(0.5,"lines"), point.padding=unit(leading.padding,"lines"), segment.color='grey50', segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(leading.arrow,'npc')), force=leading.force, ...)
+			df_genes_query <- NULL
+			df_genes_noquery <- NULL
+			if(!is.null(leading.query)){
+				ind <- match(df_genes$Symbol, leading.query)
+				if(sum(!is.na(ind))!=0){
+					df_genes_query <- df_genes[!is.na(ind),]
+					df_genes_noquery <- df_genes[is.na(ind),]
+				}
+			}
+			
+			if(is.null(df_genes_query)){
+				bp <- bp + ggrepel::geom_text_repel(data=df_genes, aes(x=Rank,y=RES,label=Symbol), lineheight=0.8, size=leading.size, color=leading.color, alpha=leading.alpha, fontface='italic', box.padding=unit(0.5,"lines"), point.padding=unit(leading.padding,"lines"), segment.color='grey50', segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(leading.arrow,'npc')), force=leading.force,...)
+			}else{
+				if(leading.query.only){
+					bp <- bp + ggrepel::geom_text_repel(data=df_genes_query, aes(x=Rank,y=RES,label=Symbol), lineheight=0.8, size=leading.size, color=leading.color, alpha=leading.alpha, fontface='italic', box.padding=unit(0.5,"lines"), point.padding=unit(leading.padding,"lines"), segment.color='grey50', segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(leading.arrow,'npc')), force=leading.force, ...)
+				}else{
+					bp <- bp + ggrepel::geom_text_repel(data=df_genes_noquery, aes(x=Rank,y=RES,label=Symbol), lineheight=0.8, size=leading.size, color=leading.color, alpha=leading.alpha, fontface='italic', box.padding=unit(0.5,"lines"), point.padding=unit(leading.padding,"lines"), segment.color='grey50', segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(leading.arrow,'npc')), force=leading.force)
+					bp <- bp + ggrepel::geom_text_repel(data=df_genes_query, aes(x=Rank,y=RES,label=Symbol), lineheight=0.8, box.padding=unit(0.5,"lines"), point.padding=unit(leading.padding,"lines"), segment.color='grey50', segment.alpha=0.5, segment.size=0.5, arrow=arrow(length=unit(leading.arrow,'npc')), force=leading.force,...)
+					
+				}
+			}
+
+		}else{
+			df_genes <- subset(df_full,Hits>=1)
 		}
 		
 		if(peak){
-			bp <- bp + geom_point(data=df_leading, aes(x=Rank, y=RES), colour=peak.color, alpha=0.5) + geom_segment(data=df_leading, aes(xend=Rank,yend=0), size=0.2, colour=peak.color, linetype="dashed") 
+			bp <- bp + geom_point(data=df_leading, aes(x=Rank, y=RES), colour=peak.color, alpha=1, size=1) + geom_segment(data=df_leading, aes(xend=Rank,yend=0), size=0.5, colour=peak.color, linetype="solid") 
 			#bp <- bp + ggrepel::geom_text_repel(data=df_leading, aes(x=Rank,y=RES,label=leading_info), size=2, color='blue', alpha=0.8, fontface='bold.italic')
 		}
 		
-		bp <- bp  + theme_bw() + theme(legend.position="right", legend.title=element_text(color="black",face="italic",size=10), axis.title.y=element_text(color="black"), axis.title.x=element_text(color="black"), panel.border=element_blank(), panel.grid.minor=element_blank(), panel.grid.major=element_blank())
+		bp <- bp  + theme_bw() + theme(legend.position="right", legend.title=element_text(color="black",face="italic",size=8), axis.title.y=element_text(color="black"), axis.title.x=element_text(color="black"), panel.border=element_blank(), panel.grid.minor=element_blank(), panel.grid.major=element_blank())
 		if(is.null(xlab)){
-			xlab <- paste0("Target ranks (from 1 to ", nrow(df_full), ")")
+			if(leading.edge.only){
+				if(x.scale=='log'){
+					xlab <- "Target ranks (log-scaled) at the leading edge"
+				}else{
+					xlab <- "Target ranks at the leading edge"
+				}
+				
+			}else{
+				xlab <- paste0("Target ranks (from 1 to ", nrow(df_full), ")")	
+			}
+			
 		}
 		bp <- bp + xlab(xlab) + ylab("Running enrichment score")
 
@@ -155,7 +203,7 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=64
 			subtitle <- ''
 		}
 		if(subtitle!=''){
-			bp <- bp + labs(title=title, subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5,size=12), plot.subtitle=element_text(hjust=0.5,,size=8))
+			bp <- bp + labs(title=title, subtitle=subtitle) + theme(plot.title=element_text(hjust=0.5,size=10), plot.subtitle=element_text(hjust=0.5,,size=8))
 		}else{
 			if(!is.na(title)){
 				bp <- bp + labs(title=title) + theme(plot.title=element_text(hjust=0.5,size=12))
@@ -190,7 +238,10 @@ xGSEAdotplot <- function(eGSEA, top=1, colormap="lightblue-darkblue", ncolors=64
 			if(!is.na(title)){
 				gp <- gp + labs(title=title) + theme(plot.title=element_text(hjust=0.5,size=8),plot.margin=unit(rep(0,4),rep("lines",4)))
 			}
+			
 		}
+		
+		gp$leading <- df_genes
 		
 		invisible(gp)
     })

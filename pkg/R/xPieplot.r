@@ -88,7 +88,6 @@ xPieplot <- function(df, columns, colormap=c("ggplot2", "bwr","jet","gbr","wyr",
 	
 	gp <- gp + coord_equal() + guides(fill=guide_legend(title=legend.title, title.position="top", keywidth=0.6, keyheight=0.6, override.aes=list(shape=19)))
 	
-	
 	## ggplot2: Fix colors to factor levels
 	my_colors <- XGR::xColormap(colormap)(length(columns))
 	names(my_colors) <- columns

@@ -11,7 +11,8 @@ label.query.only = FALSE, chromosome.only = TRUE, y.scale = c("normal",
 "sqrt", "log"), y.lab = NULL, GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"), font.family = "sans", signature = TRUE,
 verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"http://galahad.well.ox.ac.uk/bigdata",
+...)
 }
 \arguments{
 \item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
@@ -70,6 +71,9 @@ displayed in the screen. By default, it sets to false for no display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{...}{additional paramters associated with
+ggrepel::geom_text_repel}
 }
 \value{
 an object of class "ggplot", appended by an GR object called 'gr'

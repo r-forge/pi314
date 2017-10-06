@@ -18,6 +18,7 @@
 #' @param signature logical to indicate whether the signature is assigned to the plot caption. By default, it sets TRUE
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to false for no display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param ... additional paramters associated with ggrepel::geom_text_repel
 #' @return an object of class "ggplot", appended by an GR object called 'gr'
 #' @note none
 #' @export
@@ -64,7 +65,7 @@
 #' }
 
 
-xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.label.type=c("box","text"), top.label.size=2, top.label.col="darkblue", top.label.query=NULL, label.query.only=FALSE, chromosome.only=TRUE, y.scale=c("normal","sqrt","log"), y.lab=NULL, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), font.family="sans", signature=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.label.type=c("box","text"), top.label.size=2, top.label.col="darkblue", top.label.query=NULL, label.query.only=FALSE, chromosome.only=TRUE, y.scale=c("normal","sqrt","log"), y.lab=NULL, GR.Gene=c("UCSC_knownGene","UCSC_knownCanonical"), font.family="sans", signature=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -210,9 +211,9 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
 		midpoint <- priority <- Symbol <- NULL
 		if(!is.null(df_highlight)){
 			if(top.label.type=="text"){
-				bp <- bp + ggrepel::geom_text_repel(data=df_highlight, aes(x=midpoint,y=priority,label=Symbol), size=top.label.size, color=top.label.col, fontface='bold', point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')))
+				bp <- bp + ggrepel::geom_text_repel(data=df_highlight, aes(x=midpoint,y=priority,label=Symbol), size=top.label.size, color=top.label.col, fontface='bold.italic', point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')), ...)
 			}else if(top.label.type=="box"){
-				bp <- bp + ggrepel::geom_label_repel(data=df_highlight, aes(x=midpoint,y=priority,label=Symbol), size=top.label.size, color=top.label.col, fontface='bold', box.padding=unit(0.2,"lines"), point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')))
+				bp <- bp + ggrepel::geom_label_repel(data=df_highlight, aes(x=midpoint,y=priority,label=Symbol), size=top.label.size, color=top.label.col, fontface='bold.italic', box.padding=unit(0.2,"lines"), point.padding=unit(0.2,"lines"), segment.color='grey50', segment.alpha=0.5, arrow=arrow(length=unit(0.01,'npc')), ...)
 			}
 		}
 	}
@@ -230,7 +231,7 @@ xPierManhattan <- function(pNode, color=c("darkred","darkgreen"), top=50, top.la
 		bp <- bp + ylab(y.lab)
 	}
 	
-	bp <- bp + theme(axis.title.y=element_text(size=14), axis.text.x=element_text(angle=45, hjust=1,color="black",size=12), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
+	bp <- bp + theme(axis.title.y=element_text(size=12), axis.text.y=element_text(color="black",size=8), axis.text.x=element_text(angle=45, hjust=1,color="black",size=10), panel.background=element_rect(fill=rgb(0.95,0.95,0.95,1)))
 	
 	## caption
     if(signature){

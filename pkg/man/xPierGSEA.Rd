@@ -11,7 +11,8 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP",
 "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT",
 "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF",
-"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6",
+"MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p",
+"GTExV7",
 "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug",
 "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP",
 "CreedsGeneDN", "KEGG", "KEGGmetabolism", "KEGGgenetic",
@@ -40,9 +41,9 @@ Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance,
 Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for
 Experimental Factor Ontology (used to annotate GWAS Catalog genes),
 Drug-Gene Interaction database ("DGIdb") for drugable categories,
-tissue-specific eQTL-containing genes from GTEx ("GTExV4" and
-"GTExV6"), crowd extracted expression of differential signatures from
-CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
+tissue-specific eQTL-containing genes from GTEx ("GTExV4", "GTExV6p"
+and "GTExV7"), crowd extracted expression of differential signatures
+from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN",
 "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene",
 "CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for
 all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for

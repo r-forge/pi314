@@ -215,7 +215,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 					ind <- which(!is.na(cis[,j]) & cis[,j]<0.05)
 					df <- data.frame(SNP=cis[ind,1], Gene=cis[ind,4], Sig=cis[ind,j], stringsAsFactors=FALSE)
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 			
 			}else if(sum(grep("JKscience_TS2B",x,perl=TRUE)) > 0){
 				# cis-eQTL
@@ -238,14 +238,14 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 					ind <- which(!is.na(cis[,j]) & cis[,j]<0.05)
 					df <- data.frame(SNP=cis[ind,1], Gene=cis[ind,4], Sig=cis[ind,j], stringsAsFactors=FALSE)
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 			
 			}else if(x=='JKscience_TS3A'){
 				# trans-eQTL
 				trans <- xRDataLoader(RData.customised='JKscience_TS3A', RData.location=RData.location, verbose=verbose)
 				minFDR <- apply(trans[,c(9:12)], 1, base::min, na.rm=TRUE)
 				df <- data.frame(SNP=trans[,1], Gene=trans[,4], Sig=minFDR, stringsAsFactors=FALSE)
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(x=='JKscience_CD14' | x=='JKscience_LPS2' | x=='JKscience_LPS24' | x=='JKscience_IFN'){
 				# cis-eQTL
@@ -265,7 +265,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}
 				ind <- which(!is.na(df[,j]) & df[,j]<0.05)
 				df <- data.frame(SNP=df[ind,1], Gene=df[ind,4], Sig=df[ind,j], stringsAsFactors=FALSE)
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("JKng_bcell",x,perl=TRUE)) > 0){
 				# b cells
@@ -282,7 +282,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='JKng_bcell_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("JKng_mono",x,perl=TRUE)) > 0){
 				# monocytes
@@ -299,7 +299,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='JKng_mono_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("JKpg_CD4",x,perl=TRUE)) > 0){
 				# CD4
@@ -316,7 +316,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='JKpg_CD4_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("JKpg_CD8",x,perl=TRUE)) > 0){
 				# CD8
@@ -333,7 +333,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='JKpg_CD8_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("JKnc_neutro",x,perl=TRUE)) > 0){
 				# neutrophils
@@ -350,7 +350,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='JKnc_neutro_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("WESTRAng_blood",x,perl=TRUE)) > 0){
 				# neutrophils
@@ -367,7 +367,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='WESTRAng_blood_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))				
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(x=='JK_nk'){
 				# NK cells
@@ -384,27 +384,27 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 				}else if(x=='JK_nk_trans'){
 					df <- df_trans
 				}
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("GTEx_V4_",x,perl=TRUE)) > 0){
 				y <- gsub("GTEx_V4_","",x)
 				cis <- ''
 				eval(parse(text=paste("cis <- GTEx$", y, sep="")))
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("GTEx_V6p_",x,perl=TRUE)) > 0){
 				y <- gsub("GTEx_V6p_","",x)
 				cis <- ''
 				eval(parse(text=paste("cis <- GTEx$", y, sep="")))
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else if(sum(grep("eQTLdb_",x,perl=TRUE)) > 0){
 				cis <- xRDataLoader(RData.customised=x, RData.location=RData.location, verbose=verbose)
 				df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,5], stringsAsFactors=FALSE)
 				#df <- data.frame(SNP=cis[,1], Gene=cis[,2], Sig=cis[,6], stringsAsFactors=FALSE)
-				df <- cbind(df, Context=rep(x,nrow(df)))
+				df <- cbind(df, Context=rep(x,nrow(df)), stringsAsFactors=FALSE)
 				
 			}else{
 				df <- NULL
@@ -444,7 +444,7 @@ xSNPeqtl <- function(data=NULL, include.eQTL=c(NA,"JKscience_CD14","JKscience_LP
 		if(!is.null(df)){
 			colnames(df) <- c("SNP", "Gene", "Sig", "Context")
 			SGS_customised <- df
-			#SGS_customised <- cbind(df, Context=rep('Customised',nrow(df)))
+			#SGS_customised <- cbind(df, Context=rep('Customised',nrow(df)), stringsAsFactors=FALSE)
 			
 			############################
 			# remove Gene if NA

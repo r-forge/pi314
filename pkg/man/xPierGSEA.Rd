@@ -21,10 +21,13 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 customised.genesets = NULL, size.range = c(10, 500),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 weight = 1, seed = 825, nperm = 2000, fast = TRUE, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+silent = FALSE, RData.location =
+"http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
+\item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget").
+Alternatively, it can be a data frame with two columns ('priority' and
+'rank')}
 
 \item{priority.top}{the number of the top targets used for GSEA. By
 default, it is NULL meaning all targets are used}
@@ -91,6 +94,10 @@ disabled}
 
 \item{verbose}{logical to indicate whether the messages will be
 displayed in the screen. By default, it sets to true}
+
+\item{silent}{logical to indicate whether the messages will be silent
+completely. By default, it sets to false. If true, verbose will be
+forced to be false}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}

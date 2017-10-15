@@ -2,7 +2,7 @@
 #'
 #' \code{xPierGSEA} is supposed to prioritise pathways given prioritised genes and the ontology in query. It is done via gene set enrichment analysis (GSEA). It returns an object of class "eGSEA". 
 #
-#' @param pNode an object of class "pNode" (or "sTarget" or "dTarget")
+#' @param pNode an object of class "pNode" (or "sTarget" or "dTarget"). Alternatively, it can be a data frame with two columns ('priority' and 'rank')
 #' @param priority.top the number of the top targets used for GSEA. By default, it is NULL meaning all targets are used
 #' @param ontology the ontology supported currently. It can be "GOBP" for Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular Function, "GOCC" for Gene Ontology Cellular Component, "PS" for phylostratific age information, "PS2" for the collapsed PS version (inferred ancestors being collapsed into one with the known taxonomy information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam domain families, "DO" for Disease Ontology, "HPPA" for Human Phenotype Phenotypic Abnormality, "HPMI" for Human Phenotype Mode of Inheritance, "HPCM" for Human Phenotype Clinical Modifier, "HPMA" for Human Phenotype Mortality Aging, "MP" for Mammalian Phenotype, "EF" for Experimental Factor Ontology (used to annotate GWAS Catalog genes), Drug-Gene Interaction database ("DGIdb") for drugable categories, tissue-specific eQTL-containing genes from GTEx ("GTExV4", "GTExV6p" and "GTExV7"), crowd extracted expression of differential signatures from CREEDS ("CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP" and "CreedsGeneDN"), KEGG pathways (including 'KEGG' for all, 'KEGGmetabolism' for 'Metabolism' pathways, 'KEGGgenetic' for 'Genetic Information Processing' pathways, 'KEGGenvironmental' for 'Environmental Information Processing' pathways, 'KEGGcellular' for 'Cellular Processes' pathways, 'KEGGorganismal' for 'Organismal Systems' pathways, and 'KEGGdisease' for 'Human Diseases' pathways), and the molecular signatures database (Msigdb, including "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7")
 #' @param customised.genesets a list each containing gene symbols. By default, it is NULL. If the list provided, it will overtake the previous parameter "ontology"
@@ -13,6 +13,7 @@
 #' @param nperm the number of random permutations. For each permutation, gene-score associations will be permutated so that permutation of gene-term associations is realised
 #' @param fast logical to indicate whether to fast calculate GSEA resulting. By default, it sets to true, but not necessarily does so. It will depend on whether the package "fgsea" has been installed. It can be installed via: \code{source("http://bioconductor.org/biocLite.R"); biocLite(c("fgsea"))}. If not yet installed, this option will be disabled
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true
+#' @param silent logical to indicate whether the messages will be silent completely. By default, it sets to false. If true, verbose will be forced to be false
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an object of class "eGSEA", a list with following components:
@@ -51,11 +52,15 @@
 #' gp <- xGSEAdotplot(eGSEA, top=1)
 #' }
 
-xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease"), customised.genesets=NULL, size.range=c(10,500), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), weight=1, seed=825, nperm=2000, fast=TRUE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC","PS","PS2","SF","Pfam","DO","HPPA","HPMI","HPCM","HPMA","MP", "EF", "MsigdbH", "MsigdbC1", "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG", "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR", "MsigdbC4CGN", "MsigdbC4CM", "MsigdbC5BP", "MsigdbC5MF", "MsigdbC5CC", "MsigdbC6", "MsigdbC7", "DGIdb", "GTExV4", "GTExV6p", "GTExV7", "CreedsDisease", "CreedsDiseaseUP", "CreedsDiseaseDN", "CreedsDrug", "CreedsDrugUP", "CreedsDrugDN", "CreedsGene", "CreedsGeneUP", "CreedsGeneDN", "KEGG","KEGGmetabolism","KEGGgenetic","KEGGenvironmental","KEGGcellular","KEGGorganismal","KEGGdisease"), customised.genesets=NULL, size.range=c(10,500), path.mode=c("all_paths","shortest_paths","all_shortest_paths"), weight=1, seed=825, nperm=2000, fast=TRUE, verbose=TRUE, silent=FALSE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
     startT <- Sys.time()
-    message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
-    message("", appendLF=TRUE)
+    if(!silent){
+    	message(paste(c("Start at ",as.character(startT)), collapse=""), appendLF=TRUE)
+    	message("", appendLF=TRUE)
+    }else{
+    	verbose <- FALSE
+    }
     ####################################################################################
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
@@ -68,6 +73,9 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
         df_priority <- pNode$priority[, c("seed","weight","priority","rank")]
     }else if(class(pNode) == "sTarget" | class(pNode) == "dTarget"){
     	df_priority <- pNode$priority[, c("pvalue","fdr","priority","rank")]
+    }else if(class(pNode) == "data.frame"){
+    	df_priority <- pNode[,c(1:2)]
+    	colnames(df_priority) <- c("priority","rank")
     }else{
     	stop("The function must apply to a 'pNode' or 'sTarget' or 'dTarget' object.\n")
     }
@@ -174,6 +182,9 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
             }
             #######
             customised.genesets <- customised.genesets[lapply(customised.genesets,length)>0]
+            if(length(customised.genesets)==0){
+            	return(NULL)
+            }
             #######
 			anno <- lapply(customised.genesets, function(x){
 				GeneID <- xSymbol2GeneID(x, check.symbol.identity=FALSE, verbose=verbose, RData.location=RData.location)
@@ -257,7 +268,7 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 		}
 		
 		if(!is.null(seed)) set.seed(seed)
-		eTerm <- dnet::dGSEA(data=data, identity="entrez", check.symbol.identity=FALSE, ontology="Customised", customised.genesets=anno, sizeRange=size.range, which_distance=NULL, weight=weight, nperm=nperm, fast=TRUE, sigTail="one-tail", p.adjust.method="BH", verbose=verbose, RData.location=RData.location)
+		suppressMessages(eTerm <- dnet::dGSEA(data=data, identity="entrez", check.symbol.identity=FALSE, ontology="Customised", customised.genesets=anno, sizeRange=size.range, which_distance=NULL, weight=weight, nperm=nperm, fast=TRUE, sigTail="one-tail", p.adjust.method="BH", verbose=verbose, RData.location=RData.location))
 		
 		if(!is.null(eTerm)){
 			res <- dGSEAview(eTerm, which_sample=1, top_num=NULL, sortBy="pvalue", decreasing=TRUE, details=TRUE)
@@ -396,10 +407,12 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
     
 ####################################################################################
     endT <- Sys.time()
-    message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
-    
     runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
-    message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    
+    if(!silent){
+    	message(paste(c("\nEnd at ",as.character(endT)), collapse=""), appendLF=TRUE)
+    	message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
+    }
     
     invisible(eGSEA)
 }

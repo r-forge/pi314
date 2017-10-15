@@ -18,7 +18,7 @@
 #' @return
 #' an object of class "eGSEA", a list with following components:
 #' \itemize{
-#'  \item{\code{df_summary}: a data frame of nTerm x 9 containing gene set enrichment analysis result, where nTerm is the number of terms/genesets, and the 9 columns are "setID" (i.e. "Term ID"), "name" (i.e. "Term Name"), "nAnno" (i.e. number in members annotated by a term), "nLead" (i.e. number in members as leading genes), "es" (i.e. enrichment score), "nes" (i.e. normalised enrichment score; enrichment score but after being normalised by gene set size), "pvalue" (i.e. nominal p value), "adjp" (i.e. adjusted p value; p value but after being adjusted for multiple comparisons), "distance" (i.e. term distance or metadata)}
+#'  \item{\code{df_summary}: a data frame of nTerm x 9 containing gene set enrichment analysis result, where nTerm is the number of terms/genesets, and the 9 columns are "setID" (i.e. "Term ID"), "name" (i.e. "Term Name"), "nAnno" (i.e. number in members annotated by a term), "nLead" (i.e. number in members as leading genes), "peak" (i.e. the rank at peak), "total" (i.e. the total number of genes analysed), "es" (i.e. enrichment score), "nes" (i.e. normalised enrichment score; enrichment score but after being normalised by gene set size), "pvalue" (i.e. nominal p value), "adjp" (i.e. adjusted p value; p value but after being adjusted for multiple comparisons), "distance" (i.e. term distance or metadata)}
 #'  \item{\code{leading}: a list of gene sets, each storing leading gene info (i.e. the named vector with names for gene symbols and elements for priority rank). Always, gene sets are identified by "setID"}
 #'  \item{\code{full}: a list of gene sets, each storing full info on gene set enrichment analysis result (i.e. a data frame of nGene x 5, where nGene is the number of genes, and the 5 columns are "GeneID", "Rank" for priority rank, "Score" for priority score, "RES" for running enrichment score, and "Hits" for gene set hits info with 1 for gene hit, 2 for leading gene hit, 3 for the point defining leading genes, 0 for no hit). Always, gene sets are identified by "setID"}
 #'  \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell for the leading genes observed in an individaul term, and off-diagnal cell for the overlapped leading genes shared between two terms}
@@ -271,7 +271,7 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 		suppressMessages(eTerm <- dnet::dGSEA(data=data, identity="entrez", check.symbol.identity=FALSE, ontology="Customised", customised.genesets=anno, sizeRange=size.range, which_distance=NULL, weight=weight, nperm=nperm, fast=TRUE, sigTail="one-tail", p.adjust.method="BH", verbose=verbose, RData.location=RData.location))
 		
 		if(!is.null(eTerm)){
-			res <- dGSEAview(eTerm, which_sample=1, top_num=NULL, sortBy="pvalue", decreasing=TRUE, details=TRUE)
+			res <- dnet::dGSEAview(eTerm, which_sample=1, top_num=NULL, sortBy="pvalue", decreasing=TRUE, details=TRUE)
 			if(nrow(res)>0){
 				res <- res[,c("setID","ES","nES","pvalue","adjp","setSize")]
 				rownames(res) <- NULL
@@ -368,11 +368,13 @@ xPierGSEA <- function(pNode, priority.top=NULL, ontology=c("GOBP","GOMF","GOCC",
 		
 		## append leading genes
 		res$nLead <- sapply(leadingGenes,length)
+		## append peak
+		res$peak <- sapply(leadingGenes,max)
 	}
 	
 	## append "term_name" and "term_distance"
 	ind <- match(res$setID, V(g)$name)
-	summary <- data.frame(setID=res$setID, name=V(g)$term_name[ind], nAnno=res$setSize, nLead=res$nLead, es=res$ES, nes=res$nES, pvalue=res$pvalue, adjp=res$adjp, distance=V(g)$term_distance[ind], stringsAsFactors=FALSE)
+	summary <- data.frame(setID=res$setID, name=V(g)$term_name[ind], nAnno=res$setSize, nLead=res$nLead, peak=res$peak, total=rep(nrow(df_priority),length(res$peak)), es=res$ES, nes=res$nES, pvalue=res$pvalue, adjp=res$adjp, distance=V(g)$term_distance[ind], stringsAsFactors=FALSE)
 	
 	## scientific notation
 	summary$es <- signif(summary$es, digits=3)

@@ -109,11 +109,12 @@ an object of class "eGSEA", a list with following components:
 enrichment analysis result, where nTerm is the number of
 terms/genesets, and the 9 columns are "setID" (i.e. "Term ID"), "name"
 (i.e. "Term Name"), "nAnno" (i.e. number in members annotated by a
-term), "nLead" (i.e. number in members as leading genes), "es" (i.e.
-enrichment score), "nes" (i.e. normalised enrichment score; enrichment
-score but after being normalised by gene set size), "pvalue" (i.e.
-nominal p value), "adjp" (i.e. adjusted p value; p value but after
-being adjusted for multiple comparisons), "distance" (i.e. term
+term), "nLead" (i.e. number in members as leading genes), "peak" (i.e.
+the rank at peak), "total" (i.e. the total number of genes analysed),
+"es" (i.e. enrichment score), "nes" (i.e. normalised enrichment score;
+enrichment score but after being normalised by gene set size), "pvalue"
+(i.e. nominal p value), "adjp" (i.e. adjusted p value; p value but
+after being adjusted for multiple comparisons), "distance" (i.e. term
 distance or metadata)}
 \item{\code{leading}: a list of gene sets, each storing leading gene
 info (i.e. the named vector with names for gene symbols and elements

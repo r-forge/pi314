@@ -4,8 +4,10 @@
 \alias{xPierCor}
 \title{Function to calculate correlation between prioritised genes and user-defined external data}
 \usage{
-xPierCor(pNode, data, method = c("pearson", "spearman"),
+xPierCor(pNode, list_vec, method = c("pearson", "spearman"),
 pvalue.type = c("nominal", "empirical"), seed = 825, nperm = 2000,
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 plot = FALSE)
 }
 \arguments{
@@ -13,8 +15,8 @@ plot = FALSE)
 Alternatively, it can be a data frame with two columns ('name' and
 'priority')}
 
-\item{data}{a named input vector containing numeric data for genes
-(gene symbols)}
+\item{list_vec}{a named vector containing numeric values for genes
+(gene symbols). Alternatively it can be a list of named vectors}
 
 \item{method}{the method used to calcualte correlation. It can be
 'pearson' for Pearson's correlation or 'spearman' for Spearman rank
@@ -27,12 +29,26 @@ correlation}
 
 \item{nperm}{the number of random permutations}
 
+\item{p.adjust.method}{the method used to adjust p-values. It can be
+one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
+first two methods "BH" (widely used) and "BY" control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods "bonferroni",
+"holm", "hochberg" and "hommel" are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER}
+
 \item{plot}{logical to indicate whether scatter plot is drawn}
 }
 \value{
-an object of class "ggplot" with a component 'res' (a data frame with
-two columns 'cor' and 'pval') if the scatter plot is drawn. Otherwise
-it is a data frame with two columns 'cor' and 'pval'.
+a list with two componets:
+\itemize{
+\item{\code{df_summary}: a data frame of n x 4, where n is the number
+of named vectors, and the 4 columns are "name", "cor" (i.e.
+"correlation"), "pval" (i.e. p-value), "fdr"}
+\item{\code{ls_gp}: NULL if the plot is not drawn; otherwise, a list of
+'ggplot' objects}
+}
 }
 \description{
 \code{xPierCor} is supposed to calculate correlation between
@@ -65,8 +81,8 @@ RData.location=RData.location)
 # c) do correlation
 data <- pNode$priority$priority[1:100]
 name(data) <- pNode$priority$name[1:100]
-res <- xPierCor(pNode, data, method="pearson", pvalue.type="empirical",
-nperm=2000, plot=TRUE)
+ls_res <- xPierCor(pNode, data, method="pearson",
+pvalue.type="empirical", nperm=2000, plot=TRUE)
 }
 }
 \seealso{

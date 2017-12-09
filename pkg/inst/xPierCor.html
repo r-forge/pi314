@@ -17,8 +17,10 @@ prioritised genes and user-defined external data.
 <h3>Usage</h3>
 
 <pre>
-xPierCor(pNode, data, method = c("pearson", "spearman"),
+xPierCor(pNode, list_vec, method = c("pearson", "spearman"),
 pvalue.type = c("nominal", "empirical"), seed = 825, nperm = 2000,
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 plot = FALSE)
 </pre>
 
@@ -32,10 +34,10 @@ plot = FALSE)
 Alternatively, it can be a data frame with two columns ('name' and
 'priority')</p>
 </td></tr>
-<tr valign="top"><td><code>data</code></td>
+<tr valign="top"><td><code>list_vec</code></td>
 <td>
-<p>a named input vector containing numeric data for genes
-(gene symbols)</p>
+<p>a named vector containing numeric values for genes
+(gene symbols). Alternatively it can be a list of named vectors</p>
 </td></tr>
 <tr valign="top"><td><code>method</code></td>
 <td>
@@ -56,6 +58,17 @@ correlation</p>
 <td>
 <p>the number of random permutations</p>
 </td></tr>
+<tr valign="top"><td><code>p.adjust.method</code></td>
+<td>
+<p>the method used to adjust p-values. It can be
+one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
+first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
+&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER</p>
+</td></tr>
 <tr valign="top"><td><code>plot</code></td>
 <td>
 <p>logical to indicate whether scatter plot is drawn</p>
@@ -65,10 +78,20 @@ correlation</p>
 
 <h3>Value</h3>
 
-<p>an object of class &quot;ggplot&quot; with a component 'res' (a data frame with
-two columns 'cor' and 'pval') if the scatter plot is drawn. Otherwise
-it is a data frame with two columns 'cor' and 'pval'.
+<p>a list with two componets:
 </p>
+
+<ul>
+<li><p><code>df_summary</code>: a data frame of n x 4, where n is the number
+of named vectors, and the 4 columns are &quot;name&quot;, &quot;cor&quot; (i.e.
+&quot;correlation&quot;), &quot;pval&quot; (i.e. p-value), &quot;fdr&quot;
+</p>
+</li>
+<li><p><code>ls_gp</code>: NULL if the plot is not drawn; otherwise, a list of
+'ggplot' objects
+</p>
+</li></ul>
+
 
 
 <h3>Note</h3>
@@ -110,8 +133,8 @@ RData.location=RData.location)
 # c) do correlation
 data &lt;- pNode$priority$priority[1:100]
 name(data) &lt;- pNode$priority$name[1:100]
-res &lt;- xPierCor(pNode, data, method="pearson", pvalue.type="empirical",
-nperm=2000, plot=TRUE)
+ls_res &lt;- xPierCor(pNode, data, method="pearson",
+pvalue.type="empirical", nperm=2000, plot=TRUE)
 
 ## End(Not run)
 </pre>

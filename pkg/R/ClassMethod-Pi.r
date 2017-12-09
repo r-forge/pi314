@@ -416,3 +416,4 @@ print.eGSEA <- function(x, ...) {
 	print(x$df_summary[1:min(2,nrow(x$df_summary)),], row.names=FALSE)
 	cat("......\n")
 }
+

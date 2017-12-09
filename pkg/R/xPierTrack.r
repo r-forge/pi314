@@ -134,7 +134,7 @@ xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, 
 	####################
 	if(is.null(nearby)){
 		## a window (eg 1e6) of upstream and downstream from the gene in query
-		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=gr, subject=gr[target.query], maxgap=window, minoverlap=1L, type="any", select="all", ignore.strand=TRUE))))
+		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=gr, subject=gr[target.query], maxgap=window-1, minoverlap=0L, type="any", select="all", ignore.strand=TRUE))))
 		gr_sub <- gr[q2r[,1],]
 		
 	}else{
@@ -163,7 +163,7 @@ xPierTrack <- function(pNode, priority.top=NULL, target.query=NULL, window=1e6, 
 		df <- data.frame(chr=as.character(unique(df_gr_sub[,1])), start=min(df_gr_sub[,2:3]), end=max(df_gr_sub[,2:3]))
 		gr_tmp <- xGR(df, format="data.frame", RData.location=RData.location)
 		## find snps
-		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=gr_SNP, subject=gr_tmp, maxgap=0L, minoverlap=1L, type="any", select="all", ignore.strand=TRUE))))
+		q2r <- as.matrix(as.data.frame(suppressWarnings(GenomicRanges::findOverlaps(query=gr_SNP, subject=gr_tmp, maxgap=-1L, minoverlap=0L, type="any", select="all", ignore.strand=TRUE))))
 		gr_SNP_sub <- gr_SNP[q2r[,1],]
 		## track
 		if(length(gr_SNP_sub)==0){

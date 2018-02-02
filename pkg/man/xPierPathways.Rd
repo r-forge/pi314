@@ -5,7 +5,8 @@
 \title{Function to prioritise pathways based on enrichment analysis of top prioritised genes}
 \usage{
 xPierPathways(pNode, priority.top = 100, background = NULL,
-ontology = c("GOBP", "GOMF", "GOCC", "PS", "PS2", "SF", "Pfam", "DO",
+ontology = c("GOBP", "GOMF", "GOCC", "PSG", "PS", "PS2", "SF", "Pfam",
+"DO",
 "HPPA", "HPMI", "HPCM", "HPMA", "MP", "EF", "MsigdbH", "MsigdbC1",
 "MsigdbC2CGP", "MsigdbC2CPall", "MsigdbC2CP", "MsigdbC2KEGG",
 "MsigdbC2REACTOME", "MsigdbC2BIOCARTA", "MsigdbC3TFT", "MsigdbC3MIR",
@@ -39,7 +40,8 @@ used as background}
 
 \item{ontology}{the ontology supported currently. It can be "GOBP" for
 Gene Ontology Biological Process, "GOMF" for Gene Ontology Molecular
-Function, "GOCC" for Gene Ontology Cellular Component, "PS" for
+Function, "GOCC" for Gene Ontology Cellular Component, "PSG" for
+phylostratigraphy (phylostratific age), "PS" for sTOL-based
 phylostratific age information, "PS2" for the collapsed PS version
 (inferred ancestors being collapsed into one with the known taxonomy
 information), "SF" for SCOP domain superfamilies, "Pfam" for Pfam

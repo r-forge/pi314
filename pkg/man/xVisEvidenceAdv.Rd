@@ -101,7 +101,7 @@ border colors}
 
 \item{pie.thick}{the pie border thickness}
 
-\item{...}{additional graphic parameters for xA2Net}
+\item{...}{additional graphic parameters for xGGnetwork}
 }
 \value{
 a ggplot object.

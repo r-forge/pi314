@@ -10,7 +10,7 @@ vignette: >
  %\VignetteEngine{knitr::rmarkdown}
  %\VignetteEncoding{UTF-8}
 output: 
-  BiocStyle::html_document2:
+  BiocStyle::html_document:
         toc: true
         toc_depth: 2
         number_sections: true
@@ -38,7 +38,8 @@ cd ~/Sites/XGR
 R
 #devtools::install_github(c("Bioconductor/BiocStyle"))
 #rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document(toc=TRUE,toc_depth=2,number_sections=TRUE,hightlight="default",toc_float=FALSE))
-rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document2(toc=TRUE,toc_depth=2,number_sections=TRUE,theme="journal", hightlight="monochrome",toc_float=TRUE,code_folding="hide"))
+#rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document2(toc=TRUE,toc_depth=2,number_sections=TRUE,theme="journal", hightlight="monochrome",toc_float=TRUE,code_folding="hide"))
+rmarkdown::render("now.Pi_vignettes.Rmd", BiocStyle::html_document(toc=TRUE,toc_depth=2,number_sections=TRUE,theme="journal", hightlight="monochrome",toc_float=TRUE,code_folding="hide"))
 #knitr::purl("now.Pi_vignettes.Rmd")
 q('no')
 ################################################

@@ -22,12 +22,11 @@ verbose = TRUE, RData.location =
 "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
-\item{data}{NULL or an input vector containing SNPs. If NULL, all SNPs
-will be considered. If a input vector containing SNPs, SNPs should be
-provided as dbSNP ID (ie starting with rs) or in the format of
-'chrN:xxx', where N is either 1-22 or X, xxx is number; for example,
-'chr16:28525386'. Alternatively, it can be other formats/entities (see
-the next parameter 'entity')}
+\item{data}{an input vector containing SNPs. SNPs should be provided as
+dbSNP ID (ie starting with rs) or in the format of 'chrN:xxx', where N
+is either 1-22 or X, xxx is number; for example, 'chr16:28525386'.
+Alternatively, it can be other formats/entities (see the next parameter
+'entity')}
 
 \item{entity}{the data entity. By default, it is "SNP". For general
 use, it can also be one of "chr:start-end", "data.frame", "bed" or

@@ -31,7 +31,7 @@
 #' @param pie.color the border color of a pie
 #' @param pie.color.alpha the 0-1 value specifying transparency of pie border colors
 #' @param pie.thick the pie border thickness
-#' @param ... additional graphic parameters for xA2Net
+#' @param ... additional graphic parameters for xGGnetwork
 #' @return
 #' a ggplot object.
 #' @export
@@ -69,7 +69,7 @@ xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none
 	V(subg)$ycoord <- glayout[,2]
 	
 	#################
-	gp <- xA2Net(g=subg, node.label='vertex.label', node.label.size=node.label.size, node.label.color=node.label.color, node.label.alpha=node.label.alpha, node.label.padding=node.label.padding, node.label.arrow=node.label.arrow, node.label.force=node.label.force, node.shape=node.shape, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title=node.color.title, colormap=colormap, ncolors=ncolors, zlim=zlim, node.size.range=node.size.range, title=title, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow.gap=edge.arrow.gap,...)
+	gp <- xGGnetwork(g=subg, node.label='vertex.label', node.label.size=node.label.size, node.label.color=node.label.color, node.label.alpha=node.label.alpha, node.label.padding=node.label.padding, node.label.arrow=node.label.arrow, node.label.force=node.label.force, node.shape=node.shape, node.xcoord='xcoord', node.ycoord='ycoord', node.color='priority', node.color.title=node.color.title, colormap=colormap, ncolors=ncolors, zlim=zlim, node.size.range=node.size.range, title=title, edge.color=edge.color, edge.color.alpha=edge.color.alpha, edge.curve=edge.curve, edge.arrow.gap=edge.arrow.gap,...)
     #################
 
 	df <- gp$data_nodes

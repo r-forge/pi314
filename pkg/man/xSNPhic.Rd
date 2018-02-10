@@ -16,9 +16,9 @@ xSNPhic(data = NULL, entity = c("SNP", "chr:start-end", "data.frame",
 "Naive_B_cells", "Total_B_cells", "PE.Monocytes", "PE.Macrophages_M0",
 "PE.Macrophages_M1", "PE.Macrophages_M2", "PE.Neutrophils",
 "PE.Megakaryocytes", "PE.Erythroblasts", "PE.Naive_CD4_T_cells",
-"PE.Naive_CD8_T_cells"), GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"PE.Naive_CD8_T_cells", "Combined"), GR.SNP = c("dbSNP_GWAS",
+"dbSNP_Common"), verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{NULL or an input vector containing SNPs. If NULL, all SNPs
@@ -107,6 +107,7 @@ promoters (baits) with the other end (preys) in Monocytes.}
 \item{\code{Megakaryocytes}: promoter interactomes in Megakaryocytes.}
 \item{\code{Endothelial_precursors}: promoter interactomes in
 Endothelial precursors.}
+\item{\code{Erythroblasts}: promoter interactomes in Erythroblasts.}
 \item{\code{Fetal_thymus}: promoter interactomes in Fetal thymus.}
 \item{\code{Naive_CD4_T_cells}: promoter interactomes in Naive CD4+ T
 cells.}
@@ -122,6 +123,8 @@ cells.}
 cells.}
 \item{\code{Naive_B_cells}: promoter interactomes in Naive B cells.}
 \item{\code{Total_B_cells}: promoter interactomes in Total B cells.}
+\item{\code{Combined}: promoter interactomes combined above; with score
+for the number of significant cell types plus scaled average.}
 }
 2. Promoter Capture HiC datasets (involving active promoters and
 enhancers) in 9 primary blood cell types. Sourced from Cell 2016,

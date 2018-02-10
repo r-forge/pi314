@@ -30,10 +30,10 @@ xSNP2cGenes(data, entity = c("SNP", "chr:start-end", "data.frame",
 "Naive_B_cells", "Total_B_cells", "PE.Monocytes", "PE.Macrophages_M0",
 "PE.Macrophages_M1", "PE.Macrophages_M2", "PE.Neutrophils",
 "PE.Megakaryocytes", "PE.Erythroblasts", "PE.Naive_CD4_T_cells",
-"PE.Naive_CD8_T_cells"), GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
-cdf.function = c("empirical", "exponential"), plot = FALSE,
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+"PE.Naive_CD8_T_cells", "Combined"), GR.SNP = c("dbSNP_GWAS",
+"dbSNP_Common"), cdf.function = c("empirical", "exponential"),
+plot = FALSE, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -154,6 +154,9 @@ promoters (baits) with the other end (preys) in Monocytes.
 Endothelial precursors.
 </p>
 </li>
+<li><p><code>Erythroblasts</code>: promoter interactomes in Erythroblasts.
+</p>
+</li>
 <li><p><code>Fetal_thymus</code>: promoter interactomes in Fetal thymus.
 </p>
 </li>
@@ -185,6 +188,10 @@ cells.
 </p>
 </li>
 <li><p><code>Total_B_cells</code>: promoter interactomes in Total B cells.
+</p>
+</li>
+<li><p><code>Combined</code>: promoter interactomes combined above; with score
+for the number of significant cell types plus scaled average.
 </p>
 </li></ul>
 

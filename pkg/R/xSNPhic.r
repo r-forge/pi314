@@ -39,6 +39,7 @@
 #'  \item{\code{Neutrophils}: promoter interactomes in Neutrophils.}
 #'  \item{\code{Megakaryocytes}: promoter interactomes in Megakaryocytes.}
 #'  \item{\code{Endothelial_precursors}: promoter interactomes in Endothelial precursors.}
+#'  \item{\code{Erythroblasts}: promoter interactomes in Erythroblasts.}
 #'  \item{\code{Fetal_thymus}: promoter interactomes in Fetal thymus.}
 #'  \item{\code{Naive_CD4_T_cells}: promoter interactomes in Naive CD4+ T cells.}
 #'  \item{\code{Total_CD4_T_cells}: promoter interactomes in Total CD4+ T cells.}
@@ -48,6 +49,7 @@
 #'  \item{\code{Total_CD8_T_cells}: promoter interactomes in Total CD8+ T cells.}
 #'  \item{\code{Naive_B_cells}: promoter interactomes in Naive B cells.}
 #'  \item{\code{Total_B_cells}: promoter interactomes in Total B cells.}
+#'  \item{\code{Combined}: promoter interactomes combined above; with score for the number of significant cell types plus scaled average.}
 #' }
 #' 2. Promoter Capture HiC datasets (involving active promoters and enhancers) in 9 primary blood cell types. Sourced from Cell 2016, 167(5):1369-1384.e19
 #' \itemize{
@@ -91,7 +93,7 @@
 #' xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 #' }
 
-xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
 	entity <- match.arg(entity)
@@ -100,7 +102,7 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
     # Link to targets based on HiC
     ######################################################
     
-    default.include.HiC <- c("Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells")
+    default.include.HiC <- c("Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined")
 	ind <- match(default.include.HiC, include.HiC)
 	include.HiC <- default.include.HiC[!is.na(ind)]
     
@@ -126,12 +128,30 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 				message(sprintf("Processing %s ...", x), appendLF=TRUE)
 			}
 			
-			if(sum(grep("^PE.",x,perl=TRUE)) > 0){
-				RData.customised <- paste('ig.PCHiC_', x, sep='')
+			if(x == 'Combined'){
+				g <- xRDataLoader(RData.customised='ig.PCHiC', RData.location=RData.location, verbose=verbose)
+				df <- do.call(cbind, igraph::edge_attr(g))
+				num <- apply(df>=5, 1, sum)
+				dff <- df
+				dff[dff<5] <- 0
+				total <- apply(dff, 1, sum)
+				ave <- log(total / num)
+				ave_scale <- (ave - min(ave))/(max(ave) - min(ave)) * 0.9999999
+				ig <- g
+				E(ig)$score <- num + ave_scale
+				for(i in igraph::edge_attr_names(g)){
+					ig <- igraph::delete_edge_attr(ig, i)
+				}
+				
 			}else{
-				RData.customised <- paste('ig.PCHiC.', x, sep='')
+			
+				if(sum(grep("^PE.",x,perl=TRUE)) > 0){
+					RData.customised <- paste('ig.PCHiC_', x, sep='')
+				}else{
+					RData.customised <- paste('ig.PCHiC.', x, sep='')
+				}
+				ig <- xRDataLoader(RData.customised=RData.customised, RData.location=RData.location, verbose=verbose)
 			}
-			ig <- xRDataLoader(RData.customised=RData.customised, RData.location=RData.location, verbose=verbose)
 			
 			## Convert from igraph into data.frame
   			df_nodes <- igraph::get.data.frame(ig, what="vertices")

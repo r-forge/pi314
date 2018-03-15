@@ -33,6 +33,8 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "KEGGenvironmental",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease"),
 customised.genesets = NULL, size.range = c(10, 500),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 weight = 1, seed = 825, nperm = 2000, fast = TRUE, verbose = TRUE,
 silent = FALSE, RData.location =
@@ -95,6 +97,17 @@ previous parameter &quot;ontology&quot;</p>
 <p>the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
 than 500</p>
+</td></tr>
+<tr valign="top"><td><code>p.adjust.method</code></td>
+<td>
+<p>the method used to adjust p-values. It can be
+one of &quot;BH&quot;, &quot;BY&quot;, &quot;bonferroni&quot;, &quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot;. The
+first two methods &quot;BH&quot; (widely used) and &quot;BY&quot; control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods &quot;bonferroni&quot;,
+&quot;holm&quot;, &quot;hochberg&quot; and &quot;hommel&quot; are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER</p>
 </td></tr>
 <tr valign="top"><td><code>path.mode</code></td>
 <td>
@@ -174,12 +187,13 @@ for priority rank). Always, gene sets are identified by &quot;setID&quot;
 </p>
 </li>
 <li><p><code>full</code>: a list of gene sets, each storing full info on gene
-set enrichment analysis result (i.e. a data frame of nGene x 5, where
-nGene is the number of genes, and the 5 columns are &quot;GeneID&quot;, &quot;Rank&quot;
+set enrichment analysis result (i.e. a data frame of nGene x 6, where
+nGene is the number of genes, and the 6 columns are &quot;GeneID&quot;, &quot;Rank&quot;
 for priority rank, &quot;Score&quot; for priority score, &quot;RES&quot; for running
-enrichment score, and &quot;Hits&quot; for gene set hits info with 1 for gene
-hit, 2 for leading gene hit, 3 for the point defining leading genes, 0
-for no hit). Always, gene sets are identified by &quot;setID&quot;
+enrichment score, &quot;Hits&quot; for gene set hits info with 1 for gene hit, 2
+for leading gene hit, 3 for the point defining leading genes, 0 for no
+hit), and &quot;Symbol&quot; for gene symbols. Always, gene sets are identified
+by &quot;setID&quot;
 </p>
 </li>
 <li><p><code>cross</code>: a matrix of nTerm X nTerm, with an on-diagnal cell

@@ -101,8 +101,8 @@ RData files. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 a subgraph with a maximum score, an object of class "igraph". It has
-ndoe attributes: signficance, score, priority (part of the "pNode"
-object)
+ndoe attributes: signficance, score, type, priority (part of the
+"pNode" object)
 }
 \description{
 \code{xPierSubnet} is supposed to identify maximum-scoring gene

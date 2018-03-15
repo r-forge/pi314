@@ -28,7 +28,8 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 names, 2nd column for the weight values. It intends to store annotation
 data or something similar}
 
-\item{list_pNode}{a list of "pNode" objects or a "pNode" object}
+\item{list_pNode}{a list of "pNode" objects or a "pNode" object.
+Alternatively, it is NULL, meaning no restrictioin}
 
 \item{network}{the built-in network. Currently two sources of network
 information are supported: the STRING database (version 10) and the

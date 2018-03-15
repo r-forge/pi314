@@ -3,7 +3,7 @@
 #' \code{xPierAnno} is supposed to prioritise seed genes only from a list of pNode objects using annotation data. To prioritise genes, it first extracts seed genes from a list of pNode objects and then scores seed genes using annotation data (or something similar). It implements Random Walk with Restart (RWR) and calculates the affinity score of all nodes in the graph to the seeds. The priority score is the affinity score. Parallel computing is also supported for Linux-like or Windows operating systems. It returns an object of class "pNode". 
 #'
 #' @param data a data frame with two columns: 1st column for seed/node names, 2nd column for the weight values. It intends to store annotation data or something similar
-#' @param list_pNode a list of "pNode" objects or a "pNode" object
+#' @param list_pNode a list of "pNode" objects or a "pNode" object. Alternatively, it is NULL, meaning no restrictioin
 #' @param network the built-in network. Currently two sources of network information are supported: the STRING database (version 10) and the Pathways Commons database (version 7). STRING is a meta-integration of undirect interactions from the functional aspect, while Pathways Commons mainly contains both undirect and direct interactions from the physical/pathway aspect. Both have scores to control the confidence of interactions. Therefore, the user can choose the different quality of the interactions. In STRING, "STRING_highest" indicates interactions with highest confidence (confidence scores>=900), "STRING_high" for interactions with high confidence (confidence scores>=700), "STRING_medium" for interactions with medium confidence (confidence scores>=400), and "STRING_low" for interactions with low confidence (confidence scores>=150). For undirect/physical interactions from Pathways Commons, "PCommonsUN_high" indicates undirect interactions with high confidence (supported with the PubMed references plus at least 2 different sources), "PCommonsUN_medium" for undirect interactions with medium confidence (supported with the PubMed references). For direct (pathway-merged) interactions from Pathways Commons, "PCommonsDN_high" indicates direct interactions with high confidence (supported with the PubMed references plus at least 2 different sources), and "PCommonsUN_medium" for direct interactions with medium confidence (supported with the PubMed references). In addtion to pooled version of pathways from all data sources, the user can also choose the pathway-merged network from individual sources, that is, "PCommonsDN_Reactome" for those from Reactome, "PCommonsDN_KEGG" for those from KEGG, "PCommonsDN_HumanCyc" for those from HumanCyc, "PCommonsDN_PID" for those froom PID, "PCommonsDN_PANTHER" for those from PANTHER, "PCommonsDN_ReconX" for those from ReconX, "PCommonsDN_TRANSFAC" for those from TRANSFAC, "PCommonsDN_PhosphoSite" for those from PhosphoSite, and "PCommonsDN_CTD" for those from CTD. For direct (pathway-merged) interactions sourced from KEGG, it can be 'KEGG' for all, 'KEGG_metabolism' for pathways grouped into 'Metabolism', 'KEGG_genetic' for 'Genetic Information Processing' pathways, 'KEGG_environmental' for 'Environmental Information Processing' pathways, 'KEGG_cellular' for 'Cellular Processes' pathways, 'KEGG_organismal' for 'Organismal Systems' pathways, and 'KEGG_disease' for 'Human Diseases' pathways
 #' @param STRING.only the further restriction of STRING by interaction type. If NA, no such restriction. Otherwide, it can be one or more of "neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score". Useful options are c("experimental_score","database_score"): only experimental data (extracted from BIND, DIP, GRID, HPRD, IntAct, MINT, and PID) and curated data (extracted from Biocarta, BioCyc, GO, KEGG, and Reactome) are used
 #' @param weighted logical to indicate whether edge weights should be considered. By default, it sets to false. If true, it only works for the network from the STRING database 
@@ -78,33 +78,42 @@ xPierAnno <- function(data, list_pNode, network=c("STRING_highest","STRING_high"
 	}else if(class(list_pNode)=="list"){
 		## Remove null elements in a list
 		list_pNode <- base::Filter(base::Negate(is.null), list_pNode)
-		if(length(list_pNode)==0){
-			return(NULL)
-		}
-	}else{
-		stop("The function must apply to 'list' of 'pNode' objects or a 'pNode' object.\n")
+
 	}
     
-    ## get weight for seeds
-    df_predictor <- suppressMessages(xPierMatrix(list_pNode, displayBy="weight", combineBy='union', aggregateBy="none", verbose=verbose))
-    ind <- which(apply(df_predictor,1,sum)>0)
-    weight_seeds <- rownames(df_predictor)[ind]
+    if(length(list_pNode)!=0){
+    	message(sprintf("Restricted to 'list' of 'pNode' objects or a 'pNode' object (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+    
+		## get weight for seeds
+		df_predictor <- suppressMessages(xPierMatrix(list_pNode, displayBy="weight", combineBy='union', aggregateBy="none", verbose=verbose))
+		ind <- which(apply(df_predictor,1,sum)>0)
+		weight_seeds <- rownames(df_predictor)[ind]
 
-    ##########
-    ##########
-	if(is.data.frame(data)){
-		ind <- match(data[,1], weight_seeds)
-		if(sum(!is.na(ind)) >= 1){
-    		data_subset <- data[!is.na(ind),]
-    	}else{
+		##########
+		##########
+		if(is.data.frame(data)){
+			ind <- match(data[,1], weight_seeds)
+			if(sum(!is.na(ind)) >= 1){
+				data_subset <- data[!is.na(ind),]
+			}else{
+				return(NULL)
+			}
+		}else{
+			return(NULL)
+		}
+		##########
+		##########
+    
+    }else{
+    	message(sprintf("Without restriction (%s) ...", as.character(Sys.time())), appendLF=TRUE)
+    	
+    	if(!is.data.frame(data)){
     		return(NULL)
     	}
-    }else{
-    	return(NULL)
+    	data_subset <- data
+
     }
-    ##########
-    ##########
-    
+
     pNode <- suppressMessages(xPierGenes(data=data_subset, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location))
     
     ####################################################################################

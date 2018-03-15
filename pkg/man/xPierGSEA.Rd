@@ -19,6 +19,8 @@ xPierGSEA(pNode, priority.top = NULL, ontology = c("GOBP", "GOMF",
 "KEGGenvironmental",
 "KEGGcellular", "KEGGorganismal", "KEGGdisease"),
 customised.genesets = NULL, size.range = c(10, 500),
+p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
+"hommel"),
 path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
 weight = 1, seed = 825, nperm = 2000, fast = TRUE, verbose = TRUE,
 silent = FALSE, RData.location =
@@ -67,6 +69,15 @@ previous parameter "ontology"}
 \item{size.range}{the minimum and maximum size of members of each term
 in consideration. By default, it sets to a minimum of 10 but no more
 than 500}
+
+\item{p.adjust.method}{the method used to adjust p-values. It can be
+one of "BH", "BY", "bonferroni", "holm", "hochberg" and "hommel". The
+first two methods "BH" (widely used) and "BY" control the false
+discovery rate (FDR: the expected proportion of false discoveries
+amongst the rejected hypotheses); the last four methods "bonferroni",
+"holm", "hochberg" and "hommel" are designed to give strong control of
+the family-wise error rate (FWER). Notes: FDR is a less stringent
+condition than FWER}
 
 \item{path.mode}{the mode of paths induced by vertices/nodes with input
 annotation data. It can be "all_paths" for all possible paths to the
@@ -120,12 +131,13 @@ distance or metadata)}
 info (i.e. the named vector with names for gene symbols and elements
 for priority rank). Always, gene sets are identified by "setID"}
 \item{\code{full}: a list of gene sets, each storing full info on gene
-set enrichment analysis result (i.e. a data frame of nGene x 5, where
-nGene is the number of genes, and the 5 columns are "GeneID", "Rank"
+set enrichment analysis result (i.e. a data frame of nGene x 6, where
+nGene is the number of genes, and the 6 columns are "GeneID", "Rank"
 for priority rank, "Score" for priority score, "RES" for running
-enrichment score, and "Hits" for gene set hits info with 1 for gene
-hit, 2 for leading gene hit, 3 for the point defining leading genes, 0
-for no hit). Always, gene sets are identified by "setID"}
+enrichment score, "Hits" for gene set hits info with 1 for gene hit, 2
+for leading gene hit, 3 for the point defining leading genes, 0 for no
+hit), and "Symbol" for gene symbols. Always, gene sets are identified
+by "setID"}
 \item{\code{cross}: a matrix of nTerm X nTerm, with an on-diagnal cell
 for the leading genes observed in an individaul term, and off-diagnal
 cell for the overlapped leading genes shared between two terms}

@@ -87,7 +87,7 @@ xPierGRs <- function(data, significance.threshold=NULL, score.cap=NULL, build.co
     ####################################################################################
 
     if(is.vector(data) && length(data)>1 && is.null(names(data)) && is.character(data)){
-    	data <- data.frame(GR=data, Sig=rep(0.1,length(data)), stringsAsFactors=F)
+    	data <- data.frame(GR=data, Sig=rep(0.1,length(data)), stringsAsFactors=FALSE)
     	significance.threshold <- NULL
     	score.cap <- NULL
     	

@@ -51,6 +51,7 @@
 #'  \item{\code{PE.Erythroblasts}: promoter-enhancer interactomes in Erythroblasts.}
 #'  \item{\code{PE.Naive_CD4_T_cells}: promoter-enhancer interactomes in Naive CD4+ T cells.}
 #'  \item{\code{PE.Naive_CD8_T_cells}: promoter-enhancer interactomes in Naive CD8+ T cells.}
+#'  \item{\code{Combined_PE}: promoter interactomes combined above; with score for the number of significant cell types plus scaled average.}
 #' }
 #' @export
 #' @seealso \code{\link{xSNPhic}}
@@ -74,7 +75,7 @@
 #' df_cGenes <- xSNP2cGenes(data, include.HiC="Monocytes", RData.location=RData.location)
 #' }
 
-xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNP2cGenes <- function(data, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined", "Combined_PE"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), cdf.function=c("empirical","exponential"), plot=FALSE, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one

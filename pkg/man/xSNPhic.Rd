@@ -16,7 +16,8 @@ xSNPhic(data = NULL, entity = c("SNP", "chr:start-end", "data.frame",
 "Naive_B_cells", "Total_B_cells", "PE.Monocytes", "PE.Macrophages_M0",
 "PE.Macrophages_M1", "PE.Macrophages_M2", "PE.Neutrophils",
 "PE.Megakaryocytes", "PE.Erythroblasts", "PE.Naive_CD4_T_cells",
-"PE.Naive_CD8_T_cells", "Combined"), GR.SNP = c("dbSNP_GWAS",
+"PE.Naive_CD8_T_cells", "Combined", "Combined_PE"), GR.SNP =
+c("dbSNP_GWAS",
 "dbSNP_Common"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
@@ -149,6 +150,8 @@ Erythroblasts.}
 Naive CD4+ T cells.}
 \item{\code{PE.Naive_CD8_T_cells}: promoter-enhancer interactomes in
 Naive CD8+ T cells.}
+\item{\code{Combined_PE}: promoter interactomes combined above; with
+score for the number of significant cell types plus scaled average.}
 }
 }
 \examples{

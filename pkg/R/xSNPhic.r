@@ -62,6 +62,7 @@
 #'  \item{\code{PE.Erythroblasts}: promoter-enhancer interactomes in Erythroblasts.}
 #'  \item{\code{PE.Naive_CD4_T_cells}: promoter-enhancer interactomes in Naive CD4+ T cells.}
 #'  \item{\code{PE.Naive_CD8_T_cells}: promoter-enhancer interactomes in Naive CD8+ T cells.}
+#'  \item{\code{Combined_PE}: promoter interactomes combined above; with score for the number of significant cell types plus scaled average.}
 #' }
 #' @export
 #' @seealso \code{\link{xRDataLoader}}
@@ -93,7 +94,7 @@
 #' xPCHiCplot(g, glayout=layout_in_circle, vertex.label.cex=0.5)
 #' }
 
-xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed","GRanges"), include.HiC=c(NA, "Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined", "Combined_PE"), GR.SNP=c("dbSNP_GWAS","dbSNP_Common"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
 {
 	
 	entity <- match.arg(entity)
@@ -102,7 +103,7 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
     # Link to targets based on HiC
     ######################################################
     
-    default.include.HiC <- c("Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined")
+    default.include.HiC <- c("Monocytes","Macrophages_M0","Macrophages_M1","Macrophages_M2","Neutrophils","Megakaryocytes","Endothelial_precursors","Erythroblasts","Fetal_thymus","Naive_CD4_T_cells","Total_CD4_T_cells","Activated_total_CD4_T_cells","Nonactivated_total_CD4_T_cells","Naive_CD8_T_cells","Total_CD8_T_cells","Naive_B_cells","Total_B_cells","PE.Monocytes","PE.Macrophages_M0","PE.Macrophages_M1","PE.Macrophages_M2","PE.Neutrophils","PE.Megakaryocytes","PE.Erythroblasts","PE.Naive_CD4_T_cells","PE.Naive_CD8_T_cells", "Combined", "Combined_PE")
 	ind <- match(default.include.HiC, include.HiC)
 	include.HiC <- default.include.HiC[!is.na(ind)]
     
@@ -130,6 +131,30 @@ xSNPhic <- function(data=NULL, entity=c("SNP","chr:start-end","data.frame","bed"
 			
 			if(x == 'Combined'){
 				g <- xRDataLoader(RData.customised='ig.PCHiC', RData.location=RData.location, verbose=verbose)
+				df <- do.call(cbind, igraph::edge_attr(g))
+				if(1){
+					## new way
+					df[df<5] <- NA
+					res <- xAggregate(log(df), verbose=F)
+					vec_score <- res$Aggregate
+				}else{
+					## old way
+					num <- apply(df>=5, 1, sum)
+					dff <- df
+					dff[dff<5] <- 0
+					total <- apply(dff, 1, sum)
+					ave <- log(total / num)
+					ave_scale <- (ave - min(ave))/(max(ave) - min(ave)) * 0.9999999
+					vec_score <- num + ave_scale
+				}
+				ig <- g
+				E(ig)$score <- vec_score
+				for(i in igraph::edge_attr_names(g)){
+					ig <- igraph::delete_edge_attr(ig, i)
+				}
+				
+			}else if(x == 'Combined_PE'){
+				g <- xRDataLoader(RData.customised='ig.PCHiC_PE', RData.location=RData.location, verbose=verbose)
 				df <- do.call(cbind, igraph::edge_attr(g))
 				num <- apply(df>=5, 1, sum)
 				dff <- df

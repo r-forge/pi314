@@ -265,7 +265,7 @@ library(Pi)
 
 # optionally, specify the local location of built-in RData
 # by default:
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 ```
 
 ```{r, eval=TRUE, echo=FALSE}

@@ -92,7 +92,7 @@ genes in a gene network. It returns an object of class "igraph".
 # Load the library
 library(Pi)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 ## TNFRSF1A
 xVisEvidence(xTarget, nodes="TNFRSF1A", neighbor.order=1,

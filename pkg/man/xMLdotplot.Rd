@@ -41,7 +41,7 @@ none
 # Load the library
 library(Pi)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 gp <- xMLdotplot(sTarget, displayBy="importance_accurancy")
 gp

@@ -91,7 +91,7 @@ The input graph will treat as an unweighted graph if there is no
 library(Pi)
 }
 
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 # a) provide the input nodes/genes with the significance info
 sig <- rbeta(500, shape1=0.5, shape2=1)
 \dontrun{

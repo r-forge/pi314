@@ -42,7 +42,7 @@
 #' # Load the library
 #' library(Pi)
 #' }
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' ## TNFRSF1A
 #' xVisEvidenceAdv(xTarget, nodes="TNFRSF1A", neighbor.order=1, neighbor.seed=TRUE, neighbor.top=NULL)

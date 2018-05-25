@@ -114,7 +114,7 @@ none
 # Load the library
 library(Pi)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 gp <- xGSEAdotplot(eGSEA, top=1)
 #gp <- xGSEAdotplot(eGSEA, top=1, peak=FALSE, compact=TRUE, signature=FALSE)

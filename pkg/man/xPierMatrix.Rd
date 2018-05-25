@@ -91,7 +91,7 @@ none
 # Load the library
 library(Pi)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # get predictor matrix for targets
 df_score <- xPierMatrix(ls_pNode)

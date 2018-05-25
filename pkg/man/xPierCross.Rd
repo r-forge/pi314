@@ -75,7 +75,7 @@ none
 # Load the library
 library(Pi)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 df_score <- xPierCross(ls_xTarget)
 }

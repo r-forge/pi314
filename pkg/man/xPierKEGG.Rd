@@ -73,7 +73,7 @@ biocLite("pathview")}.
 # Load the library
 library(Pi)
 }
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 ## evidence
 xPierKEGG(xTarget, hsa="hsa04621", vis="evidence",

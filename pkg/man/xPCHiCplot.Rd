@@ -16,7 +16,7 @@ edge.color = "grey", ...)
 }
 \arguments{
 \item{g}{an object of both classes "igraph" and "PCHiC" (part of the
-results from \code{\link{xSNPhic}})}
+results from \code{\link{xDefineHIC}})}
 
 \item{node.info}{tells the information used to label nodes. It can be
 one of "none" for no node labeling, "GR" for only using genomic regions
@@ -124,21 +124,17 @@ information (if any): genomic regions, SNPs in query, genes associated
 \examples{
 \dontrun{
 # Load the library
-library(Pi)
+library(XGR)
 }
 
-RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 # a) provide the SNPs with the significance info
-## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-#AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase',
-RData.location=RData.location)
+data(ImmunoBase)
 data <- names(ImmunoBase$AS$variants)
 
 # b) extract HiC-gene pairs given a list of AS SNPs
-PCHiC <- xSNPhic(data, include.HiC="Monocytes", GR.SNP="dbSNP_GWAS",
+PCHiC <- xDefineHIC(data, include.HiC="Monocytes", GR.SNP="dbSNP_GWAS",
 RData.location=RData.location)
 head(PCHiC$df)
 
@@ -157,5 +153,5 @@ xPCHiCplot(g, node.info='SNP_target', vertex.label.cex=0.5)
 }
 }
 \seealso{
-\code{\link{xSNPhic}}
+\code{\link{xDefineHIC}}
 }

@@ -2,7 +2,7 @@
 #'
 #' \code{xPCHiCplot} is supposed to visualise promoter capture HiC data using different network layouts.
 #'
-#' @param g an object of both classes "igraph" and "PCHiC" (part of the results from \code{\link{xSNPhic}})
+#' @param g an object of both classes "igraph" and "PCHiC" (part of the results from \code{\link{xDefineHIC}})
 #' @param node.info tells the information used to label nodes. It can be one of "none" for no node labeling, "GR" for only using genomic regions (GR), "GR_SNP" for using GR and SNP (if any), "GR_SNP_target" for using GR and SNP (if any) and target genes (if any), "SNP_target" for using SNP (if any) and target genes (if any), and "smart" (by default) for only using GR if both SNP and target genes are not available (otherwise GR will be hidden)
 #' @param node.colors colors used to flag which nodes contain SNP or not. By default, a node harboring an SNP will be colored in 'skyblue' and the node without an SNP in 'pink'
 #' @param nodes.query nodes in query for which edges attached to them will be displayed. By default, it sets to NULL meaning no such restriction
@@ -31,25 +31,22 @@
 #'  \item{\code{node label}: a node is labelled with three pieces of information (if any): genomic regions, SNPs in query, genes associated (marked by an @ icon)}
 #' }
 #' @export
-#' @seealso \code{\link{xSNPhic}}
+#' @seealso \code{\link{xDefineHIC}}
 #' @include xPCHiCplot.r
 #' @examples
 #' \dontrun{
 #' # Load the library
-#' library(Pi)
+#' library(XGR)
 #' }
 #'
-#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata_dev"
+#' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' # a) provide the SNPs with the significance info
-#' ## get lead SNPs reported in AS GWAS and their significance info (p-values)
-#' #data.file <- "http://galahad.well.ox.ac.uk/bigdata/AS.txt"
-#' #AS <- read.delim(data.file, header=TRUE, stringsAsFactors=FALSE)
-#' ImmunoBase <- xRDataLoader(RData.customised='ImmunoBase', RData.location=RData.location)
+#' data(ImmunoBase)
 #' data <- names(ImmunoBase$AS$variants)
 #'
 #' # b) extract HiC-gene pairs given a list of AS SNPs
-#' PCHiC <- xSNPhic(data, include.HiC="Monocytes", GR.SNP="dbSNP_GWAS", RData.location=RData.location)
+#' PCHiC <- xDefineHIC(data, include.HiC="Monocytes", GR.SNP="dbSNP_GWAS", RData.location=RData.location)
 #' head(PCHiC$df)
 #' 
 #' # c) visualise the interaction (a directed graph: bait->prey)
@@ -143,7 +140,7 @@ xPCHiCplot <- function(g, node.info=c("smart", "none", "GR", "GR_SNP", "GR_SNP_t
 	suppressWarnings(graphics::par(par_old))
 	
     if(signature){
-    	caption <- paste("Created by xPCHiCplot from Pi version", utils::packageVersion("Pi"))
+    	caption <- paste("Created by xPCHiCplot from XGR version", utils::packageVersion("XGR"))
     	graphics::mtext(caption, side=1, line=2, adj=1, cex=.66, font=3)
     }
 	

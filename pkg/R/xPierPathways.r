@@ -83,7 +83,7 @@ xPierPathways <- function(pNode, priority.top=100, background=NULL, ontology=NA,
     ####################################################################################
     
     ## match.arg matches arg against a table of candidate values as specified by choices, where NULL means to take the first one
-    ontology <- match.arg(ontology)
+    #ontology <- match.arg(ontology)
     test <- match.arg(test)
     p.adjust.method <- match.arg(p.adjust.method)
     ontology.algorithm <- match.arg(ontology.algorithm)

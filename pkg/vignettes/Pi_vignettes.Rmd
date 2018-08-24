@@ -235,11 +235,7 @@ knitr::kable(df_obo[,c(3,2,1)], caption="", row.names=FALSE)
 
 - *[`xPierCross`](http://rawgit.com/hfang-bristol/Pi/master/inst/xPierCross.html)*: extracts priority matrix from a list of `dTarget`/`sTarget` objects. 
 
-- *[`xSNPeqtl`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNPeqtl.html)*: extracts eQTL-gene pairs given a list of SNPs.
-
 - *[`xSNP2eGenes`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNP2eGenes.html)*: defines eQTL genes given a list of SNPs.
-
-- *[`xSNPhic`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNPhic.html)*: extracts promoter capture HiC-gene pairs given a list of SNPs.
 
 - *[`xSNP2cGenes`](http://rawgit.com/hfang-bristol/Pi/master/inst/xSNP2cGenes.html)*: defines HiC genes given a list of SNPs.
 

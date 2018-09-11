@@ -5,9 +5,8 @@
 \title{Function to extract priority matrix from a list of dTarget/sTarget objects}
 \usage{
 xPierCross(list_xTarget, displayBy = c("priority", "rank", "pvalue",
-"fdr"),
-combineBy = c("intersect", "union"), aggregateBy = c("none", "fishers",
-"logistic", "Ztransform", "orderStatistic"), verbose = TRUE,
+"fdr"), combineBy = c("intersect", "union"), aggregateBy = c("none",
+"fishers", "logistic", "Ztransform", "orderStatistic"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

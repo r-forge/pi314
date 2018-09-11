@@ -17,9 +17,9 @@ xPierSubnet(pNode, priority.quantile = 0.1, network = c(NA,
 "cooccurence_score", "coexpression_score", "experimental_score",
 "database_score", "textmining_score")[1], network.customised = NULL,
 subnet.significance = 0.01, subnet.size = NULL,
-test.permutation = FALSE, num.permutation = 100, respect = c("none",
-"degree"), aggregateBy = c("Ztransform", "fishers", "logistic",
-"orderStatistic"), verbose = TRUE,
+test.permutation = FALSE, num.permutation = 100,
+respect = c("none", "degree"), aggregateBy = c("Ztransform",
+"fishers", "logistic", "orderStatistic"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

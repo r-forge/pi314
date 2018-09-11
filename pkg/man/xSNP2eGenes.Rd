@@ -6,8 +6,8 @@
 \usage{
 xSNP2eGenes(data, include.eQTL = NA, eQTL.customised = NULL,
 cdf.function = c("empirical", "exponential"), plot = FALSE,
-verbose = TRUE, RData.location =
-"http://galahad.well.ox.ac.uk/bigdata")
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{
 \item{data}{an input vector containing SNPs. SNPs should be provided as

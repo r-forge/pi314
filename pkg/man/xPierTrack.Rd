@@ -10,8 +10,8 @@ track.ideogram = TRUE, track.genomeaxis = TRUE,
 name.datatrack = "5-star rating\\n(Priority index)",
 name.annotrack = "Targets", GR.Gene = c("UCSC_knownGene",
 "UCSC_knownCanonical"), SNPs = NULL, max.num.SNPs = 50,
-GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"), verbose =
-TRUE,
+GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
+verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
 \arguments{

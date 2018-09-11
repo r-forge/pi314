@@ -5,8 +5,7 @@
 \title{Function to visualise machine learning results using dot plot}
 \usage{
 xMLdotplot(sTarget, displayBy = c("importance2fold", "roc2fold",
-"fmax2fold",
-"importance_accurancy", "importance_gini", "ROC", "Fmax"),
+"fmax2fold", "importance_accurancy", "importance_gini", "ROC", "Fmax"),
 font.family = "sans", signature = TRUE)
 }
 \arguments{

@@ -5,9 +5,9 @@
 \title{Function to do prioritisation through random walk techniques}
 \usage{
 xPier(seeds, g, seeds.inclusive = TRUE, normalise = c("laplacian",
-"row",
-"column", "none"), restart = 0.7, normalise.affinity.matrix = c("none",
-"quantile"), parallel = TRUE, multicores = NULL, verbose = TRUE)
+"row", "column", "none"), restart = 0.7,
+normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
+multicores = NULL, verbose = TRUE)
 }
 \arguments{
 \item{seeds}{a named input vector containing a list of seed nodes. For
@@ -47,11 +47,7 @@ output affinity matrix have the same quantiles}
 multicores is used. By default, it sets to true, but not necessarily
 does so. Partly because parallel backends available will be
 system-specific (now only Linux or Mac OS). Also, it will depend on
-whether these two packages "foreach" and "doMC" have been installed. It
-can be installed via:
-\code{source("http://bioconductor.org/biocLite.R");
-biocLite(c("foreach","doMC"))}. If not yet installed, this option will
-be disabled}
+whether these two packages "foreach" and "doMC" have been installed}
 
 \item{multicores}{an integer to specify how many cores will be
 registered as the multicore parallel backend to the 'foreach' package.

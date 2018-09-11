@@ -5,8 +5,8 @@
 \title{Function to assess the prediction performance via ROC and Precision-Recall (PR) analysis}
 \usage{
 xPredictROCR(prediction, GSP, GSN, rescale = TRUE, plot = c("none",
-"ROC",
-"PR"), verbose = TRUE, font.family = "sans", signature = TRUE)
+"ROC", "PR"), verbose = TRUE, font.family = "sans",
+signature = TRUE)
 }
 \arguments{
 \item{prediction}{a data frame containing predictions along with

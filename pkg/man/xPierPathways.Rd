@@ -4,18 +4,15 @@
 \alias{xPierPathways}
 \title{Function to prioritise pathways based on enrichment analysis of top prioritised genes}
 \usage{
-xPierPathways(pNode, priority.top = 100, background = NULL, ontology =
-NA,
-size.range = c(10, 2000), min.overlap = 3, which.distance = NULL,
-test = c("hypergeo", "fisher", "binomial"),
+xPierPathways(pNode, priority.top = 100, background = NULL,
+ontology = NA, size.range = c(10, 2000), min.overlap = 3,
+which.distance = NULL, test = c("hypergeo", "fisher", "binomial"),
 background.annotatable.only = NULL, p.tail = c("one-tail",
-"two-tails"),
-p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"),
-ontology.algorithm = c("none", "pc", "elim", "lea"), elim.pvalue =
-0.01,
-lea.depth = 2, path.mode = c("all_paths", "shortest_paths",
-"all_shortest_paths"), true.path.rule = FALSE, verbose = TRUE,
+"two-tails"), p.adjust.method = c("BH", "BY", "bonferroni", "holm",
+"hochberg", "hommel"), ontology.algorithm = c("none", "pc", "elim",
+"lea"), elim.pvalue = 0.01, lea.depth = 2,
+path.mode = c("all_paths", "shortest_paths", "all_shortest_paths"),
+true.path.rule = FALSE, verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 }
 \arguments{

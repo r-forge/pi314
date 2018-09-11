@@ -4,10 +4,9 @@
 \alias{xPierKEGG}
 \title{Function to visualise prioritised genes in terms of a KEGG pathway}
 \usage{
-xPierKEGG(xTarget, vis = c("net", "evidence", "pathview"), hsa =
-"hsa04621",
-priority.top = NULL, incoming.neighbor.order = 1, nodes_query = NULL,
-largest.comp = TRUE, pathview.filename = NULL,
+xPierKEGG(xTarget, vis = c("net", "evidence", "pathview"),
+hsa = "hsa04621", priority.top = NULL, incoming.neighbor.order = 1,
+nodes_query = NULL, largest.comp = TRUE, pathview.filename = NULL,
 pathview.filetype = c("png", "pdf"), verbose = TRUE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
@@ -65,8 +64,7 @@ a KEGG pathway. It returns an object of class "igraph".
 \note{
 If vis is 'pathview', it will depend on whether a package "pathview"
 has been installed. It can be installed via:
-\code{source("http://bioconductor.org/biocLite.R");
-biocLite("pathview")}.
+\code{BiocManager::install("pathview")}.
 }
 \examples{
 \dontrun{

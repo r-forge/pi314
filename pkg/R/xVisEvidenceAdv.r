@@ -88,6 +88,7 @@ xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none
 		df_sub <- cbind(df_sub_1, df_sub_2)
 
 		gp <- xPieplot(df_sub, columns, colormap='ggplot2', pie.radius=pie.radius, pie.color=pie.color, pie.color.alpha=pie.color.alpha, pie.thick=pie.thick, legend.title='Seed gene', gp=gp)
+		
 	}
 	
     invisible(gp)

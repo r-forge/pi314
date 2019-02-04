@@ -26,6 +26,7 @@
 #'  \item{\code{gp}: a ggplot object for the ROC curve}
 #'  \item{\code{gp_cv}: a ggplot object for the ROC curves from repeated cross-validation}
 #'  \item{\code{evidence}: an object of the class "eTarget", a list with following components "evidence" and "metag"}
+#'  \item{\code{list_pNode}: a list of "pNode" objects}
 #' }
 #' @note It will depend on whether a package "caret" and its suggested packages have been installed. It can be installed via: \code{BiocManager::install(c("caret","e1071","gbm","kernlab","klaR","pls","nnet","randomForest","party","glmnet","arm","caTools","xgboost"))}.
 #' @export
@@ -912,7 +913,8 @@ xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm
     				performance_cv = df_ROC_Fmax,
     				gp_cv = gp_cv,
     				importance = overall.importance,
-    				evidence = eTarget
+    				evidence = eTarget,
+    				list_pNode  = list_pNode
                  )
     class(sTarget) <- "sTarget"
     

@@ -150,12 +150,14 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	pie.color <- xColormap(colormap)(ncol(df_val)-1)
 	## legend text
 	legend.text <- colnames(df_val)[-1]
-	legend.text[grep('OMIM|disease',legend.text,ignore.case=TRUE)] <- "dGene"
-	legend.text[grep('Phenotype',legend.text,ignore.case=TRUE)] <- "pGene"
-	legend.text[grep('Function',legend.text,ignore.case=TRUE)] <- "fGene"
-	legend.text[grep('nearbyGenes',legend.text,ignore.case=TRUE)] <- "nGene"
-	legend.text[grep('eQTL',legend.text,ignore.case=TRUE)] <- "eGene"
-	legend.text[grep('HiC|Hi-C',legend.text,ignore.case=TRUE)] <- "cGene"
+	if(0){
+		legend.text[grep('OMIM|disease',legend.text,ignore.case=TRUE)] <- "dGene"
+		legend.text[grep('Phenotype',legend.text,ignore.case=TRUE)] <- "pGene"
+		legend.text[grep('Function',legend.text,ignore.case=TRUE)] <- "fGene"
+		legend.text[grep('nearbyGenes',legend.text,ignore.case=TRUE)] <- "nGene"
+		legend.text[grep('eQTL',legend.text,ignore.case=TRUE)] <- "eGene"
+		legend.text[grep('HiC|Hi-C',legend.text,ignore.case=TRUE)] <- "cGene"
+	}
 	## vertex size
 	if(is.null(vertex.size)){
 		vertex.size <- igraph::degree(subg)

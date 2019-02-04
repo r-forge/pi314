@@ -3,13 +3,13 @@
 #' \code{xPierSMRheatmap} is supposed to visualise SMR evidence using heatmap. It returns an object of class "ggplot".
 #'
 #' @param data an input vector containing gene symbols
-#' @param xTarget a "dTarget" or "sTarget" object with the componet 'list_pNode' related to 'eQTL' predictors. Alternatively, it can be a data frame with columns ('Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')
+#' @param xTarget a "dTarget" or "sTarget" object with the componet 'list_pNode' related to 'eGene' predictors. Alternatively, it can be a data frame with columns ('Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')
 #' @param colormap short name for the colormap. It can be one of "jet" (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red colormap), "wyr" (white-yellow-red colormap), "br" (black-red colormap), "yr" (yellow-red colormap), "wb" (white-black colormap), and "rainbow" (rainbow colormap, that is, red-yellow-green-cyan-blue-magenta). Alternatively, any hyphen-separated HTML color names, e.g. "blue-black-yellow", "royalblue-white-sandybrown", "darkgreen-white-darkviolet". A list of standard color names can be found in \url{http://html-color-codes.info/color-names}
 #' @param zlim the minimum and maximum z values for which colors should be plotted
 #' @return an object of class "ggplot" appended with 'mat' (the matrix colored by 'b_SMR') and 'df' (a data frame with columns 'priority','code','Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','direction_GWAS','direction_eQTL','direction_SMR'). Only those fdr_SMR<0.05 are visualised.
 #' @note none
 #' @export
-#' @seealso \code{\link{xHeatmap}}
+#' @seealso \code{\link{xPierSMRheatmap}}
 #' @include xPierSMRheatmap.r
 #' @examples
 #' \dontrun{
@@ -17,21 +17,7 @@
 #' library(Pi)
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata/"
 #' 
-#' # provide the input Genes of interest (eg 100 randomly chosen human genes)
-#' ## load human genes
-#' org.Hs.eg <- xRDataLoader(RData='org.Hs.eg', RData.location=RData.location)
-#' set.seed(825)
-#' data <- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-#' data
-#' 
-#' # optionally, provide the test background (if not provided, all human genes)
-#' #background <- as.character(org.Hs.eg$gene_info$Symbol)
-#' 
-#' # 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
-#' # perform enrichment analysis
-#' ls_eTerm <- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"), RData.location=RData.location)
-#' ## heatmap plot of enrichment results
-#' gp <- xPierSMRheatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
+#' gp <- xPierSMRheatmap(data, dTarget)
 #' }
 
 xPierSMRheatmap <- function(data, xTarget, colormap='steelblue-white-darkred', zlim=c(-1,1))
@@ -42,7 +28,7 @@ xPierSMRheatmap <- function(data, xTarget, colormap='steelblue-white-darkred', z
     
     	if(any(names(xTarget) %in% 'list_pNode')){
 			list_pNode <- xTarget$list_pNode
-			ind <- which(grepl('eQTL_', names(list_pNode)))
+			ind <- which(grepl('eGene_', names(list_pNode)))
 			ls_df <- lapply(list_pNode[ind], function(x){
 				x$evidence
 			})

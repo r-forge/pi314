@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Function to visualise SMR evidence using heatmap</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for xPierSMRheatmap"><tr><td>xPierSMRheatmap</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Function to visualise SMR evidence using heatmap</h2>
+
+<h3>Description</h3>
+
+<p><code>xPierSMRheatmap</code> is supposed to visualise SMR evidence using
+heatmap. It returns an object of class &quot;ggplot&quot;.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+xPierSMRheatmap(data, xTarget, colormap = "steelblue-white-darkred",
+zlim = c(-1, 1))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>an input vector containing gene symbols</p>
+</td></tr>
+<tr valign="top"><td><code>xTarget</code></td>
+<td>
+<p>a &quot;dTarget&quot; or &quot;sTarget&quot; object with the componet
+'list_pNode' related to 'eQTL' predictors. Alternatively, it can be a
+data frame with columns
+('Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')</p>
+</td></tr>
+<tr valign="top"><td><code>colormap</code></td>
+<td>
+<p>short name for the colormap. It can be one of &quot;jet&quot;
+(jet colormap), &quot;bwr&quot; (blue-white-red colormap), &quot;gbr&quot; (green-black-red
+colormap), &quot;wyr&quot; (white-yellow-red colormap), &quot;br&quot; (black-red
+colormap), &quot;yr&quot; (yellow-red colormap), &quot;wb&quot; (white-black colormap), and
+&quot;rainbow&quot; (rainbow colormap, that is,
+red-yellow-green-cyan-blue-magenta). Alternatively, any
+hyphen-separated HTML color names, e.g. &quot;blue-black-yellow&quot;,
+&quot;royalblue-white-sandybrown&quot;, &quot;darkgreen-white-darkviolet&quot;. A list of
+standard color names can be found in
+<a href="http://html-color-codes.info/color-names">http://html-color-codes.info/color-names</a></p>
+</td></tr>
+<tr valign="top"><td><code>zlim</code></td>
+<td>
+<p>the minimum and maximum z values for which colors should be
+plotted</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an object of class &quot;ggplot&quot; appended with 'mat' (the matrix colored by
+'b_SMR') and 'df' (a data frame with columns
+'priority','code','Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','direction_GWAS','direction_eQTL','direction_SMR').
+Only those fdr_SMR&lt;0.05 are visualised.
+</p>
+
+
+<h3>Note</h3>
+
+<p>none
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>xHeatmap</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Load the library
+library(Pi)
+RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
+
+# provide the input Genes of interest (eg 100 randomly chosen human genes)
+## load human genes
+org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
+RData.location=RData.location)
+set.seed(825)
+data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
+data
+
+# optionally, provide the test background (if not provided, all human genes)
+#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
+
+# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
+# perform enrichment analysis
+ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
+RData.location=RData.location)
+## heatmap plot of enrichment results
+gp &lt;- xPierSMRheatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
+
+## End(Not run)
+</pre>
+
+
+</body></html>

@@ -125,6 +125,7 @@ where nPredictor is the number of predictors, two columns are "ROC"
 (AUC values) and "Fmax" (F-max values)}
 \item{\code{evidence}: an object of the class "eTarget", a list with
 following components "evidence" and "metag"}
+\item{\code{list_pNode}: a list of "pNode" objects}
 }
 }
 \description{

@@ -95,7 +95,7 @@ xPierSNPsAdv <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, sig
 	relative.importance <- c(1,0,0)
     pNode_distance <- xPierSNPs(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.TAD=include.TAD, include.eQTL=NA, eQTL.customised=NULL, include.HiC=NA, cdf.function=cdf.function, relative.importance=relative.importance, scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose.details, RData.location=RData.location)
     ls_pNode_distance <- list(pNode_distance)
-    names(ls_pNode_distance) <- paste('nearbyGenes_', distance.max, '_', decay.kernel, sep='')
+    names(ls_pNode_distance) <- paste('nGene_', distance.max, '_', decay.kernel, sep='')
     
     ####################################################################################
     
@@ -116,7 +116,7 @@ xPierSNPsAdv <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, sig
 			}
 			return(pNode)
 		})
-		names(ls_pNode_eQTL) <- paste('eQTL_', names(ls_pNode_eQTL), sep='')
+		names(ls_pNode_eQTL) <- paste('eGene_', names(ls_pNode_eQTL), sep='')
     }
     
     ################################
@@ -158,7 +158,7 @@ xPierSNPsAdv <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, sig
 			}
 			return(pNode)
 		})
-		names(ls_pNode_eQTL_customised) <- paste('eQTL_', names(ls_df), sep='')
+		names(ls_pNode_eQTL_customised) <- paste('eGene_', names(ls_df), sep='')
     }
     ls_pNode_eQTL <- c(ls_pNode_eQTL, ls_pNode_eQTL_customised)
     ################################
@@ -179,7 +179,7 @@ xPierSNPsAdv <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, sig
 			}
 			return(pNode)
 		})
-		names(ls_pNode_HiC) <- paste('HiC_', names(ls_pNode_HiC), sep='')
+		names(ls_pNode_HiC) <- paste('cGene_', names(ls_pNode_HiC), sep='')
 	}else{
 		ls_pNode_HiC <- NULL
 	}

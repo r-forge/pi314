@@ -54,6 +54,7 @@ Collate:
     'xPierGRs.r'
     'xPierSMR.r'
     'xPierSMRheatmap.r'
+    'xPierSNPsAdv2.r'
 License: GPL-3
 VignetteBuilder: knitr
 biocViews: Software, Genetics, GraphAndNetwork, Pathways, GeneExpression, GeneTarget, GenomeWideAssociation, LinkageDisequilibrium, Network, HiC

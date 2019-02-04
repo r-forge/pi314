@@ -32,7 +32,7 @@ zlim = c(-1, 1))
 <tr valign="top"><td><code>xTarget</code></td>
 <td>
 <p>a &quot;dTarget&quot; or &quot;sTarget&quot; object with the componet
-'list_pNode' related to 'eQTL' predictors. Alternatively, it can be a
+'list_pNode' related to 'eGene' predictors. Alternatively, it can be a
 data frame with columns
 ('Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')</p>
 </td></tr>
@@ -74,7 +74,7 @@ Only those fdr_SMR&lt;0.05 are visualised.
 
 <h3>See Also</h3>
 
-<p><code>xHeatmap</code>
+<p><code>xPierSMRheatmap</code>
 </p>
 
 
@@ -86,23 +86,7 @@ Only those fdr_SMR&lt;0.05 are visualised.
 library(Pi)
 RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata/"
 
-# provide the input Genes of interest (eg 100 randomly chosen human genes)
-## load human genes
-org.Hs.eg &lt;- xRDataLoader(RData='org.Hs.eg',
-RData.location=RData.location)
-set.seed(825)
-data &lt;- as.character(sample(org.Hs.eg$gene_info$Symbol, 100))
-data
-
-# optionally, provide the test background (if not provided, all human genes)
-#background &lt;- as.character(org.Hs.eg$gene_info$Symbol)
-
-# 2) Gene-based enrichment analysis using ontologies (REACTOME and GOMF)
-# perform enrichment analysis
-ls_eTerm &lt;- xEnricherGenesAdv(data, ontologies=c("REACTOME","GOMF"),
-RData.location=RData.location)
-## heatmap plot of enrichment results
-gp &lt;- xPierSMRheatmap(ls_eTerm, fdr.cutoff=0.1, displayBy="zscore")
+gp &lt;- xPierSMRheatmap(data, dTarget)
 
 ## End(Not run)
 </pre>

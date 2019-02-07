@@ -46,7 +46,7 @@
 #' write.table(pNode_smr$priority, file="Genes_priority.SMR.txt", sep="\t", row.names=FALSE)
 #' }
 
-xPierSMR <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN"), peqtl=5e-2, heidi=F, bfile=NULL, clear=T, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD","KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], weighted=FALSE, network.customised=NULL, seeds.inclusive=TRUE, normalise=c("laplacian","row","column","none"), restart=0.7, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xPierSMR <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN"), peqtl=5e-8, heidi=F, bfile=NULL, clear=T, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD","KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], weighted=FALSE, network.customised=NULL, seeds.inclusive=TRUE, normalise=c("laplacian","row","column","none"), restart=0.7, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
 {
 
     startT <- Sys.time()
@@ -181,13 +181,29 @@ xPierSMR <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neut
 		
 	if(class(df_output)=='data.frame'){
 		
+		if(0){
+			#################################
+			# remove HLA genes and histone genes
+			ind <- which(!grepl('^HLA-|^HIST', df_output$Gene))
+			df_output <- df_output[ind,]
+			#################################
+		}
+		
 		df_evidence <- data.frame(Context=eqtl, df_output, stringsAsFactors=F)
 		
 		###########
 		df_output <- df_output %>% dplyr::arrange(Gene,p_SMR)
 		ind <- which(!duplicated(df_output[,c("Gene")]))
 		df_output <- df_output[ind,]
+		
+		## pass SMR test: fdr_SMR<0.05
 		df_output <- subset(df_output, fdr_SMR<0.05)
+		## also pass HEIDI test: fdr_HEIDI>=0.05
+		if(heidi){
+			fdr_HEIDI <- NULL
+			df_output <- subset(df_output, fdr_HEIDI>=0.05 | is.na(fdr_HEIDI))
+		}
+		
 		data_subset <- df_output[,c("Gene","p_SMR")]
 		data_subset$p_SMR <- -log10(data_subset$p_SMR)
 		###########

@@ -6,7 +6,7 @@
 \usage{
 xPierSMR(data, eqtl = c("CD14", "LPS2", "LPS24", "IFN", "Bcell", "NK",
 "Neutrophil", "CD4", "CD8", "Blood", "Monocyte", "shared_CD14",
-"shared_LPS2", "shared_LPS24", "shared_IFN"), peqtl = 0.05,
+"shared_LPS2", "shared_LPS24", "shared_IFN"), peqtl = 5e-08,
 heidi = F, bfile = NULL, clear = T, network = c("STRING_highest",
 "STRING_high", "STRING_medium", "STRING_low", "PCommonsUN_high",
 "PCommonsUN_medium", "PCommonsDN_high", "PCommonsDN_medium",

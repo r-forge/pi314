@@ -171,7 +171,7 @@ xPierSubnet <- function(pNode, priority.quantile=0.1, network=c(NA,"STRING_highe
 		}
 		nodes <- igraph::get.data.frame(subg, what="vertices")
 		nodes <- cbind(name=nodes$name, description=nodes$description, significance=nodes$significance, score=nodes$score, type=nodes$type, priority=priority[rownames(nodes)])
-		if(is.directed(subg)){
+		if(igraph::is.directed(subg)){
 			subnet <- igraph::graph.data.frame(d=relations, directed=TRUE, vertices=nodes)
 		}else{
 			subnet <- igraph::graph.data.frame(d=relations, directed=FALSE, vertices=nodes)

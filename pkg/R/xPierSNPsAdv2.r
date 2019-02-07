@@ -2,7 +2,7 @@
 #'
 #' \code{xPierSNPsAdv2} is supposed to prepare genetic predictors given GWAS summary data. Internally it calls \code{\link{xPierSNPs}} to prepare the distance predictor and the HiC predictors (if required), and \code{\link{xPierSMR}} to prepare the eQTL predictors (if required). It returns a list of class "pNode" objects.
 #'
-#' @param data a named input vector containing the sinificance level for nodes (dbSNP). For this named vector, the element names are dbSNP ID (or in the format such as 'chr16:28525386'), the element values for the significance level (measured as p-value or fdr). Alternatively, it can be a matrix or data frame with two columns: 1st column for dbSNP, 2nd column for the significance level
+#' @param data a data frame storing GWAS summary data with following required columns 'snp', 'p' (p-value), 'effect' (the effect allele assessed), 'other' (other allele), 'b' (effect size for the allele assessed; log(odds ratio) for a case-control study), 'se' (standard error), 'suggestive' (logical, and those false only to define nGene/cGene; all used to define eGene), and the optional columnns 'freq' (frequency of the effect allele; not essential unless 'freq.check' is true) and 'n' (sample size; not required)
 #' @param include.LD additional SNPs in LD with Lead SNPs are also included. By default, it is 'NA' to disable this option. Otherwise, LD SNPs will be included based on one or more of 5 super-populations from 1000 Genomics Project data (phase 3). They are "AFR", "AMR", "EAS", "EUR", and "SAS". Explanations for population code can be found at \url{http://www.1000genomes.org/faq/which-populations-are-part-your-study}
 #' @param LD.customised a user-input matrix or data frame with 3 columns: 1st column for Lead SNPs, 2nd column for LD SNPs, and 3rd for LD r2 value. It is designed to allow the user analysing their pre-calculated LD info. This customisation (if provided) has the high priority over built-in LD SNPs
 #' @param LD.r2 the LD r2 value. By default, it is 0.8, meaning that SNPs in LD (r2>=0.8) with input SNPs will be considered as LD SNPs. It can be any value from 0.8 to 1
@@ -79,6 +79,12 @@ xPierSNPsAdv2 <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, si
     normalise <- match.arg(normalise)
     normalise.affinity.matrix <- match.arg(normalise.affinity.matrix)
     
+    #############################
+    suggestive <- NULL
+    data_significant <- subset(data, !suggestive)
+    
+    #############################
+        
     ## force verbose.details to be FALSE if verbose is FALSE
     if(verbose==FALSE){
     	verbose.details <- FALSE
@@ -89,7 +95,7 @@ xPierSNPsAdv2 <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, si
 		message(sprintf("Preparing the distance predictor (%s) ...", as.character(now)), appendLF=TRUE)
 	}
 	relative.importance <- c(1,0,0)
-    pNode_distance <- xPierSNPs(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.TAD=include.TAD, include.eQTL=NA, eQTL.customised=NULL, include.HiC=NA, cdf.function=cdf.function, relative.importance=relative.importance, scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose.details, RData.location=RData.location)
+    pNode_distance <- xPierSNPs(data=data_significant, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.TAD=include.TAD, include.eQTL=NA, eQTL.customised=NULL, include.HiC=NA, cdf.function=cdf.function, relative.importance=relative.importance, scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose.details, RData.location=RData.location)
     ls_pNode_distance <- list(pNode_distance)
     names(ls_pNode_distance) <- paste('nGene_', distance.max, '_', decay.kernel, sep='')
     
@@ -102,15 +108,17 @@ xPierSNPsAdv2 <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, si
 		names(include.eQTLs) <- include.eQTLs
 		ls_pNode_eQTL <- lapply(include.eQTLs, function(x){
 			if(verbose){
-				message(sprintf("Preparing the eQTL predictor '%s' (%s) ...", x, as.character(Sys.time())), appendLF=TRUE)
+				startT <- Sys.time()
+				message(sprintf("Preparing the eQTL predictor '%s' (%s) ...", x, as.character(startT)), appendLF=TRUE)
 			}
-
-			suppressMessages(pNode <- xPierSMR(data, eqtl=x, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location, ...))
+			suppressMessages(pNode <- xPierSMR(data=data, eqtl=x, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location, ...))
 			if(verbose & is.null(pNode)){
 				message(sprintf("\tNote: this predictor '%s' is NULL", x), appendLF=TRUE)
 			}
 			if(verbose){
-				message(sprintf("\n"), appendLF=TRUE)
+				endT <- Sys.time()
+				runTime <- as.numeric(difftime(strptime(endT, "%Y-%m-%d %H:%M:%S"), strptime(startT, "%Y-%m-%d %H:%M:%S"), units="secs"))
+				message(paste(c("Runtime in total is: ",runTime," secs\n"), collapse=""), appendLF=TRUE)
 			}
 			return(pNode)
 		})
@@ -127,7 +135,7 @@ xPierSNPsAdv2 <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, si
 				message(sprintf("Preparing the HiC predictor '%s' (%s) ...", x, as.character(Sys.time())), appendLF=TRUE)
 			}
 			relative.importance <- c(0,0,1)
-			pNode <- xPierSNPs(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.eQTL=NA, eQTL.customised=NULL, include.HiC=x, cdf.function=cdf.function, relative.importance=relative.importance, scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose.details, RData.location=RData.location)
+			pNode <- xPierSNPs(data=data_significant, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.eQTL=NA, eQTL.customised=NULL, include.HiC=x, cdf.function=cdf.function, relative.importance=relative.importance, scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose.details, RData.location=RData.location)
 			if(verbose & is.null(pNode)){
 				message(sprintf("\tNote: this predictor '%s' has NULL", x), appendLF=TRUE)
 			}
@@ -138,10 +146,6 @@ xPierSNPsAdv2 <- function(data, include.LD=NA, LD.customised=NULL, LD.r2=0.8, si
 		ls_pNode_HiC <- NULL
 	}
 
-    ##########################################################################################
-    ## prioritisation equally
-    #relative.importance <- c(1/3,1/3,1/3)
-    #pNode_all <- xPierSNPs(data=data, include.LD=include.LD, LD.customised=LD.customised, LD.r2=LD.r2, significance.threshold=significance.threshold, score.cap=score.cap, distance.max=distance.max, decay.kernel=decay.kernel, decay.exponent=decay.exponent, GR.SNP=GR.SNP, GR.Gene=GR.Gene, include.eQTL=include.eQTLs, eQTL.customised=NULL, include.HiC=include.HiCs, cdf.function=cdf.function, relative.importance=relative.importance, scoring.scheme=scoring.scheme, network=network, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location)
     ##########################################################################################
     ls_pNode <- c(ls_pNode_distance, ls_pNode_eQTL, ls_pNode_HiC)
     

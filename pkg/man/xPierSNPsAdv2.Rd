@@ -35,12 +35,14 @@ multicores = NULL, verbose = TRUE, verbose.details = FALSE,
 RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 }
 \arguments{
-\item{data}{a named input vector containing the sinificance level for
-nodes (dbSNP). For this named vector, the element names are dbSNP ID
-(or in the format such as 'chr16:28525386'), the element values for the
-significance level (measured as p-value or fdr). Alternatively, it can
-be a matrix or data frame with two columns: 1st column for dbSNP, 2nd
-column for the significance level}
+\item{data}{a data frame storing GWAS summary data with following
+required columns 'snp', 'p' (p-value), 'effect' (the effect allele
+assessed), 'other' (other allele), 'b' (effect size for the allele
+assessed; log(odds ratio) for a case-control study), 'se' (standard
+error), 'suggestive' (logical, and those false only to define
+nGene/cGene; all used to define eGene), and the optional columnns
+'freq' (frequency of the effect allele; not essential unless
+'freq.check' is true) and 'n' (sample size; not required)}
 
 \item{include.LD}{additional SNPs in LD with Lead SNPs are also
 included. By default, it is 'NA' to disable this option. Otherwise, LD

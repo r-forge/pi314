@@ -17,8 +17,8 @@ heatmap. It returns an object of class &quot;ggplot&quot;.
 <h3>Usage</h3>
 
 <pre>
-xPierSMRheatmap(data, xTarget, colormap = "steelblue-white-darkred",
-zlim = c(-1, 1))
+xPierSMRheatmap(data, xTarget, type = c("Gene", "Gene_SNP"),
+colormap = "steelblue-lightyellow-orange", zlim = c(-0.5, 0.5))
 </pre>
 
 
@@ -35,6 +35,11 @@ zlim = c(-1, 1))
 'list_pNode' related to 'eGene' predictors. Alternatively, it can be a
 data frame with columns
 ('Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>the type of the heatmap. It can be &quot;Gene&quot; (gene-centric
+heatmap) or &quot;Gene_SNP&quot; (heatmap for the gene-snp pair)</p>
 </td></tr>
 <tr valign="top"><td><code>colormap</code></td>
 <td>
@@ -61,8 +66,9 @@ plotted</p>
 
 <p>an object of class &quot;ggplot&quot; appended with 'mat' (the matrix colored by
 'b_SMR') and 'df' (a data frame with columns
-'priority','code','Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','direction_GWAS','direction_eQTL','direction_SMR').
-Only those fdr_SMR&lt;0.05 are visualised.
+'priority','code','Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','direction_GWAS','direction_eQTL','direction_SMR',
+and optionally, 'p_HEIDI','fdr_HEIDI','nsnp_HEIDI'). Only those
+fdr_SMR&lt;0.05 (and fdr_HEIDI&gt;=0.05) are visualised.
 </p>
 
 

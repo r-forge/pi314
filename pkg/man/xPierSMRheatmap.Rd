@@ -4,8 +4,8 @@
 \alias{xPierSMRheatmap}
 \title{Function to visualise SMR evidence using heatmap}
 \usage{
-xPierSMRheatmap(data, xTarget, colormap = "steelblue-white-darkred",
-zlim = c(-1, 1))
+xPierSMRheatmap(data, xTarget, type = c("Gene", "Gene_SNP"),
+colormap = "steelblue-lightyellow-orange", zlim = c(-0.5, 0.5))
 }
 \arguments{
 \item{data}{an input vector containing gene symbols}
@@ -14,6 +14,9 @@ zlim = c(-1, 1))
 'list_pNode' related to 'eGene' predictors. Alternatively, it can be a
 data frame with columns
 ('Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR')}
+
+\item{type}{the type of the heatmap. It can be "Gene" (gene-centric
+heatmap) or "Gene_SNP" (heatmap for the gene-snp pair)}
 
 \item{colormap}{short name for the colormap. It can be one of "jet"
 (jet colormap), "bwr" (blue-white-red colormap), "gbr" (green-black-red
@@ -32,8 +35,9 @@ plotted}
 \value{
 an object of class "ggplot" appended with 'mat' (the matrix colored by
 'b_SMR') and 'df' (a data frame with columns
-'priority','code','Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','direction_GWAS','direction_eQTL','direction_SMR').
-Only those fdr_SMR<0.05 are visualised.
+'priority','code','Context','mode','probeID','Gene','ProbeChr','Probe_bp','topSNP','topSNP_chr','topSNP_bp','A1','A2','b_GWAS','b_eQTL','b_SMR','p_GWAS','p_eQTL','p_SMR','fdr_SMR','direction_GWAS','direction_eQTL','direction_SMR',
+and optionally, 'p_HEIDI','fdr_HEIDI','nsnp_HEIDI'). Only those
+fdr_SMR<0.05 (and fdr_HEIDI>=0.05) are visualised.
 }
 \description{
 \code{xPierSMRheatmap} is supposed to visualise SMR evidence using

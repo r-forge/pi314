@@ -3,47 +3,49 @@
 <link rel="stylesheet" type="text/css" href="R.css" />
 </head><body>
 
-<table width="100%" summary="page for xPierSMR"><tr><td>xPierSMR</td><td style="text-align: right;">R Documentation</td></tr></table>
+<table width="100%" summary="page for xPierABF"><tr><td>xPierABF</td><td style="text-align: right;">R Documentation</td></tr></table>
 
-<h2>Function to prioritise genes based on seed eGenes identified through SMR integrating GWAS and eQTL summary data</h2>
+<h2>Function to prioritise genes based on seed eGenes identified through ABF integrating GWAS and eQTL summary data</h2>
 
 <h3>Description</h3>
 
-<p><code>xPierSMR</code> is supposed to prioritise genes based on seed eGenes
-identified through SMR integrating GWAS and eQTL summary data. To
-prioritise genes, it first conducts Summary-data-based Mendelian
-Randomisation (SMR) integrating GWAS and eQTL summary data to identify
-and score seed genes (that is, eGenes weighted by SMR reported
-p-values). It implements Random Walk with Restart (RWR) and calculates
-the affinity score of all nodes in the graph to the seeds. The priority
-score is the affinity score. Parallel computing is also supported for
-Linux-like or Windows operating systems. It returns an object of class
-&quot;pNode&quot;.
+<p><code>xPierABF</code> is supposed to prioritise genes based on seed eGenes
+identified through ABF integrating GWAS and eQTL summary data. To
+prioritise genes, it first conducts colocalisation analysis through
+Wakefield's Approximate Bayes Factor (ABF) integrating GWAS and eQTL
+summary data integrating GWAS and eQTL summary data to identify and
+score seed genes (that is, eGenes weighted by posterior probability of
+the SNP being causal for both GWAS and eQTL traits). It implements
+Random Walk with Restart (RWR) and calculates the affinity score of all
+nodes in the graph to the seeds. The priority score is the affinity
+score. Parallel computing is also supported for Linux-like or Windows
+operating systems. It returns an object of class &quot;pNode&quot;.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-xPierSMR(data, eqtl = c("CD14", "LPS2", "LPS24", "IFN", "Bcell", "NK",
+xPierABF(data, eqtl = c("CD14", "LPS2", "LPS24", "IFN", "Bcell", "NK",
 "Neutrophil", "CD4", "CD8", "Blood", "Monocyte", "shared_CD14",
-"shared_LPS2", "shared_LPS24", "shared_IFN"), peqtl = 5e-08,
-heidi = F, bfile = NULL, clear = T, network = c("STRING_highest",
-"STRING_high", "STRING_medium", "STRING_low", "PCommonsUN_high",
-"PCommonsUN_medium", "PCommonsDN_high", "PCommonsDN_medium",
-"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
-"PCommonsDN_PID", "PCommonsDN_PANTHER", "PCommonsDN_ReconX",
-"PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite", "PCommonsDN_CTD",
-"KEGG", "KEGG_metabolism", "KEGG_genetic", "KEGG_environmental",
-"KEGG_cellular", "KEGG_organismal", "KEGG_disease"),
-STRING.only = c(NA, "neighborhood_score", "fusion_score",
-"cooccurence_score", "coexpression_score", "experimental_score",
-"database_score", "textmining_score")[1], weighted = FALSE,
-network.customised = NULL, seeds.inclusive = TRUE,
-normalise = c("laplacian", "row", "column", "none"), restart = 0.7,
-normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
-multicores = NULL, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
+"shared_LPS2", "shared_LPS24", "shared_IFN"), prior.eqtl = 1e-04,
+prior.gwas = 1e-04, prior.both = 1e-05, cutoff.H4 = 0.8,
+cutoff.pgwas = 1e-05, network = c("STRING_highest", "STRING_high",
+"STRING_medium", "STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
+"PCommonsDN_high", "PCommonsDN_medium", "PCommonsDN_Reactome",
+"PCommonsDN_KEGG", "PCommonsDN_HumanCyc", "PCommonsDN_PID",
+"PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
+"PCommonsDN_PhosphoSite", "PCommonsDN_CTD", "KEGG", "KEGG_metabolism",
+"KEGG_genetic", "KEGG_environmental", "KEGG_cellular",
+"KEGG_organismal",
+"KEGG_disease"), STRING.only = c(NA, "neighborhood_score",
+"fusion_score", "cooccurence_score", "coexpression_score",
+"experimental_score", "database_score", "textmining_score")[1],
+weighted = FALSE, network.customised = NULL,
+seeds.inclusive = TRUE, normalise = c("laplacian", "row", "column",
+"none"), restart = 0.7, normalise.affinity.matrix = c("none",
+"quantile"), parallel = TRUE, multicores = NULL, verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata")
 </pre>
 
 
@@ -55,38 +57,38 @@ RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
 <p>a data frame storing GWAS summary data with following
 required columns 'snp', 'effect' (the effect allele assessed), 'other'
 (other allele), 'b' (effect size for the allele assessed; log(odds
-ratio) for a case-control study), 'se' (standard error), 'p' (p-value),
-and the optional columnns 'freq' (frequency of the effect allele; not
-essential unless 'freq.check' is true) and 'n' (sample size; not
-required)</p>
+ratio) for a case-control study), 'se' (standard error), 'p' (p-value)</p>
 </td></tr>
 <tr valign="top"><td><code>eqtl</code></td>
 <td>
 <p>context-specific eQTL summary data. It can be one of
 &quot;Bcell&quot;,&quot;Blood&quot;,&quot;CD14&quot;,&quot;CD4&quot;,&quot;CD8&quot;,&quot;IFN&quot;,&quot;LPS24&quot;,&quot;LPS2&quot;,&quot;Monocyte&quot;,&quot;Neutrophil&quot;,&quot;NK&quot;,&quot;shared_CD14&quot;,&quot;shared_IFN&quot;,&quot;shared_LPS24&quot;,&quot;shared_LPS2&quot;</p>
 </td></tr>
-<tr valign="top"><td><code>peqtl</code></td>
+<tr valign="top"><td><code>prior.eqtl</code></td>
 <td>
-<p>eQTL p-value threshold for selecting a probe (with the top
-associated eQTL passing a p-value threshold) for the SMR test. In other
-words, a probe with the top associated eQTL not passing this threshold
-will be removed for the test. By default, it is 5e-2</p>
+<p>the prior probability an eQTL associated with the
+eQTL trait. The default value is 1e-4</p>
 </td></tr>
-<tr valign="top"><td><code>heidi</code></td>
+<tr valign="top"><td><code>prior.gwas</code></td>
 <td>
-<p>logical to indicate whether the HEIDI test is enabled. By
-default it is true</p>
+<p>the prior probability an SNP associated with the GWAS
+trait. The default value is 1e-4</p>
 </td></tr>
-<tr valign="top"><td><code>bfile</code></td>
+<tr valign="top"><td><code>prior.both</code></td>
 <td>
-<p>a character specifying where to find the LD reference data
-containing three files (.bed, .bim, and .fam). Required if heidi test
-is enabled (see above)</p>
+<p>the prior probability an eQTL/SNP associated with
+both eQTL/GWAS traits. The default value is 1e-5</p>
 </td></tr>
-<tr valign="top"><td><code>clear</code></td>
+<tr valign="top"><td><code>cutoff.H4</code></td>
 <td>
-<p>logical to indicate whether the temporary and log files
-are cleared up. By default, it sets to TRUE</p>
+<p>the H4 cutoff used to define eGenes. This cutoff is
+based on the posterior probabilities of H4 - one shared causal variant.
+The default value is 0.8</p>
+</td></tr>
+<tr valign="top"><td><code>cutoff.pgwas</code></td>
+<td>
+<p>the GWAS p-value cutoff that must be met to
+consider SNPs. The default value is 1e-5</p>
 </td></tr>
 <tr valign="top"><td><code>network</code></td>
 <td>
@@ -210,13 +212,6 @@ displayed in the screen. By default, it sets to true for display</p>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
 </td></tr>
-<tr valign="top"><td><code>...</code></td>
-<td>
-<p>additional graphic parameters used in xMEsmr. They are
-&quot;mode&quot;, &quot;window.cis&quot;, &quot;window.trans&quot;, &quot;heidi.peqtl&quot;, &quot;heidi.ld&quot;,
-&quot;heidi.num&quot;, &quot;freq.check&quot;, &quot;thread.num&quot;, &quot;p.adjust.method&quot; and
-&quot;silent&quot;</p>
-</td></tr>
 </table>
 
 
@@ -273,9 +268,9 @@ RData.location &lt;- "http://galahad.well.ox.ac.uk/bigdata"
 ## Not run: 
 data &lt;- utils::read.delim(file="summary_gwas.RA.txt", header=T,
 row.names=NULL, stringsAsFactors=F)
-pNode_smr &lt;- xPierSMR(data, eqtl="Blood", network="STRING_high",
+pNode_abf &lt;- xPierABF(data, eqtl="Blood", network="STRING_high",
 restart=0.7, RData.location=RData.location)
-write.table(pNode_smr$priority, file="Genes_priority.SMR.txt",
+write.table(pNode_abf$priority, file="Genes_priority.ABF.txt",
 sep="\t", row.names=FALSE)
 
 ## End(Not run)

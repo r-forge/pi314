@@ -1,6 +1,6 @@
-#' Function to prioritise seed genes only from a list of pNode objects using annotation data
+#' Function to prioritise genes based on seed eGenes identified through SMR integrating GWAS and eQTL summary data
 #'
-#' \code{xPierSMR} is supposed to prioritise seed genes only from a list of pNode objects using annotation data. To prioritise genes, it first extracts seed genes from a list of pNode objects and then scores seed genes using annotation data (or something similar). It implements Random Walk with Restart (RWR) and calculates the affinity score of all nodes in the graph to the seeds. The priority score is the affinity score. Parallel computing is also supported for Linux-like or Windows operating systems. It returns an object of class "pNode". 
+#' \code{xPierSMR} is supposed to prioritise genes based on seed eGenes identified through SMR integrating GWAS and eQTL summary data. To prioritise genes, it first conducts Summary-data-based Mendelian Randomisation (SMR) integrating GWAS and eQTL summary data to identify and score seed genes (that is, eGenes weighted by SMR reported p-values). It implements Random Walk with Restart (RWR) and calculates the affinity score of all nodes in the graph to the seeds. The priority score is the affinity score. Parallel computing is also supported for Linux-like or Windows operating systems. It returns an object of class "pNode". 
 #'
 #' @param data a data frame storing GWAS summary data with following required columns 'snp', 'effect' (the effect allele assessed), 'other' (other allele), 'b' (effect size for the allele assessed; log(odds ratio) for a case-control study), 'se' (standard error), 'p' (p-value), and the optional columnns 'freq' (frequency of the effect allele; not essential unless 'freq.check' is true) and 'n' (sample size; not required)
 #' @param eqtl context-specific eQTL summary data. It can be one of "Bcell","Blood","CD14","CD4","CD8","IFN","LPS24","LPS2","Monocyte","Neutrophil","NK","shared_CD14","shared_IFN","shared_LPS24","shared_LPS2"
@@ -31,7 +31,7 @@
 #' }
 #' @note The input graph will treat as an unweighted graph if there is no 'weight' edge attribute associated with
 #' @export
-#' @seealso \code{\link{xMEsmr}}, \code{\link{xPierGenes}}
+#' @seealso \code{\link{xPierGenes}}
 #' @include xPierSMR.r
 #' @examples
 #' \dontrun{
@@ -65,7 +65,7 @@ xPierSMR <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neut
     pNode <- NULL
     se <- b <- effect <- other <- n <- p <- NULL
 	Gene <- p_SMR <- fdr_SMR <- NULL
-		
+	
 	###########################	
 	# summary GWAS
 	###########################
@@ -204,6 +204,7 @@ xPierSMR <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neut
 			df_output <- subset(df_output, fdr_HEIDI>=0.05 | is.na(fdr_HEIDI))
 		}
 		
+		## the seed gene (eGene) weighted by p_SMR
 		data_subset <- df_output[,c("Gene","p_SMR")]
 		data_subset$p_SMR <- -log10(data_subset$p_SMR)
 		###########

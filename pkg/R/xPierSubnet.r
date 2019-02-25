@@ -95,8 +95,9 @@ xPierSubnet <- function(pNode, priority.quantile=0.1, network=c(NA,"STRING_highe
 		y <- (x - min(x,na.rm=TRUE)) / (max(x,na.rm=TRUE) - min(x,na.rm=TRUE))
 		pval <- 10^(-100*y)
 		
-    }else if(class(pNode) == "sTarget" | class(pNode) == "dTarget"){
-    	df_priority <- pNode$priority[, c("pvalue","fdr","priority")]
+	}else if(class(pNode) == "sTarget" | class(pNode) == "dTarget"){
+    	df_priority <- pNode$priority[, c("name","rank","rating")]
+    	df_priority$priority <- df_priority$rating
     	
     	network <- network[1]
 		if(!is.na(network)){

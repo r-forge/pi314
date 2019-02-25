@@ -32,6 +32,14 @@ library(Pi)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 old_names <- colnames(sTarget$predictor)[-c(1,2)]
+old_names <- c('nGene_20000_constant', 'eGene_CD14', 'eGene_LPS2',
+'eGene_LPS24', 'eGene_IFN', 'eGene_Bcell', 'eGene_CD4', 'eGene_CD8',
+'eGene_Neutrophil', 'eGene_NK', 'eGene_Blood', 'cGene_Monocytes',
+'cGene_Macrophages_M0', 'cGene_Macrophages_M1', 'cGene_Macrophages_M2',
+'cGene_Neutrophils', 'cGene_Naive_CD4_T_cells',
+'cGene_Total_CD4_T_cells', 'cGene_Naive_CD8_T_cells',
+'cGene_Total_CD8_T_cells', 'cGene_Naive_B_cells',
+'cGene_Total_B_cells', 'dGene', 'pGene', 'fGene')
 new_names <- c('nearbyGenes_nGene: nearby genes', 'eQTL_eGene: resting
 state (CD14+)', 'eQTL_eGene: activating state (CD14+ by LPS2h)',
 'eQTL_eGene: activating state (CD14+ by LPS24h)', 'eQTL_eGene:

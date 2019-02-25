@@ -84,19 +84,21 @@ xPierABF <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neut
 		}
 	}
 	
-	###########################	
+	###########################
 	# built-in summary eQTL
 	###########################
-	JK_cohort_xMEdb <- xRDataLoader('JK_cohort_xMEdb', verbose=F, RData.location=RData.location)
-	
 	## number of samples analysed
 	vec_N_eqtl <- c(414, 261, 322, 367, 286, 245, 101, 293, 283, 5311, 287, 228, 228, 228, 228)
 names(vec_N_eqtl) <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN")
-	
-	## summary_eqtl: extracted 
-	ind <- match(JK_cohort_xMEdb$context, eqtl)
-	summary_eqtl <- JK_cohort_xMEdb[!is.na(ind), ]
 	N_eqtl <- vec_N_eqtl[eqtl]
+	if(0){
+		JK_cohort_xMEdb <- xRDataLoader('JK_cohort_xMEdb', verbose=F, RData.location=RData.location)
+		## summary_eqtl: extracted 
+		ind <- match(JK_cohort_xMEdb$context, eqtl)
+		summary_eqtl <- JK_cohort_xMEdb[!is.na(ind), ]
+	}else{
+		summary_eqtl <- xRDataLoader(paste0('JK_cohort_xMEdb_',eqtl), verbose=F, RData.location=RData.location)
+	}
 	
 	##########################
 	## much quick!

@@ -18,7 +18,7 @@
 #' \itemize{
 #'  \item{\code{model}: an object of class "train" as a best model}
 #'  \item{\code{ls_model}: a list of best models from repeated cross-validation}
-#'  \item{\code{priority}: a data frame of nGene X 6 containing gene priority information, where nGene is the number of genes in the input data frame, and the 6 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (ranks of the priority scores), "priority" (5-star priority score), and "description" (gene description)}
+#'  \item{\code{priority}: a data frame of n X 5 containing gene priority information, where n is the number of genes in the input data frame, and the 5 columns are "GS" (either 'GSP', or 'GSN', or 'Putative'), "name" (gene names), "rank" (priority rank), "rating" (5-star priority score/rating), and "description" (gene description)}
 #'  \item{\code{predictor}: a data frame, which is the same as the input data frame but inserting two additional columns ('GS' in the first column, 'name' in the second column)}
 #'  \item{\code{performance}: a data frame of 1+nPredictor X 2 containing the supervised/predictor performance info, where nPredictor is the number of predictors, two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
 #'  \item{\code{performance_cv}: a data frame of nfold*nrepeat X 2 containing the repeated cross-validation performance, where two columns are "ROC" (AUC values) and "Fmax" (F-max values)}
@@ -394,7 +394,7 @@ xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm
                },
                loop = NULL,
                fit = function(x, y, wts, param, lev, last, classProbs, ...) { 
-            		randomForest(x, y, mtry = param$mtry, ntree = param$ntree, ...)
+            		randomForest::randomForest(x, y, mtry = param$mtry, ntree = param$ntree, ...)
                },
                predict = function(modelFit, newdata, submodels = NULL) {  
                		if(!is.null(newdata)) predict(modelFit, newdata) else predict(modelFit)
@@ -842,12 +842,12 @@ xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm
 		## adjp
 		vec_adjp <- stats::p.adjust(vec_ap, method="BH")
 	
-		## priority: first log10-transformed ap and then being rescaled into the [0,5] range
-		priority <- -log10(vec_ap)
+		## rating: first log10-transformed ap and then being rescaled into the [0,5] range
+		rating <- -log10(vec_ap)
 		####
-		priority <- sqrt(priority)
+		rating <- sqrt(rating)
 		####
-		vec_priority <- 5 * (priority - min(priority))/(max(priority) - min(priority))
+		vec_priority <- 5 * (rating - min(rating))/(max(rating) - min(rating))
 
 	}
 	
@@ -860,7 +860,7 @@ xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm
 	output_gs[!is.na(ind)] <- gs_targets[ind[!is.na(ind)]]
 	output_gs[output_gs=='0'] <- 'GSN'
 	output_gs[output_gs=='1'] <- 'GSP'
-	df_priority <- data.frame(GS=output_gs, name=names(vec_priority), rank=vec_rank, priority=vec_priority, stringsAsFactors=FALSE)
+	df_priority <- data.frame(GS=output_gs, name=names(vec_priority), rank=vec_rank, rating=vec_priority, stringsAsFactors=FALSE)
 	### add description
 	df_priority$description <- XGR::xSymbol2GeneID(df_priority$name, details=TRUE, RData.location=RData.location)$description
 	###
@@ -876,7 +876,7 @@ xMLcaret <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, method=c("gbm
 	## overall evaluation
 	######################
 	### do preparation
-	df_predictor_overall <- cbind(Supervised=df_priority$priority, df_predictor_gs[,-c(1,2)])
+	df_predictor_overall <- cbind(Supervised=df_priority$rating, df_predictor_gs[,-c(1,2)])
 	rownames(df_predictor_overall) <- rownames(df_priority)
 	df_pred <- df_predictor_overall
 	ls_predictors <- lapply(colnames(df_pred), function(x){

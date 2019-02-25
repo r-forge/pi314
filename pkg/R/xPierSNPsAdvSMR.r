@@ -45,7 +45,7 @@
 #' }
 #' @note This function calls \code{\link{xPierSNPs}} in a loop way generating the distance predictor, the eQTL predictors (if required) and the HiC predictors (if required).
 #' @export
-#' @seealso \code{\link{xPierSNPs}}, \code{\link{xPierMatrix}}
+#' @seealso \code{\link{xPierSMR}}, \code{\link{xPierSNPs}}, \code{\link{xPierMatrix}}
 #' @include xPierSNPsAdvSMR.r
 #' @examples
 #' \dontrun{

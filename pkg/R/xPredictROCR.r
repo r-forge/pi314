@@ -46,9 +46,9 @@ xPredictROCR <- function(prediction, GSP, GSN, rescale=TRUE, plot=c("none","ROC"
     if (class(prediction) == "pNode" ){
         prediction <- prediction$priority[,c("name","priority")]
     }else if(class(prediction) == "sTarget"){
-    	prediction <- prediction$priority[, c("name","priority")]
+    	prediction <- prediction$priority[, c("name","rating")]
     }else if(class(prediction) == "dTarget"){
-    	prediction <- prediction$priority[, c("name","priority")]
+    	prediction <- prediction$priority[, c("name","rating")]
     }
 
     res_ls <- split(x=as.numeric(prediction[,2]), f=as.character(prediction[,1]))

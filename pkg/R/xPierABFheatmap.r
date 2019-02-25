@@ -37,7 +37,7 @@ xPierABFheatmap <- function(data, xTarget, type=c('Gene','Gene_SNP'), colormap='
 			df_evidence <- do.call(rbind, ls_df)
 		
 			## df_gene_priority: extract priority
-			df_gene_priority <- data.frame(gene=xTarget$priority$name, priority=xTarget$priority$priority, stringsAsFactors=F)
+			df_gene_priority <- data.frame(gene=xTarget$priority$name, priority=xTarget$priority$rating, stringsAsFactors=F)
 			ind <- match(df_gene_priority$gene, data)
 			if(sum(!is.na(ind))>0){
 				df_gene_priority <- df_gene_priority[!is.na(ind),]
@@ -132,12 +132,12 @@ xPierABFheatmap <- function(data, xTarget, type=c('Gene','Gene_SNP'), colormap='
 	}else if(type=='Gene'){
 		##################
 		Symbol <- NULL
-		df <- df %>% dplyr::arrange(context,Symbol,pp_ABF)
+		df <- df %>% dplyr::arrange(context,Symbol,-pp_ABF)
 		ind <- which(!duplicated(df[,c("context","Symbol")]))
 		df <- df[ind,]
 		df <- df %>% dplyr::arrange(-priority)
 		##################
-				
+		
 		## columns alwawys sorted by pre-defined ones
 		## rows always sorted by priority
 		default.Context <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN")

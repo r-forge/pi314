@@ -37,7 +37,7 @@ xPierSMRheatmap <- function(data, xTarget, type=c('Gene','Gene_SNP'), colormap='
 			df_evidence <- do.call(rbind, ls_df)
 		
 			## df_gene_priority: extract priority
-			df_gene_priority <- data.frame(gene=xTarget$priority$name, priority=xTarget$priority$priority, stringsAsFactors=F)
+			df_gene_priority <- data.frame(gene=xTarget$priority$name, priority=xTarget$priority$rating, stringsAsFactors=F)
 			ind <- match(df_gene_priority$gene, data)
 			if(sum(!is.na(ind))>0){
 				df_gene_priority <- df_gene_priority[!is.na(ind),]

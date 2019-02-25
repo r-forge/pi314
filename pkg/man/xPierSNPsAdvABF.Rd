@@ -303,5 +303,6 @@ RData.location=RData.location)
 }
 }
 \seealso{
-\code{\link{xPierSNPs}}, \code{\link{xPierMatrix}}
+\code{\link{xPierABF}}, \code{\link{xPierSNPs}},
+\code{\link{xPierMatrix}}
 }

@@ -47,15 +47,17 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 
     if(class(xTarget) == "dTarget"){
     	if(is.null(xTarget$pPerf)){
-    		df_evidence <- xTarget$priority[, 7:ncol(xTarget$priority)]
+    		df_evidence <- xTarget$priority[, 5:ncol(xTarget$priority)]
     	}else{
-    		df_evidence <- xTarget$priority[, 8:ncol(xTarget$priority)]
+    		df_evidence <- xTarget$priority[, 6:ncol(xTarget$priority)]
     	}
-        df_priority <- xTarget$priority[, c("rank","priority")]
+        df_priority <- xTarget$priority[, c("rank","rating")]
+        df_priority$priority <- df_priority$rating
 		
     }else if(class(xTarget) == "sTarget"){
         df_evidence <- as.data.frame(xTarget$evidence$evidence)
-        df_priority <- xTarget$priority[, c("rank","priority")]
+        df_priority <- xTarget$priority[, c("rank","rating")]
+        df_priority$priority <- df_priority$rating
 		
     }else if(class(xTarget) == "eTarget"){
         df_evidence <- as.data.frame(xTarget$evidence)

@@ -103,7 +103,7 @@ xVisEvidence <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none"),
 	neighbors <- names(unlist(neighs.out))
 	if(neighbor.seed){
 		# restrict to seeds
-		ind <- neighbors %in% rownames(df_evidence)[df_evidence[,1]>0]
+		ind <- neighbors %in% rownames(df_evidence)[df_evidence$seed=='Y']
 		neighbors <- neighbors[ind]
 	}
 	if(!is.null(neighbor.top)){

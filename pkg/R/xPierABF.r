@@ -117,6 +117,7 @@ names(vec_N_eqtl) <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD
 			if(i %% 1000 == 0){
 				message(sprintf("Analysing %d (%d) (%s)", i, length(ls_gene), as.character(Sys.time())), appendLF=T)
 			}
+			message(sprintf("Analysing %d (%d) (%s)", i, length(ls_gene), as.character(Sys.time())), appendLF=T)
 		}
 		
 		df_output <- NULL
@@ -202,9 +203,11 @@ names(vec_N_eqtl) <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD
 	
 	## the seed gene (eGene) weighted by pp_ABF
 	data_subset <- df[,c("Symbol","pp_ABF")]
-	pNode <- suppressMessages(xPierGenes(data=data_subset, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location))
-    	
-    pNode$evidence <- df_evidence
+	if(nrow(data_subset)!=0){
+		pNode <- suppressMessages(xPierGenes(data=data_subset, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location))
+		
+		pNode$evidence <- df_evidence
+    }
     
     ####################################################################################
     endT <- Sys.time()

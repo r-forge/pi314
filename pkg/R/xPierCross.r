@@ -74,7 +74,7 @@ xPierCross <- function(list_xTarget, displayBy=c("rating","rank","pvalue","fdr")
 	rownames(df_disease) <- nodes
 	
 	## replace NA with worst value
-	if(displayBy=='priority'){
+	if(displayBy=='rating'){
 		df_disease[is.na(df_disease)] <- 0
 	}else if(displayBy=='pvalue' | displayBy=='fdr'){
 		df_disease[is.na(df_disease)] <- 1

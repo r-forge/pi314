@@ -177,8 +177,11 @@ xPierSMR <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neut
 		}
 	}
 	
-	df_output <- xMEsmr(gwas.summary, beqtl.summary, peqtl=peqtl, heidi=heidi, bfile=bfile, clear=clear, verbose=verbose, ...)
-		
+	#df_output <- xMEsmr(gwas.summary, beqtl.summary, peqtl=peqtl, heidi=heidi, bfile=bfile, clear=clear, verbose=verbose, ...)
+	if(class(suppressWarnings(try(df_output <- xMEsmr(gwas.summary, beqtl.summary, peqtl=peqtl, heidi=heidi, bfile=bfile, clear=clear, verbose=verbose, ...), T)))=="try-error"){
+		df_output <- NULL
+	}
+	
 	if(class(df_output)=='data.frame'){
 		
 		if(0){

@@ -218,7 +218,9 @@ xPierMatrix <- function(list_pNode, displayBy=c("score","rank","weight","pvalue"
 			
 			## return dTarget
 			#priority <- cbind(df_priority,Overall=overall, mat_evidence)
-			priority <- data.frame(df_priority[,c("name","rank","rating","description")], seed=ifelse(overall!=0,'Y','N'), mat_evidence[,c("nGene","cGene","eGene","dGene","pGene","fGene")], stringsAsFactors=F)
+			#priority <- data.frame(df_priority[,c("name","rank","rating","description")], seed=ifelse(overall!=0,'Y','N'), mat_evidence[,c("nGene","cGene","eGene","dGene","pGene","fGene")], stringsAsFactors=F)
+			ind <- match(c("nGene","cGene","eGene","dGene","pGene","fGene"), colnames(mat_evidence))
+			priority <- data.frame(df_priority[,c("name","rank","rating","description")], seed=ifelse(overall!=0,'Y','N'), mat_evidence[,ind[!is.na(ind)]], stringsAsFactors=F)
 			dTarget <- list(priority  = priority,
 							predictor = df_predictor,
 							metag	  = metag,

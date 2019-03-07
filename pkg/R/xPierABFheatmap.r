@@ -60,11 +60,19 @@ xPierABFheatmap <- function(data, xTarget, type=c('Gene','Gene_SNP'), colormap='
     }
     
     ######################################################################################
+    if(is.null(df_evidence)){
+    	return(NULL)
+    }
+    ######################################################################################
     
 	## df_evidence_priority
 	ind <- match(df_evidence$Symbol, df_gene_priority$gene)
 	df_evidence_priority <- df_evidence[!is.na(ind),]
 	df_evidence_priority$priority <- df_gene_priority$priority[ind[!is.na(ind)]]
+
+	if(nrow(df_evidence_priority)==0){
+		return(NULL)
+	}
 
 	#######################
 	# different effect alleles for the same SNP

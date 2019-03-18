@@ -139,6 +139,7 @@ xPierABFheatmap <- function(data, xTarget, type=c('Gene','Gene_SNP'), colormap='
 	
 	}else if(type=='Gene'){
 		##################
+		## only the one with the highest pp_ABF if multiple found in the same context given a gene
 		Symbol <- NULL
 		df <- df %>% dplyr::arrange(context,Symbol,-pp_ABF)
 		ind <- which(!duplicated(df[,c("context","Symbol")]))

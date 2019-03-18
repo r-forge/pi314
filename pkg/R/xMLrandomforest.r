@@ -295,6 +295,7 @@ xMLrandomforest <- function(list_pNode=NULL, df_predictor=NULL, GSP, GSN, nfold=
 		## df_ROC
 		df_res <- as.matrix(xSparseMatrix(df_res[,-4], verbose=FALSE))
 		ind <- match(c("Supervised_randomforest",colnames(df_predictor)), rownames(df_res))
+		ind <- ind[!is.na(ind)]
 		if(nfold==1 & nrepeat==1){
 			df_res <- as.matrix(df_res[ind,], ncol=nfold)
 			colnames(df_res) <- 'Fold1'

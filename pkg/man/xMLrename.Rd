@@ -32,11 +32,20 @@ library(Pi)
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 old_names <- colnames(sTarget$predictor)[-c(1,2)]
-old_names <- c('nGene_20000_constant', 'eGene_CD14', 'eGene_LPS2',
+old_names_1 <- c('nGene_20000_constant', 'eGene_CD14', 'eGene_LPS2',
 'eGene_LPS24', 'eGene_IFN', 'eGene_Bcell', 'eGene_CD4', 'eGene_CD8',
 'eGene_Neutrophil', 'eGene_NK', 'eGene_Blood', 'cGene_Monocytes',
 'cGene_Macrophages_M0', 'cGene_Macrophages_M1', 'cGene_Macrophages_M2',
 'cGene_Neutrophils', 'cGene_Naive_CD4_T_cells',
+'cGene_Total_CD4_T_cells', 'cGene_Naive_CD8_T_cells',
+'cGene_Total_CD8_T_cells', 'cGene_Naive_B_cells',
+'cGene_Total_B_cells', 'dGene', 'pGene', 'fGene')
+old_names_2 <- c('nGene_20000_constant', 'eGene_Pi_eQTL_CD14',
+'eGene_Pi_eQTL_LPS2', 'eGene_Pi_eQTL_LPS24', 'eGene_Pi_eQTL_IFN',
+'eGene_Pi_eQTL_Bcell', 'eGene_Pi_eQTL_CD4', 'eGene_Pi_eQTL_CD8',
+'eGene_Pi_eQTL_Neutrophil', 'eGene_Pi_eQTL_NK', 'eGene_Pi_eQTL_Blood',
+'cGene_Monocytes', 'cGene_Macrophages_M0', 'cGene_Macrophages_M1',
+'cGene_Macrophages_M2', 'cGene_Neutrophils', 'cGene_Naive_CD4_T_cells',
 'cGene_Total_CD4_T_cells', 'cGene_Naive_CD8_T_cells',
 'cGene_Total_CD8_T_cells', 'cGene_Naive_B_cells',
 'cGene_Total_B_cells', 'dGene', 'pGene', 'fGene')
@@ -53,7 +62,8 @@ cells (total)', 'HiC_cGene: CD8+ T cells (naive)', 'HiC_cGene: CD8+ T
 cells (total)', 'HiC_cGene: B cells (naive)', 'HiC_cGene: B cells
 (total)', 'Annotation_dGene: disease genes', 'Annotation_pGene:
 phenotype genes', 'Annotation_fGene: function genes')
-sTarget_rename <- xMLrename(sTarget, old_names, new_names)
+sTarget_renamed <- xMLrename(sTarget, old_names_1, new_names)
+sTarget_renamed <- xMLrename(sTarget_renamed, old_names_2, new_names)
 }
 }
 \seealso{

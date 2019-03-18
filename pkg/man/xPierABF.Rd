@@ -168,13 +168,13 @@ rescaled to the range [0,1]), "rank" (ranks of the priority scores),
 identified through ABF integrating GWAS and eQTL summary data. To
 prioritise genes, it first conducts colocalisation analysis through
 Wakefield's Approximate Bayes Factor (ABF) integrating GWAS and eQTL
-summary data integrating GWAS and eQTL summary data to identify and
-score seed genes (that is, eGenes weighted by posterior probability of
-the SNP being causal for both GWAS and eQTL traits). It implements
-Random Walk with Restart (RWR) and calculates the affinity score of all
-nodes in the graph to the seeds. The priority score is the affinity
-score. Parallel computing is also supported for Linux-like or Windows
-operating systems. It returns an object of class "pNode".
+summary data to identify and score seed genes (that is, eGenes weighted
+by posterior probability of the SNP being causal for both GWAS and eQTL
+traits). It implements Random Walk with Restart (RWR) and calculates
+the affinity score of all nodes in the graph to the seeds. The priority
+score is the affinity score. Parallel computing is also supported for
+Linux-like or Windows operating systems. It returns an object of class
+"pNode".
 }
 \note{
 The input graph will treat as an unweighted graph if there is no

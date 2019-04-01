@@ -181,11 +181,8 @@ The input graph will treat as an unweighted graph if there is no
 'weight' edge attribute associated with
 }
 \examples{
-\dontrun{
 # Load the library
 library(Pi)
-}
-
 RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 \dontrun{
 data <- utils::read.delim(file="summary_gwas.RA.txt", header=T,

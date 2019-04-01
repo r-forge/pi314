@@ -34,11 +34,8 @@
 #' @seealso \code{\link{xPierGenes}}
 #' @include xPierABF.r
 #' @examples
-#' \dontrun{
 #' # Load the library
 #' library(Pi)
-#' }
-#'
 #' RData.location <- "http://galahad.well.ox.ac.uk/bigdata"
 #' \dontrun{
 #' data <- utils::read.delim(file="summary_gwas.RA.txt", header=T, row.names=NULL, stringsAsFactors=F)
@@ -152,7 +149,7 @@ names(vec_N_eqtl) <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD
 				gwas.summary <- list(beta=df_gwas$b_corrected, varbeta=df_gwas$se^2, type="cc", snp=df_gwas$snp)
 		
 				## Bayesian colocalisation analysis through ABF
-				res <- xMEabf(eqtl.summary, gwas.summary, prior.eqtl=prior.eqtl, prior.gwas=prior.gwas, prior.both=prior.both)
+				res <- XGR::xMEabf(eqtl.summary, gwas.summary, prior.eqtl=prior.eqtl, prior.gwas=prior.gwas, prior.both=prior.both)
 				
 				## post-processing to obtain df_output
 				df_res <- res$results

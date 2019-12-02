@@ -4,10 +4,18 @@
 \alias{xCorrelation}
 \title{Function to calculate and visualise correlation}
 \usage{
-xCorrelation(df, list_vec, method = c("pearson", "spearman"),
-p.type = c("nominal", "empirical"), seed = 825, nperm = 2000,
+xCorrelation(
+df,
+list_vec,
+method = c("pearson", "spearman"),
+p.type = c("nominal", "empirical"),
+seed = 825,
+nperm = 2000,
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"), plot = FALSE, plot.smooth = c(NA, "lm", "loess"))
+"hommel"),
+plot = FALSE,
+plot.smooth = c(NA, "lm", "loess")
+)
 }
 \arguments{
 \item{df}{a data frame with two columns ('name' and 'value')}

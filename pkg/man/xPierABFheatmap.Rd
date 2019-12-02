@@ -4,8 +4,13 @@
 \alias{xPierABFheatmap}
 \title{Function to visualise ABF evidence using heatmap}
 \usage{
-xPierABFheatmap(data, xTarget, type = c("Gene", "Gene_SNP"),
-colormap = "steelblue-lightyellow-orange", zlim = c(-0.5, 0.5))
+xPierABFheatmap(
+data,
+xTarget,
+type = c("Gene", "Gene_SNP"),
+colormap = "steelblue-lightyellow-orange",
+zlim = c(-0.5, 0.5)
+)
 }
 \arguments{
 \item{data}{an input vector containing gene symbols}

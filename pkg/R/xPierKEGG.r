@@ -13,6 +13,7 @@
 #' @param pathview.filetype the file format saved using the package "pathview". It can be "png" or "pdf"
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @param ... additional graphic parameters. If the type of visualisation is 'net', see \code{\link{xVisNet}}; if the visualisation type is 'evidence', see \code{\link{xVisEvidence}}
 #' @return
 #' a subgraph, an object of class "igraph".
@@ -35,7 +36,7 @@
 #' pv.out <- xPierKEGG(xTarget, hsa="hsa04621", vis="pathview", pathview.filetype=c("png","pdf")[2], RData.location=RData.location)
 #' }
 
-xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621", priority.top=NULL, incoming.neighbor.order=1, nodes_query=NULL, largest.comp=TRUE, pathview.filename=NULL, pathview.filetype=c("png","pdf"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", ...)
+xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621", priority.top=NULL, incoming.neighbor.order=1, nodes_query=NULL, largest.comp=TRUE, pathview.filename=NULL, pathview.filetype=c("png","pdf"), verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL, ...)
 {
 
     vis <- match.arg(vis)
@@ -49,7 +50,7 @@ xPierKEGG <- function(xTarget, vis=c("net","evidence","pathview"), hsa="hsa04621
     	stop("The function must apply to a 'dTarget' or 'sTarget' or 'eTarget' object.\n")
     }
 	
-	ls_ig <- xRDataLoader(RData.customised="ig.KEGG.list", RData.location=RData.location)
+	ls_ig <- xRDataLoader("ig.KEGG.list", RData.location=RData.location, guid=guid)
 	kegg <- sapply(ls_ig, function(x) x$path)
 	kegg <- gsub('^path:', '', kegg)
 	hsa <- gsub('^path:', '', hsa)

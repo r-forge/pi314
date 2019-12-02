@@ -4,15 +4,26 @@
 \alias{xPierTrack}
 \title{Function to visualise a prioritised gene using track plot}
 \usage{
-xPierTrack(pNode, priority.top = NULL, target.query = NULL,
-window = 1e+06, nearby = NULL, query.highlight = TRUE,
-track.ideogram = TRUE, track.genomeaxis = TRUE,
+xPierTrack(
+pNode,
+priority.top = NULL,
+target.query = NULL,
+window = 1e+06,
+nearby = NULL,
+query.highlight = TRUE,
+track.ideogram = TRUE,
+track.genomeaxis = TRUE,
 name.datatrack = "5-star rating\\n(Priority index)",
-name.annotrack = "Targets", GR.Gene = c("UCSC_knownGene",
-"UCSC_knownCanonical"), SNPs = NULL, max.num.SNPs = 50,
+name.annotrack = "Targets",
+GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
+SNPs = NULL,
+max.num.SNPs = 50,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common", "dbSNP_Single"),
 verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL,
+...
+)
 }
 \arguments{
 \item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget")}
@@ -84,6 +95,9 @@ displayed in the screen. By default, it sets to false for no display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 
 \item{...}{additional graphic parameters. For example, the parameter
 "add" allows the plot added to an existing plotting canvas without

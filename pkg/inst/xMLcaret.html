@@ -22,13 +22,23 @@ it. It returns an object of class 'sTarget'.
 <h3>Usage</h3>
 
 <pre>
-xMLcaret(list_pNode = NULL, df_predictor = NULL, GSP, GSN,
+xMLcaret(
+list_pNode = NULL,
+df_predictor = NULL,
+GSP,
+GSN,
 method = c("gbm", "svmRadial", "rda", "knn", "pls", "nnet", "rf",
-"myrf", "cforest", "glmnet", "glm", "bayesglm", "LogitBoost",
-"xgbLinear", "xgbTree"), nfold = 3, nrepeat = 10, seed = 825,
+"myrf", "cforest",
+"glmnet", "glm", "bayesglm", "LogitBoost", "xgbLinear", "xgbTree"),
+nfold = 3,
+nrepeat = 10,
+seed = 825,
 aggregateBy = c("none", "logistic", "Ztransform", "fishers",
-"orderStatistic"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"orderStatistic"),
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 </pre>
 
 
@@ -111,6 +121,11 @@ displayed in the screen. By default, it sets to TRUE for display</p>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 </table>
 

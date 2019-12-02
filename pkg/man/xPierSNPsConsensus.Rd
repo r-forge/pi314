@@ -4,33 +4,53 @@
 \alias{xPierSNPsConsensus}
 \title{Function to resolve relative importance of distance weight and eQTL weight priorising consensus gene ranks given a list of seed SNPs together with the significance level (e.g. GWAS reported p-values)}
 \usage{
-xPierSNPsConsensus(data, include.LD = NA, LD.customised = NULL,
-LD.r2 = 0.8, significance.threshold = 5e-05, distance.max = 2e+05,
-decay.kernel = c("rapid", "slow", "linear"), decay.exponent = 2,
+xPierSNPsConsensus(
+data,
+include.LD = NA,
+LD.customised = NULL,
+LD.r2 = 0.8,
+significance.threshold = 5e-05,
+distance.max = 2e+05,
+decay.kernel = c("rapid", "slow", "linear"),
+decay.exponent = 2,
 GR.SNP = c("dbSNP_GWAS", "dbSNP_Common"),
 GR.Gene = c("UCSC_knownGene", "UCSC_knownCanonical"),
 include.eQTL = c(NA, "JKscience_TS2A", "JKscience_TS2B",
-"JKscience_TS3A", "JKng_bcell", "JKng_mono", "JKnc_neutro", "JK_nk",
-"GTEx_V4_Adipose_Subcutaneous", "GTEx_V4_Artery_Aorta",
-"GTEx_V4_Artery_Tibial", "GTEx_V4_Esophagus_Mucosa",
+"JKscience_TS3A",
+"JKng_bcell", "JKng_mono", "JKnc_neutro", "JK_nk",
+"GTEx_V4_Adipose_Subcutaneous",
+"GTEx_V4_Artery_Aorta", "GTEx_V4_Artery_Tibial",
+"GTEx_V4_Esophagus_Mucosa",
 "GTEx_V4_Esophagus_Muscularis", "GTEx_V4_Heart_Left_Ventricle",
-"GTEx_V4_Lung", "GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
+"GTEx_V4_Lung",
+"GTEx_V4_Muscle_Skeletal", "GTEx_V4_Nerve_Tibial",
 "GTEx_V4_Skin_Sun_Exposed_Lower_leg", "GTEx_V4_Stomach",
-"GTEx_V4_Thyroid", "GTEx_V4_Whole_Blood", "eQTLdb_NK", "eQTLdb_CD14",
-"eQTLdb_LPS2", "eQTLdb_LPS24", "eQTLdb_IFN"),
-eQTL.customised = NULL, cdf.function = c("empirical", "exponential"),
+"GTEx_V4_Thyroid",
+"GTEx_V4_Whole_Blood", "eQTLdb_NK", "eQTLdb_CD14", "eQTLdb_LPS2",
+"eQTLdb_LPS24",
+"eQTLdb_IFN"),
+eQTL.customised = NULL,
+cdf.function = c("empirical", "exponential"),
 scoring.scheme = c("max", "sum", "sequential"),
 network = c("STRING_highest", "STRING_high", "STRING_medium",
-"STRING_low", "PCommonsUN_high", "PCommonsUN_medium",
-"PCommonsDN_high",
-"PCommonsDN_medium", "PCommonsDN_Reactome", "PCommonsDN_KEGG",
-"PCommonsDN_HumanCyc", "PCommonsDN_PID", "PCommonsDN_PANTHER",
-"PCommonsDN_ReconX", "PCommonsDN_TRANSFAC", "PCommonsDN_PhosphoSite",
-"PCommonsDN_CTD"), weighted = FALSE, network.customised = NULL,
-normalise = c("laplacian", "row", "column", "none"), restart = 0.75,
-normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
-multicores = NULL, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata")
+"STRING_low",
+"PCommonsUN_high", "PCommonsUN_medium", "PCommonsDN_high",
+"PCommonsDN_medium",
+"PCommonsDN_Reactome", "PCommonsDN_KEGG", "PCommonsDN_HumanCyc",
+"PCommonsDN_PID",
+"PCommonsDN_PANTHER", "PCommonsDN_ReconX", "PCommonsDN_TRANSFAC",
+"PCommonsDN_PhosphoSite", "PCommonsDN_CTD"),
+weighted = FALSE,
+network.customised = NULL,
+normalise = c("laplacian", "row", "column", "none"),
+restart = 0.75,
+normalise.affinity.matrix = c("none", "quantile"),
+parallel = TRUE,
+multicores = NULL,
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL
+)
 }
 \arguments{
 \item{data}{a named input vector containing the sinificance level for
@@ -210,6 +230,9 @@ displayed in the screen. By default, it sets to true for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 }
 \value{
 an object of class "pNode", a list with following components:
@@ -275,7 +298,7 @@ network="PCommonsUN_medium", restart=0.7)
 
 # c) save to the file called 'SNPs_priority.consensus.txt'
 write.table(pNode$priority, file="SNPs_priority.consensus.txt",
-sep="\\t", row.names=FALSE)
+sep="\t", row.names=FALSE)
 
 # d) manhattan plot
 mp <- xPierManhattan(pNode, highlight.top=10)

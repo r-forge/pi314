@@ -4,12 +4,25 @@
 \alias{xMLparameters}
 \title{Function to visualise cross-validation performance against tuning parameters}
 \usage{
-xMLparameters(data, nD = c("auto", "1D", "2D", "3D"), contour = TRUE,
-main = "Repeated cross-validation", xlab = NA, ylab = NA,
-zlab = NA, clab = "AUC (repeated CV)", nlevels = 50,
+xMLparameters(
+data,
+nD = c("auto", "1D", "2D", "3D"),
+contour = TRUE,
+main = "Repeated cross-validation",
+xlab = NA,
+ylab = NA,
+zlab = NA,
+clab = "AUC (repeated CV)",
+nlevels = 50,
 colormap = c("lightblue-lightyellow-darkorange-darkred", "bwr", "jet",
-"gbr", "wyr", "br", "yr", "rainbow", "wb"), highlight = TRUE,
-x.label.cex = 0.8, x.label.srt = 30, theta.3D = 40, phi.3D = 25)
+"gbr", "wyr",
+"br", "yr", "rainbow", "wb"),
+highlight = TRUE,
+x.label.cex = 0.8,
+x.label.srt = 30,
+theta.3D = 40,
+phi.3D = 25
+)
 }
 \arguments{
 \item{data}{an object of the class "train" or "train.formula"

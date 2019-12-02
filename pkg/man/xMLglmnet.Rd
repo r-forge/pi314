@@ -4,10 +4,21 @@
 \alias{xMLglmnet}
 \title{Function to integrate predictor matrix in a supervised manner via machine learning algorithm glmnet.}
 \usage{
-xMLglmnet(df_predictor, GSP, GSN, family = c("binomial", "gaussian"),
-type.measure = c("auc", "mse"), nfold = 3, alphas = seq(0, 1, 0.1),
-standardize = TRUE, lower.limits = -Inf, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
+xMLglmnet(
+df_predictor,
+GSP,
+GSN,
+family = c("binomial", "gaussian"),
+type.measure = c("auc", "mse"),
+nfold = 3,
+alphas = seq(0, 1, 0.1),
+standardize = TRUE,
+lower.limits = -Inf,
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL,
+...
+)
 }
 \arguments{
 \item{df_predictor}{a data frame containing genes (in rows) and
@@ -46,6 +57,9 @@ displayed in the screen. By default, it sets to TRUE for display}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 
 \item{...}{additional parameters. Please refer to 'glmnet::cv.glmnet'
 for the complete list.}

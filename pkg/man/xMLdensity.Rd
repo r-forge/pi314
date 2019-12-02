@@ -4,9 +4,13 @@
 \alias{xMLdensity}
 \title{Function to visualise machine learning results using density plot}
 \usage{
-xMLdensity(xTarget, displayBy = c("All", "GS", "GSN", "GSP", "NEW"),
-x.scale = c("sqrt", "normal"), font.family = "sans",
-signature = TRUE)
+xMLdensity(
+xTarget,
+displayBy = c("All", "GS", "GSN", "GSP", "NEW"),
+x.scale = c("sqrt", "normal"),
+font.family = "sans",
+signature = TRUE
+)
 }
 \arguments{
 \item{xTarget}{an object of class "xTarget" or "dTarget" (with the

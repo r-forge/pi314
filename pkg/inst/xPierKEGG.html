@@ -17,11 +17,21 @@ a KEGG pathway. It returns an object of class &quot;igraph&quot;.
 <h3>Usage</h3>
 
 <pre>
-xPierKEGG(xTarget, vis = c("net", "evidence", "pathview"),
-hsa = "hsa04621", priority.top = NULL, incoming.neighbor.order = 1,
-nodes_query = NULL, largest.comp = TRUE, pathview.filename = NULL,
-pathview.filetype = c("png", "pdf"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
+xPierKEGG(
+xTarget,
+vis = c("net", "evidence", "pathview"),
+hsa = "hsa04621",
+priority.top = NULL,
+incoming.neighbor.order = 1,
+nodes_query = NULL,
+largest.comp = TRUE,
+pathview.filename = NULL,
+pathview.filetype = c("png", "pdf"),
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL,
+...
+)
 </pre>
 
 
@@ -88,6 +98,11 @@ displayed in the screen. By default, it sets to true</p>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>

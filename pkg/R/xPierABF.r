@@ -21,6 +21,7 @@
 #' @param multicores an integer to specify how many cores will be registered as the multicore parallel backend to the 'foreach' package. If NULL, it will use a half of cores available in a user's computer. This option only works when parallel computation is enabled
 #' @param verbose logical to indicate whether the messages will be displayed in the screen. By default, it sets to true for display
 #' @param RData.location the characters to tell the location of built-in RData files. See \code{\link{xRDataLoader}} for details
+#' @param guid a valid (5-character) Global Unique IDentifier for an OSF project. See \code{\link{xRDataLoader}} for details
 #' @return
 #' an object of class "pNode", a list with following components:
 #' \itemize{
@@ -43,7 +44,7 @@
 #' write.table(pNode_abf$priority, file="Genes_priority.ABF.txt", sep="\t", row.names=FALSE)
 #' }
 
-xPierABF <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN"), prior.eqtl=1e-4, prior.gwas=1e-4, prior.both=1e-5, cutoff.H4=0.8, cutoff.pgwas=1e-5, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD","KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], weighted=FALSE, network.customised=NULL, seeds.inclusive=TRUE, normalise=c("laplacian","row","column","none"), restart=0.7, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata")
+xPierABF <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN"), prior.eqtl=1e-4, prior.gwas=1e-4, prior.both=1e-5, cutoff.H4=0.8, cutoff.pgwas=1e-5, network=c("STRING_highest","STRING_high","STRING_medium","STRING_low","PCommonsUN_high","PCommonsUN_medium","PCommonsDN_high","PCommonsDN_medium","PCommonsDN_Reactome","PCommonsDN_KEGG","PCommonsDN_HumanCyc","PCommonsDN_PID","PCommonsDN_PANTHER","PCommonsDN_ReconX","PCommonsDN_TRANSFAC","PCommonsDN_PhosphoSite","PCommonsDN_CTD","KEGG","KEGG_metabolism","KEGG_genetic","KEGG_environmental","KEGG_cellular","KEGG_organismal","KEGG_disease"), STRING.only=c(NA,"neighborhood_score","fusion_score","cooccurence_score","coexpression_score","experimental_score","database_score","textmining_score")[1], weighted=FALSE, network.customised=NULL, seeds.inclusive=TRUE, normalise=c("laplacian","row","column","none"), restart=0.7, normalise.affinity.matrix=c("none","quantile"), parallel=TRUE, multicores=NULL, verbose=TRUE, RData.location="http://galahad.well.ox.ac.uk/bigdata", guid=NULL)
 {
 
     startT <- Sys.time()
@@ -89,12 +90,12 @@ xPierABF <- function(data, eqtl=c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neut
 names(vec_N_eqtl) <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD4","CD8","Blood","Monocyte","shared_CD14","shared_LPS2","shared_LPS24","shared_IFN")
 	N_eqtl <- vec_N_eqtl[eqtl]
 	if(0){
-		JK_cohort_xMEdb <- xRDataLoader('JK_cohort_xMEdb', verbose=F, RData.location=RData.location)
+		JK_cohort_xMEdb <- xRDataLoader('JK_cohort_xMEdb', verbose=F, RData.location=RData.location, guid=guid)
 		## summary_eqtl: extracted 
 		ind <- match(JK_cohort_xMEdb$context, eqtl)
 		summary_eqtl <- JK_cohort_xMEdb[!is.na(ind), ]
 	}else{
-		summary_eqtl <- xRDataLoader(paste0('JK_cohort_xMEdb_',eqtl), verbose=F, RData.location=RData.location)
+		summary_eqtl <- xRDataLoader(paste0('JK_cohort_xMEdb_',eqtl), verbose=F, RData.location=RData.location, guid=guid)
 	}
 	
 	##########################
@@ -201,7 +202,7 @@ names(vec_N_eqtl) <- c("CD14","LPS2","LPS24","IFN","Bcell","NK","Neutrophil","CD
 	## the seed gene (eGene) weighted by pp_ABF
 	data_subset <- df[,c("Symbol","pp_ABF")]
 	if(nrow(data_subset)!=0){
-		pNode <- suppressMessages(xPierGenes(data=data_subset, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location))
+		pNode <- suppressMessages(xPierGenes(data=data_subset, network=network, STRING.only=STRING.only, weighted=weighted, network.customised=network.customised, seeds.inclusive=seeds.inclusive, normalise=normalise, restart=restart, normalise.affinity.matrix=normalise.affinity.matrix, parallel=parallel, multicores=multicores, verbose=verbose, RData.location=RData.location, guid=guid))
 		
 		pNode$evidence <- df_evidence
     }

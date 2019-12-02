@@ -4,11 +4,21 @@
 \alias{xPierKEGG}
 \title{Function to visualise prioritised genes in terms of a KEGG pathway}
 \usage{
-xPierKEGG(xTarget, vis = c("net", "evidence", "pathview"),
-hsa = "hsa04621", priority.top = NULL, incoming.neighbor.order = 1,
-nodes_query = NULL, largest.comp = TRUE, pathview.filename = NULL,
-pathview.filetype = c("png", "pdf"), verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
+xPierKEGG(
+xTarget,
+vis = c("net", "evidence", "pathview"),
+hsa = "hsa04621",
+priority.top = NULL,
+incoming.neighbor.order = 1,
+nodes_query = NULL,
+largest.comp = TRUE,
+pathview.filename = NULL,
+pathview.filetype = c("png", "pdf"),
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL,
+...
+)
 }
 \arguments{
 \item{xTarget}{an object of class "dTarget" or "sTarget"}
@@ -49,6 +59,9 @@ displayed in the screen. By default, it sets to true}
 
 \item{RData.location}{the characters to tell the location of built-in
 RData files. See \code{\link{xRDataLoader}} for details}
+
+\item{guid}{a valid (5-character) Global Unique IDentifier for an OSF
+project. See \code{\link{xRDataLoader}} for details}
 
 \item{...}{additional graphic parameters. If the type of visualisation
 is 'net', see \code{\link{xVisNet}}; if the visualisation type is

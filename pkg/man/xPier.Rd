@@ -4,10 +4,17 @@
 \alias{xPier}
 \title{Function to do prioritisation through random walk techniques}
 \usage{
-xPier(seeds, g, seeds.inclusive = TRUE, normalise = c("laplacian",
-"row", "column", "none"), restart = 0.7,
-normalise.affinity.matrix = c("none", "quantile"), parallel = TRUE,
-multicores = NULL, verbose = TRUE)
+xPier(
+seeds,
+g,
+seeds.inclusive = TRUE,
+normalise = c("laplacian", "row", "column", "none"),
+restart = 0.7,
+normalise.affinity.matrix = c("none", "quantile"),
+parallel = TRUE,
+multicores = NULL,
+verbose = TRUE
+)
 }
 \arguments{
 \item{seeds}{a named input vector containing a list of seed nodes. For

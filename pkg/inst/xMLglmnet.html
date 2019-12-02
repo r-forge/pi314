@@ -21,10 +21,21 @@ returns an object of class 'pTarget'.
 <h3>Usage</h3>
 
 <pre>
-xMLglmnet(df_predictor, GSP, GSN, family = c("binomial", "gaussian"),
-type.measure = c("auc", "mse"), nfold = 3, alphas = seq(0, 1, 0.1),
-standardize = TRUE, lower.limits = -Inf, verbose = TRUE,
-RData.location = "http://galahad.well.ox.ac.uk/bigdata", ...)
+xMLglmnet(
+df_predictor,
+GSP,
+GSN,
+family = c("binomial", "gaussian"),
+type.measure = c("auc", "mse"),
+nfold = 3,
+alphas = seq(0, 1, 0.1),
+standardize = TRUE,
+lower.limits = -Inf,
+verbose = TRUE,
+RData.location = "http://galahad.well.ox.ac.uk/bigdata",
+guid = NULL,
+...
+)
 </pre>
 
 
@@ -89,6 +100,11 @@ displayed in the screen. By default, it sets to TRUE for display</p>
 <td>
 <p>the characters to tell the location of built-in
 RData files. See <code>xRDataLoader</code> for details</p>
+</td></tr>
+<tr valign="top"><td><code>guid</code></td>
+<td>
+<p>a valid (5-character) Global Unique IDentifier for an OSF
+project. See <code>xRDataLoader</code> for details</p>
 </td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>

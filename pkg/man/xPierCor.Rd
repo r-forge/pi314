@@ -4,10 +4,17 @@
 \alias{xPierCor}
 \title{Function to calculate correlation between prioritised genes and user-defined external data}
 \usage{
-xPierCor(pNode, list_vec, method = c("pearson", "spearman"),
-pvalue.type = c("nominal", "empirical"), seed = 825, nperm = 2000,
+xPierCor(
+pNode,
+list_vec,
+method = c("pearson", "spearman"),
+pvalue.type = c("nominal", "empirical"),
+seed = 825,
+nperm = 2000,
 p.adjust.method = c("BH", "BY", "bonferroni", "holm", "hochberg",
-"hommel"), plot = FALSE)
+"hommel"),
+plot = FALSE
+)
 }
 \arguments{
 \item{pNode}{an object of class "pNode" (or "sTarget" or "dTarget").

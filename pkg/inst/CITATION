@@ -1,0 +1,15 @@
+citEntry(entry="Article",
+    author = "Hai Fang, et al",
+    title = "A genetics-led approach defines the drug target landscape of 30 immune-related traits",
+    journal = "Nature Genetics",
+    volume = "51",
+    issue = "7",
+    year = "2019", 
+    pages = "1082-1091",
+    url = "http://www.nature.com/articles/s41588-019-0456-1",
+    doi = "10.1038/s41588-019-0456-1",
+    textVersion = paste(
+    	"Fang, H., et al",
+        "Pi: Leveraging Genetic Evidence to Prioritise Drug Targets at the Gene and Pathway Level.",
+        "Nature Genetics, 51:7, 2019. http://www.nature.com/articles/s41588-019-0456-1")
+)

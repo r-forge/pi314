@@ -61,9 +61,13 @@ xVisEvidenceAdv <- function(xTarget, g=NA, nodes=NULL, node.info=c("smart","none
 	## layout
 	if(any(is.null(V(subg)$xcoord), is.null(V(subg)$ycoord))){
 		#glayout <- igraph::layout_as_tree(subg,root=dnet::dDAGroot(subg),circular=TRUE,flip.y=TRUE)
-		glayout <- igraph::layout_with_kk(subg)
-		V(subg)$xcoord <- glayout[,1]
-		V(subg)$ycoord <- glayout[,2]
+		if(0){
+			glayout <- igraph::layout_with_kk(subg)
+			V(subg)$xcoord <- glayout[,1]
+			V(subg)$ycoord <- glayout[,2]
+		}else{
+			subg <- subg %>% xLayout("graphlayouts.layout_with_stress")
+		}
 	}
 	
 	#################
